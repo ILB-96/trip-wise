@@ -3,6 +3,9 @@ import "@styles/globals.css";
 export const metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",
+  icons: {
+    icon: "/assets/icons/favicon.ico",
+  },
 };
 
 export default function RootLayout({
