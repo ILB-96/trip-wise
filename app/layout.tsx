@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "@styles/globals.css";
+import Header from "@components/Header";
+import Register from "@components/Register";
 export const metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",
@@ -16,10 +18,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <div className="main">
-          <div className="gradient" />
-        </div>
-        <main className="app">{children}</main>
+        {/* Header */}
+        {/* <Header /> */}
+        <Register />
       </body>
     </html>
   );
