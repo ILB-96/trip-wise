@@ -1,30 +1,22 @@
-import { Button } from '@components/ui/button'
-import { Input } from '@components/ui/input'
-import { Label } from '@components/ui/label'
-import React from 'react'
+import RegisterForm from "@components/RegisterForm";
+import Link from "next/link";
+import React from "react";
 
-function RegisterForm() {
-    const onSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log('Clicked on register form thing')
-    }
+function Register() {
   return (
-    <form className='space-y-12 w-[400px]'>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor='email'>Email</Label>
-            <Input id='email' type='email'/>
-
-        </div>
-        <div className="grid w-full max-w-sm items-center gap-1.5">
-            <Label htmlFor='password'>Password</Label>
-            <Input id='password' type='password'/>
-
-        </div>
-        <div className='w-full'>
-            <Button className='w-full' size='lg'>Register</Button>
-        </div>
-    </form>
-  )
+    <div className="h-screen w-screen flex justify-center items-center">
+      <div className="shadow-xl px-8 pb-8 pt-12 bg-white rounded-xl space-y-12">
+        <h1 className="font-semibold text-2xl">Create an account</h1>
+        <RegisterForm />
+        <p className="text-center">
+          Already have an account?{" "}
+          <Link className="text-indigo-500 hover:underline" href="/login">
+            Sign in
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
 }
 
-export default RegisterForm
+export default Register;

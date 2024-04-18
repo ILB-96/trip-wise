@@ -316,3 +316,6 @@
 .flex-between {
   @apply flex justify-between items-center;
 }
+.container {
+  @apply flex justify-between items-center bg-white rounded-2xl shadow-lg mt-2 h-10 border border-gray-200 font-satoshi focus:border-blue-200;
+}

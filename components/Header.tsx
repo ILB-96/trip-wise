@@ -8,10 +8,18 @@ type NavItemProps = {
 const Logo: React.FC = () => (
   <div className="flex items-center space-x-4">
     <div className="rounded-full overflow-hidden">
-      <Image src="/logo.png" alt="logo" height={40} width={40} priority />
+      <Image
+        src="/assets/icons/logo.png"
+        alt="logo"
+        height={40}
+        width={40}
+        priority
+      />
     </div>
     <div>
-      <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight">TripWise</h1>
+      <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight">
+        TripWise
+      </h1>
       <h2 className="text-sm font-light">Itinerary Planner</h2>
     </div>
   </div>
