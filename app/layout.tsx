@@ -18,9 +18,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        {/* Header */}
-        {/* <Header /> */}
-        <Register />
+        {/* <Provider> */}
+        <div className="main">
+          <div className="gradient" />
+        </div>
+
+        <main className="app">
+          {/* <Header /> */}
+          {children}
+          {/* <Footer /> */}
+        </main>
+        {/* </Provider> */}
       </body>
     </html>
   );
