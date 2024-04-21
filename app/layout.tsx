@@ -18,15 +18,15 @@ export default function RootLayout({
     <html lang="en">
       <body>
         {/* <Provider> */}
-        <div className="main">
+        {/* <div className="main">
           <div className="gradient" />
-        </div>
+        </div> */}
 
-        <main className="app">
+        {/* <main className="app"> */}
           <Header />
           {children}
           {/* <Footer /> */}
-        </main>
+        {/* </main> */}
         {/* </Provider> */}
       </body>
     </html>
