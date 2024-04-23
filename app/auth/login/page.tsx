@@ -8,7 +8,7 @@ function LoginPage() {
     bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-[#fef3c7] to-[#92400e]'>
         <CardWrapper 
             headerLabel='👏 Pick your preferred way to authenticate yourself!'
-            backButtonLabel="Continue as guest"
+            backButtonLabel="😉 Create an account!"
             backButtonHref="/auth/register"
             showSocial
         >
