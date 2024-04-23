@@ -63,6 +63,7 @@ export const dummyData = [
     country: "China",
     rating: 4.5,
     price: "$$$",
+
     description:
       "The Great Wall of China is a series of fortifications made of stone, brick, tamped earth, wood, and other materials, generally built along an east-to-west line across the historical northern borders of China to protect the Chinese states and empires against the raids and invasions of the various nomadic groups of the Eurasian Steppe.",
     image:

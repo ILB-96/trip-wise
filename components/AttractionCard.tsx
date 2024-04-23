@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
 import PopoverInfo from "./PopoverInfo";
+        
 interface CardProps {
   name: string;
   image: string;
