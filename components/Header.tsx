@@ -56,7 +56,7 @@ const Header: React.FC = () => {
       <Logo />
       <nav className={`${openNavigation ? 'flex' : 'hidden'}  
                     fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8
-                    lg:static lg:flex lg:mx-auto lg:bg-transparent`}>
+                    lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}>
         <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
           {
             navigation.map((item) => (
@@ -87,7 +87,6 @@ const Header: React.FC = () => {
       >
         <MenuSvg openNavigation={openNavigation} />
       </Button>
-      
     </header>
   );
 };
