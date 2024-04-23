@@ -8,7 +8,9 @@ async function SettingsPage() {
             {JSON.stringify(session)}
             <form action={async () => {
                 "use server";
-                await signOut();
+                await signOut(
+                    {redirectTo: "/auth/login"}
+                );
             }}>
                 <button type="submit">
                     Signout
