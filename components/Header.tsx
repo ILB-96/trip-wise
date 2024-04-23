@@ -1,13 +1,14 @@
 "use client"
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { navigation } from '@constants/navigation';
 import { usePathname } from 'next/navigation';
 import { Button } from './Header/Button';
 import { ButtonGradient } from './Header/ButtonGradient';
 import MenuSvg from './Header/MenuSvg';
-import { MenuBackground } from './Header/MenuBackground';
 import { disablePageScroll, enablePageScroll } from 'scroll-lock';
+import { ProfileButton } from './Header/ProfileButton';
+import { useSession } from 'next-auth/react';
 
 
 const Logo: React.FC = () => (
@@ -31,7 +32,16 @@ const Logo: React.FC = () => (
 );
 
 const Header: React.FC = () => {
-  const currentPath = usePathname(); // to know which page are we in
+  const currentUser = useSession().data?.user;
+  const [user, setUser] = useState<any>(currentUser);
+
+  const changeUserState = () => {
+    if(user)
+        setUser(null);
+    else
+      setUser("");
+  }
+  const currentPath = usePathname(); // to know which page are we in]
   const [openNavigation, setOpenNavigation] = React.useState(false);
   const toggleNavigation = () => {
     if(openNavigation) {
@@ -50,7 +60,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
-      text-white py-4 px-6 md:px-10 lg:px-16 xl:px-20 flex flex-col md:flex-row justify-between items-center shadow-xl
+      text-white py-4 px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
        ${openNavigation ? 'bg-n-8' : 'bg-n-8/90 backdrop-blur-sm'}`}
     >
       <Logo />
@@ -74,19 +84,26 @@ const Header: React.FC = () => {
           }
         </div>
       </nav>
-      <a href="/auth/register" className='font-code text-xs font-bold uppercase tracking-wider 
-       hidden mr-8 text-n-1/50 transition-colors hover:text-n-1 lg:block'>
-        REGISTER
-      </a>
-      <Button className="hidden lg:flex" href="/auth/login">
-          LOGIN
-      </Button>
+      {!user && (
+        <>
+          <a href="/auth/register" className='font-code text-xs font-bold uppercase tracking-wider 
+           hidden mr-8 text-n-1/50 transition-colors hover:text-n-1 lg:block'>
+            REGISTER
+          </a>
+          <Button className="hidden lg:flex" href="/auth/login">
+              LOGIN
+          </Button>
+        </>
+      )}
       <ButtonGradient />
+      <div className='items-center justify-center space-x-5'>
+      {user && (<ProfileButton changeUserState={changeUserState}/>)}
       <Button className='ml-auto lg:hidden' px="px-3"
         onClick={toggleNavigation}
       >
         <MenuSvg openNavigation={openNavigation} />
       </Button>
+      </div>
     </header>
   );
 };
