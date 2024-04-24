@@ -27,7 +27,7 @@ const Logo: React.FC = () => (
 
 const NavItem: React.FC<NavItemProps> = ({ children }) => (
   <a href="#" className="hover:text-blue-400 transition duration-300 ease-in-out">
-    {children}
+      {children}
   </a>
 );
 
@@ -43,8 +43,8 @@ const Avatar: React.FC<AvatarProps> = ({ initial }) => (
 
 const Header: React.FC = () => {
   return (
-    <header 
-      className="bg-gradient-to-r from-gray-700 to-gray-900  
+    <header
+      className="bg-gradient-to-r from-gray-700 to-gray-900
       text-white py-4 px-6 md:px-10 lg:px-16 xl:px-20 flex flex-col md:flex-row justify-between items-center shadow-xl"
     >
       <Logo />
@@ -53,15 +53,16 @@ const Header: React.FC = () => {
         <NavItem>TRIPS</NavItem>
         <NavItem>ATTRACTIONS</NavItem>
         <NavItem>COMMUNITY</NavItem>
+          <NavItem>REGISTER</NavItem>
       </nav>
-      <div className="flex items-center space-x-4">
-        <NavItem>REGISTER</NavItem>
-        <span className="text-gray-500 mx-2">|</span>
-        <NavItem>LOGIN</NavItem>
-        <Avatar initial="J" />
+
+      <div className="flex items-center ">
+          <span className="text-gray-500 mx-2">|</span>
+          <NavItem>LOGIN</NavItem>
+          <Avatar initial="J"/>
       </div>
     </header>
-  );
+);
 };
 
 export default Header;
