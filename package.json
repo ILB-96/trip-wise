@@ -25,8 +25,9 @@
     "embla-carousel-react": "^8.0.2",
     "framer-motion": "^11.0.28",
     "fuse.js": "^7.0.0",
-
     "lucide-react": "^0.371.0",
+    "mongoos": "^0.0.1-security",
+    "mongoose": "^8.3.2",
     "next": "14.2.1",
     "next-auth": "^4.24.7",
     "react": "^18",
