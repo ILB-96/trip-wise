@@ -11,7 +11,7 @@ export const connectToDB = async () => {
     }
     try {
         await mongoose.connect(MONGO_URI, {
-            dbName: "trip_wise" // corrected a small typo in dbName
+            dbName:"share_prompt" // corrected a small typo in dbName
         });
         is_connected = true; // Update connection status on successful connect
         console.log('MongoDB connection established');
@@ -19,3 +19,5 @@ export const connectToDB = async () => {
         console.error('Failed to connect to MongoDB', error);
     }
 }
+
+

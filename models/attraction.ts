@@ -1,7 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
 
-
-
 interface IAttraction extends Document {
     name: string;
     location: string;
