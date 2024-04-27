@@ -31,34 +31,24 @@ const Logo: React.FC = () => (
     </div>
   </div>
 );
-interface HeaderProps {
-  currentUser: User | undefined;
-}
-const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
-  const [user, setUser] = useState<any>(currentUser);
 
-  const changeUserState = () => {
-    if(user)
-        setUser(null);
-    else
-      setUser("");
-  }
-  const currentPath = usePathname(); // to know which page are we in]
-  const [openNavigation, setOpenNavigation] = React.useState(false);
-  const toggleNavigation = () => {
-    if(openNavigation) {
-      setOpenNavigation(false);
-      enablePageScroll();
-    } else {
-      setOpenNavigation(true);
-      disablePageScroll();
-    }
-  };
-  const handleClick = () => {
-    if(!openNavigation) return ;
-    enablePageScroll();
-    setOpenNavigation(false);
-  };
+const NavItem: React.FC<NavItemProps> = ({ children }) => (
+  <a href="#" className="hover:text-blue-400 transition duration-300 ease-in-out">
+    {children}
+  </a>
+);
+
+type AvatarProps = {
+  initial: string;
+};
+
+const Avatar: React.FC<AvatarProps> = ({ initial }) => (
+  <div className="h-10 w-10 bg-gray-600 rounded-full flex items-center justify-center">
+    <span className="text-white font-bold">{initial}</span>
+  </div>
+);
+
+const Header: React.FC = () => {
   return (
     <header
       className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
@@ -107,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
       </Button>
       </div>
     </header>
-  );
+);
 };
 
 export default Header;

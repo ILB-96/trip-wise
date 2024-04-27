@@ -1,10 +1,37 @@
 /** @type {import('next').NextConfig}*/
 const nextConfig = {
   images: {
-    domains: [
-      "upload.wikimedia.org",
-      "en.wikipedia.org",
-      "www.telegraph.co.uk",
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "upload.wikimedia.org",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "en.wikipedia.org",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.telegraph.co.uk",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "www.nationalparks.org",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "i0.wp.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "a.cdn-hotels.com",
+        pathname: "**",
+      },
     ],
   },
 };
