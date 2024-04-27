@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import "@styles/globals.css";
 import Header from "@components/Header";
+import Provider from "@context/Provider";
 import { auth } from "@auth";
-import { SessionProvider } from "next-auth/react";
+import { HeaderProvider } from "@components/Header/HeaderProvider";
 export const metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",
@@ -18,7 +19,7 @@ export default async function RootLayout({
 }) {
   const session = await auth();
   return (
-    <SessionProvider session={session}>
+    <Provider session={session}>
       <html lang="en">
         <body>
           {/* <Provider> */}
@@ -27,13 +28,13 @@ export default async function RootLayout({
           </div> */}
 
           {/* <main className="app"> */}
-            <Header />
+            <HeaderProvider />
             {children}
             {/* <Footer /> */}
           {/* </main> */}
           {/* </Provider> */}
         </body>
       </html>
-    </SessionProvider>
+    </Provider>
   );
 }

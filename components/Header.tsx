@@ -9,6 +9,7 @@ import MenuSvg from './Header/MenuSvg';
 import { disablePageScroll, enablePageScroll } from 'scroll-lock';
 import { ProfileButton } from './Header/ProfileButton';
 import { useSession } from 'next-auth/react';
+import { User } from 'next-auth';
 
 
 const Logo: React.FC = () => (
@@ -30,9 +31,10 @@ const Logo: React.FC = () => (
     </div>
   </div>
 );
-
-const Header: React.FC = () => {
-  const currentUser = useSession().data?.user;
+interface HeaderProps {
+  currentUser: User | undefined;
+}
+const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   const [user, setUser] = useState<any>(currentUser);
 
   const changeUserState = () => {
