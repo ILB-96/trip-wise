@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 
 let is_connected = false;
 const MONGO_URI: string = process.env.MONGO_URI || 'your_default_connection_string';
+export const DB_NAME = "share_prompt";
 
 export const connectToDB = async () => {
     mongoose.set('strictQuery', true);
@@ -11,7 +12,7 @@ export const connectToDB = async () => {
     }
     try {
         await mongoose.connect(MONGO_URI, {
-            dbName:"share_prompt" // corrected a small typo in dbName
+            dbName: DB_NAME // corrected a small typo in dbName
         });
         is_connected = true; // Update connection status on successful connect
         console.log('MongoDB connection established');
