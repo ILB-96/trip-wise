@@ -1,5 +1,6 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
+
 import clientPromise from "@lib/db";
 import { getUserById } from "@lib/user";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
@@ -11,12 +12,14 @@ declare module "next-auth/jwt" {
     interface JWT {
         role?: "ADMIN" | "USER";
     }
+
 }
 
 declare module "next-auth" {
     interface Session {
         user: {
             id: string;
+
             role: "ADMIN" | "USER";
         } & DefaultSession["user"]
     }
@@ -73,5 +76,6 @@ export const {
         databaseName: DB_NAME,
     }),
     session: { strategy: 'jwt' },
+
     ...authConfig,
 })
