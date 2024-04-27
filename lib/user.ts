@@ -1,24 +1,20 @@
-import { db } from "@lib/db";
+import { connectToDB } from '@utils/database';
+import User from '../models/user';
 
 export const getUserByEmail = async (email: string) => {
     try {
-        const user = await db.user.findUnique({
-            where: {
-                email,
-            }
-        });
+        await connectToDB();
+        const user = await User.findOne({ email });
         return user;
     } catch {
         return null;
     }
 }
+
 export const getUserById = async (id: string) => {
     try {
-        const user = await db.user.findUnique({
-            where: {
-                id,
-            }
-        });
+        await connectToDB();
+        const user = await User.findOne({ _id: id });
         return user;
     } catch {
         return null;
