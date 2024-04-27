@@ -31,7 +31,7 @@ const nextConfig = {
         protocol: "https",
         hostname: "a.cdn-hotels.com",
         pathname: "**",
-      },
+      }
     ],
   },
 };
