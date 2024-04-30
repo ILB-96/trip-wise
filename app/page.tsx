@@ -14,6 +14,7 @@ const Home = () => (
       TripWise is an open-source tool for discovering and sharing trips and
       attractions.
     </p>
+    <hr className="my-8 max-w-xl mx-auto" />
     {<Slider />}
   </section>
 );
