@@ -22,16 +22,18 @@ export default function Slider() {
       </h2>
 
       <div className="relative w-full max-w-none">
-        <Carousel className="w-full">
+        <Carousel className="p-5 w-full">
           <CarouselContent className="-ml-1">
             {dummyData.map((attraction) => (
               <CarouselItem
                 key={attraction.name}
-                className="pl-1 basis-full md:basis-1/3 lg:basis-1/5"
+                className="pl-1 basis-full sm:basis-1/2 md:basis-2/5 lg:basis-1/5" // Basis classes as previously adjusted
               >
                 <div className="p-1">
-                  <Card>
+                  <Card className="h-auto min-h-64">
+                    {" "}
                     <CardContent className="items-center justify-center p-1">
+                      {" "}
                       <AttractionCard
                         name={attraction.name}
                         image={attraction.image}
