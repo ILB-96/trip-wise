@@ -38,6 +38,7 @@
     preact "10.11.3"
     preact-render-to-string "5.2.3"
 
+
 "@auth/mongodb-adapter@^3.0.0":
   version "3.0.0"
   resolved "https://registry.npmjs.org/@auth/mongodb-adapter/-/mongodb-adapter-3.0.0.tgz"
