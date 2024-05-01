@@ -31,7 +31,6 @@ const Home = () => {
         </Link>
         {/*<ScrollButton scrollTo={2 * window.innerHeight} />*/}
       </div>
-      <hr className="my-8 max-w-xl mx-auto" />
       <Slider />
     </>
   );
