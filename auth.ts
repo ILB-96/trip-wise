@@ -7,6 +7,7 @@ import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { JWT } from "next-auth/jwt"
 import User from "@models/user";
 import { DB_NAME, connectToDB } from "@utils/database";
+import { Types } from "mongoose";
 
 declare module "next-auth/jwt" {
     interface JWT {
@@ -40,16 +41,16 @@ export const {
             console.log("I got here");
             await connectToDB();
             console.log(user.id);
-            await User.updateOne({
-                where: {
-                    _id: user.id
-                }
-            },
-                {
-                    emailVerified: new Date(),
-                },
-            );
-            const test = await User.findOne({ _id: user.id });
+            await User.updateOne({ 
+                _id: user.id 
+            }, 
+            { 
+                $set: 
+                { 
+                    emailVerified: new Date() 
+                } 
+            });
+            const test = await User.findOne({ _id: new Types.ObjectId(user.id) });
             console.log({ test });
         }
     },
@@ -65,6 +66,7 @@ export const {
             return session;
         },
         async jwt({ token }) {
+            
             if (!token.sub) return token; // the user is not logged in
             const existingUser = await getUserById(token.sub);
             if (!existingUser) return token;

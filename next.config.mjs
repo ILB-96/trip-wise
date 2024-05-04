@@ -31,7 +31,17 @@ const nextConfig = {
         protocol: "https",
         hostname: "a.cdn-hotels.com",
         pathname: "**",
-      }
+      },
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+        pathname: "**",
+      },
+      {
+        protocol:"https",
+        hostname:"avatars.githubusercontent.com",
+        pathname:"**"
+      },
     ],
   },
 };

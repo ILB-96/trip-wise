@@ -28,7 +28,7 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
         <Image
           src={imgUrl}
           alt={title}
-{/*           layout="fill" */}
+/*           layout="fill" */
         fill
           className="object-cover"
         />
@@ -61,10 +61,10 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
             <Image
               src={imgUrl}
               alt={title}
-{/*               layout="responsive" */}
+/*               layout="responsive" */
               width={150}
               height={150}
-{/*               objectFit="cover" */}
+/*               objectFit="cover" */
               className="rounded-l-lg object-cover"
             />
           </div>
