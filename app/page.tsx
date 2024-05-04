@@ -3,7 +3,6 @@ import Slider from "@components/Slider";
 import ScrollButton from "@components/ui/button/ScrollButton";
 import TripsStoriesSection from "@components/TripsStoriesSection";
 
-
 const Home = () => {
   return (
     <>

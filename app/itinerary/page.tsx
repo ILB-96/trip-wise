@@ -14,6 +14,7 @@ import CommentFeed from '@components/ItineraryViewer/CommentFeed';
 import CommentForm from '@components/ItineraryViewer/CommentForm';
 import Rating from '@components/ItineraryViewer/Rating';
 import { motion, useInView } from 'framer-motion';
+import HeartInteraction from '@components/ItineraryViewer/HeartInteraction';
 
 
 const types = [
@@ -106,14 +107,9 @@ const ItineraryPage: React.FC = () => {
               ))}
             </div>
             <div className='flex space-x-5'>
+              <HeartInteraction />
               <Button
-                className=' bg-red-800 hover:bg-red-400 text-white font-bold py-2 px-4 rounded-full w-300
-               mt-10 text-center'
-              >
-                ❤Favour
-              </Button>
-              <Button
-                className=' bg-blue-800 hover:bg-blue-400 text-white font-bold py-2 px-4 rounded-full w-300
+                className=' bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full w-300
                mt-10 text-center'
               >
                 ➕Duplicate
@@ -187,10 +183,10 @@ const ItineraryPage: React.FC = () => {
       >
         <motion.div
           className="pl-20 flex items-center py-8 px-4 bg-gradient-to-r from-gray-100 to-teal-200 rounded-lg shadow-md"
-          whileHover={{ scale: 1.05 }} // Subtle hover scale animation
+          whileHover={{ scale: 1.05 }}
         >
-          <div className="text-center space-y-2"> {/* Centered stars with spacing */}
-            <p className="text-gray-600 mt-2 font-medium">How would you rate this itinerary?</p> {/* Updated text */}
+          <div className="text-center mt-2 flex space-x-5 items-center">
+            <p className="text-gray-600 font-medium">How would you rate this itinerary?</p>
             <Rating rating={currentRating} onRate={handleRate} />
           </div>
         </motion.div>
@@ -200,7 +196,7 @@ const ItineraryPage: React.FC = () => {
             animate="visible"
             variants={{
               hidden: { opacity: 0 },
-              visible: { opacity: 1, transition: { duration: 0.5 } }, // Slightly faster fade-in animation
+              visible: { opacity: 1, transition: { duration: 0.5 } },
             }}
           >
             <CommentForm />
@@ -211,7 +207,7 @@ const ItineraryPage: React.FC = () => {
           animate="visible"
           variants={{
             hidden: { opacity: 0 },
-            visible: { opacity: 1, transition: { duration: 0.7 } }, // Gradual fade-in animation
+            visible: { opacity: 1, transition: { duration: 0.7 } },
           }}
         >
           <CommentFeed />
