@@ -1,4 +1,5 @@
 import Slider from "@components/Slider";
+import TripsStoriesSection from "@components/TripsStoriesSection";
 
 const Home = () => (
   <section className="w-full flex-center flex-col">
@@ -14,7 +15,8 @@ const Home = () => (
       TripWise is an open-source tool for discovering and sharing trips and
       attractions.
     </p>
-    {<Slider />}
+    <Slider />
+    <TripsStoriesSection />
   </section>
 );
 
