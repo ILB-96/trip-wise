@@ -38,9 +38,14 @@ const nextConfig = {
         pathname: "**",
       },
       {
-        protocol:"https",
-        hostname:"avatars.githubusercontent.com",
-        pathname:"**"
+        protocol: "https",
+        hostname: "avatars.githubusercontent.com",
+        pathname: "**",
+      },
+      {
+        protocol: "https",
+        hostname: "source.unsplash.com",
+        pathname: "**",
       },
     ],
   },
