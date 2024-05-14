@@ -9,27 +9,33 @@ import MenuSvg from './Header/MenuSvg';
 import { disablePageScroll, enablePageScroll } from 'scroll-lock';
 import { ProfileButton } from './Header/ProfileButton';
 import { User } from 'next-auth';
+import { useRouter } from "next/navigation";
 
-
-const Logo: React.FC = () => (
-  <div className="flex items-center space-x-4">
-    <div className="rounded-full overflow-hidden">
-      <Image
-        src="/assets/icons/logo.png"
-        alt="logo"
-        height={40}
-        width={40}
-        priority
-      />
-    </div>
-    <div>
-      <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight">
-        TripWise
-      </h1>
-      <h2 className="text-sm font-light">Itinerary Planner</h2>
-    </div>
-  </div>
-);
+const Logo: React.FC = () => {
+  const router = useRouter();
+  const navigateToHomePage = () => {
+    router.push("/"); // Navigate to the trip detail page
+  };
+  return (
+    <>
+      <button className="flex items-center" onClick={navigateToHomePage}>
+        <Image
+          src="/assets/icons/logo.png"
+          alt="logo"
+          height={50}
+          width={70}
+          priority
+        />
+      </button>
+      <div>
+        <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight font-inter">
+          TripWise
+        </h1>
+        <h2 className="text-sm font-light">Itinerary Planner</h2>
+      </div>
+    </>
+  );
+};
 interface HeaderProps {
   currentUser: User | undefined;
 }
@@ -37,11 +43,9 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   const [user, setUser] = useState<any>(currentUser);
 
   const changeUserState = () => {
-    if (user)
-      setUser(null);
-    else
-      setUser("");
-  }
+    if (user) setUser(null);
+    else setUser("");
+  };
   const currentPath = usePathname(); // to know which page are we in]
   const [openNavigation, setOpenNavigation] = React.useState(false);
   const toggleNavigation = () => {
@@ -61,34 +65,43 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   return (
     <header
       className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
-      text-white py-4 px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
-       ${openNavigation ? 'bg-n-8' : 'bg-n-8/90 backdrop-blur-sm'}`}
+      text-white  px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
+       ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
     >
       <Logo />
-      <nav className={`${openNavigation ? 'flex' : 'hidden'}  
+      <nav
+        className={`${openNavigation ? "flex" : "hidden"}  
                     fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8
-                    lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}>
+                    lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}
+      >
         <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
-          {
-            navigation.map((item) => (
-              <a key={item.id} href={item.url}
-                onClick={handleClick}
-                className={`block relative font-code text-2xl uppercase 
+          {navigation.map((item) => (
+            <a
+              key={item.id}
+              href={item.url}
+              onClick={handleClick}
+              className={`block relative font-code text-2xl uppercase 
                 transition duration-300 ease-in-out hover:text-blue-400
                  px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold
-                 ${item.url === currentPath ? 'z-2 lg:text-n-1' : 'lg:text-n-1/50'}
+                 ${
+                   item.url === currentPath
+                     ? "z-2 lg:text-n-1"
+                     : "lg:text-n-1/50"
+                 }
                   lg:leading-5 lg:hover:text-n-1 xl:px-12`}
-              >
-                {item.title}
-              </a>
-            ))
-          }
+            >
+              {item.title}
+            </a>
+          ))}
         </div>
       </nav>
       {!user && (
         <>
-          <a href="/auth/register" className='font-code text-xs font-bold uppercase tracking-wider 
-           hidden mr-8 text-n-1/50 transition-colors hover:text-n-1 lg:block'>
+          <a
+            href="/auth/register"
+            className="font-code text-xs font-bold uppercase tracking-wider 
+           hidden mr-8 text-n-1/50 transition-colors hover:text-n-1 lg:block"
+          >
             REGISTER
           </a>
           <Button className="hidden lg:flex" href="/auth/login">
@@ -97,9 +110,11 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
         </>
       )}
       <ButtonGradient />
-      <div className='flex items-center justify-center space-x-10'>
-        {user && (<ProfileButton changeUserState={changeUserState} />)}
-        <Button className='ml-auto lg:hidden' px="px-3"
+      <div className="flex items-center justify-center space-x-10">
+        {user && <ProfileButton changeUserState={changeUserState} />}
+        <Button
+          className="ml-auto lg:hidden"
+          px="px-3"
           onClick={toggleNavigation}
         >
           <MenuSvg openNavigation={openNavigation} />

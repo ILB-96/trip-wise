@@ -4,7 +4,7 @@ import Header from "@components/Header";
 import Provider from "@context/Provider";
 import { auth } from "@auth";
 import { HeaderProvider } from "@components/Header/HeaderProvider";
-export const metadata = {
+export const metadata: Metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",
   icons: {
