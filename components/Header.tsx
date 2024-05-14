@@ -18,21 +18,24 @@ const Logo: React.FC = () => {
   };
   return (
     <>
-      <button className="flex items-center" onClick={navigateToHomePage}>
-        <Image
-          src="/assets/icons/logo.png"
-          alt="logo"
-          height={50}
-          width={70}
-          priority
-        />
+      <button className=" flex items-center" onClick={navigateToHomePage}>
+        <div className="py-1 lg:py-0">
+          <Image
+            src="/assets/icons/logo.png"
+            alt="logo"
+            height={50}
+            width={70}
+            priority
+          />
+        </div>
+        <div>
+          <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight font-inter">
+            <span className="text-blue-300">Trip</span>
+            <span className="text-green-500">Wise</span>
+          </h1>
+          <h2 className="text-sm font-light">Itinerary Planner</h2>
+        </div>
       </button>
-      <div>
-        <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight font-inter">
-          TripWise
-        </h1>
-        <h2 className="text-sm font-light">Itinerary Planner</h2>
-      </div>
     </>
   );
 };
@@ -64,7 +67,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   };
   return (
     <header
-      className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
+      className={`h-fit bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
       text-white  px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
        ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
     >
@@ -73,6 +76,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
         className={`${openNavigation ? "flex" : "hidden"}  
                     fixed top-[5rem] left-0 right-0 bottom-0 bg-n-8
                     lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}
+        aria-label="Main Navigation"
       >
         <div className="relative z-2 flex flex-col items-center justify-center m-auto lg:flex-row">
           {navigation.map((item) => (
@@ -110,12 +114,14 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
         </>
       )}
       <ButtonGradient />
-      <div className="flex items-center justify-center space-x-10">
+      <div className="flex items-center justify-center space-x-4">
         {user && <ProfileButton changeUserState={changeUserState} />}
         <Button
           className="ml-auto lg:hidden"
           px="px-3"
           onClick={toggleNavigation}
+          aria-expanded={openNavigation}
+          aria-controls="main-navigation"
         >
           <MenuSvg openNavigation={openNavigation} />
         </Button>
