@@ -4,28 +4,15 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { MouseEventHandler } from "react";
 import { Button } from "./ui/button";
+import { AttractionType } from "@app/attractions/page";
 
 interface PopoverProps {
-  image: string;
-  name: string;
-  location: string;
-  country: string;
-  description: string;
-  badges: string[];
+  item: AttractionType;
   isOpen: boolean;
   onClose: () => void;
 }
 
-const PopoverInfo: React.FC<PopoverProps> = ({
-  image,
-  name,
-  location,
-  country,
-  description,
-  badges,
-  isOpen,
-  onClose,
-}) => {
+const PopoverInfo: React.FC<PopoverProps> = ({ item, isOpen, onClose }) => {
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       const target = event.target as HTMLElement;
@@ -53,24 +40,24 @@ const PopoverInfo: React.FC<PopoverProps> = ({
                 className="w-full h-full object-cover rounded-xl shadow-lg"
                 width={800}
                 height={500}
-                src={image}
-                alt={name}
+                src={item.image}
+                alt={item.name}
               />
             </div>
-            <h2 className="font-semibold text-xl mb-4">{name}</h2>
+            <h2 className="font-semibold text-xl mb-4">{item.name}</h2>
             <div className="text-gray-600 mb-4">
-              {location + ", " + country}
+              {item.location + ", " + item.country}
             </div>
-            <p className="text-gray-800 mb-4">{description}</p>
+            <p className="text-gray-800 mb-4">{item.description}</p>
             <div className="grid grid-flow-col">
               <div className="flex justify-start">
-                {badges.map((badge, index) => (
+                {item.types.map((type: string, index: number) => (
                   <Badge
                     key={index}
                     variant="secondary"
                     className="transform transition-transform hover:scale-105 cursor-pointer"
                   >
-                    {badge}
+                    {type}
                   </Badge>
                 ))}
               </div>
