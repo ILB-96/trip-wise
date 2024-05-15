@@ -27,6 +27,7 @@ export type TripType = {
   image: string;
   from_date?: string;
   to_date?: string;
+  types?: string[];
 };
 const Trips = () => {
   const [filteredData, setFilteredData] = useState<TripType[]>(
