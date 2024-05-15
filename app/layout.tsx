@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",
   icons: {
-    icon: "/assets/icons/logo.png",
+    icon: "/assets/icons/favicon.ico",
   },
 };
 
