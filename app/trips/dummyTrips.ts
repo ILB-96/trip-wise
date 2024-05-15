@@ -1,4 +1,4 @@
-import { dummyData } from "@app/attractions/page";
+import { dummyAttractions } from "@app/attractions/dummyAttractions";
 import { TripType } from "./page";
 
 export const dummyTrips: TripType[] = [
@@ -12,12 +12,12 @@ export const dummyTrips: TripType[] = [
         date: "2022-01-01",
         visits: [
           {
-            attraction: dummyData[0],
+            attraction: dummyAttractions[0],
             from_time: "9:00 AM",
             to_time: "11:00 AM",
           },
           {
-            attraction: dummyData[1],
+            attraction: dummyAttractions[1],
             from_time: "12:00 PM",
             to_time: "4:00 PM",
           },
@@ -37,12 +37,12 @@ export const dummyTrips: TripType[] = [
         date: "2022-05-15",
         visits: [
           {
-            attraction: dummyData[3], // The Eiffel Tower
+            attraction: dummyAttractions[3], // The Eiffel Tower
             from_time: "10:00 AM",
             to_time: "1:00 PM",
           },
           {
-            attraction: dummyData[6], // The Colosseum
+            attraction: dummyAttractions[6], // The Colosseum
             from_time: "3:00 PM",
             to_time: "6:00 PM",
           },
@@ -52,7 +52,7 @@ export const dummyTrips: TripType[] = [
         date: "2022-05-16",
         visits: [
           {
-            attraction: dummyData[5], // The Great Wall of China
+            attraction: dummyAttractions[5], // The Great Wall of China
             from_time: "9:00 AM",
             to_time: "3:00 PM",
           },
@@ -72,7 +72,7 @@ export const dummyTrips: TripType[] = [
         date: "2022-09-10",
         visits: [
           {
-            attraction: dummyData[7], // Machu Picchu
+            attraction: dummyAttractions[7], // Machu Picchu
             from_time: "5:00 AM",
             to_time: "10:00 AM",
           },
@@ -82,7 +82,7 @@ export const dummyTrips: TripType[] = [
         date: "2022-09-12",
         visits: [
           {
-            attraction: dummyData[8], // The Statue of Liberty
+            attraction: dummyAttractions[8], // The Statue of Liberty
             from_time: "1:00 PM",
             to_time: "4:00 PM",
           },
