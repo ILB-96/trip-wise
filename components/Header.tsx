@@ -19,21 +19,32 @@ const Logo: React.FC = () => {
   return (
     <>
       <button className=" flex items-center" onClick={navigateToHomePage}>
-        <div className="py-1 lg:py-0">
+        <div
+          className="py-1 lg:py-0"
+          // style={{
+          //   width: "70px",
+          //   height: "70px",
+          //   minWidth: "70px",
+          //   minHeight: "70px",
+          // }}
+        >
           <Image
             src="/assets/icons/logo.png"
             alt="logo"
-            height={50}
-            width={70}
+            className="w-20 max-md:w-16 h-auto"
+            height={65}
+            width={65}
             priority
           />
         </div>
         <div>
-          <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight font-inter">
+          <h1 className="font-extrabold text-xl md:text-2xl lg:text-3xl tracking-tight font-inter max-sm:hidden">
             <span className="text-blue-300">Trip</span>
             <span className="text-green-500">Wise</span>
           </h1>
-          <h2 className="text-sm font-light">Itinerary Planner</h2>
+          <h2 className="text-sm font-light font-inter max-sm:hidden">
+            Itinerary Planner
+          </h2>
         </div>
       </button>
     </>
@@ -67,7 +78,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   };
   return (
     <header
-      className={`h-fit bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
+      className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
       text-white  px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
        ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
     >
