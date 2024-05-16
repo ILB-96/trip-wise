@@ -1,4 +1,4 @@
-import { IAccount } from '@lib/account';
+import { IAccount } from '@models/account';
 import mongoose, { Document, Schema } from 'mongoose';
 
 

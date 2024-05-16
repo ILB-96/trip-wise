@@ -1,15 +1,15 @@
-interface Activity {
-    name: string;
-    time: string;
-    image: string;
-  }
+export interface IActivity {
+  name: string;
+  time: string;
+  image: string;
+}
+
+export interface IDay {
+  dayNumber: number;
+  activities: IActivity[];
+}
   
-  interface Day {
-    dayNumber: number;
-    activities: Activity[];
-  }
-  
-  export const dummyDays: Day[] = [
+  export const dummyDays: IDay[] = [
     {
       dayNumber: 1,
       activities: [

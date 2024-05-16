@@ -4,7 +4,7 @@ import * as z from "zod";
 import { RegisterSchema } from "@schemas";
 import bcrypt from "bcryptjs";
 
-import { getUserByEmail } from "@lib/user";
+import { getUserByEmail } from "@lib/user_object_get";
 import User from "@models/user";
 import { connectToDB } from "@utils/database";
 
