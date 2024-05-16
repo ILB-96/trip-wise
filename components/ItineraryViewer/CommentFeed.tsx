@@ -6,7 +6,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar'
 import { FaUser } from 'react-icons/fa'
 import TimeAgo  from 'react-timeago'
 import { Separator } from '@components/ui/separator'
-import CommentForm from './CommentForm'
 
 function CommentFeed() {
     return (
