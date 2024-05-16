@@ -10,10 +10,10 @@ import { AttractionType } from "@app/attractions/page";
 
 export type VisitType = {
   attraction: AttractionType;
-  from_time?: string;
-  to_time?: string;
+  fromTime?: string;
+  toTime?: string;
 };
-export type DayType = { visits: VisitType[]; date?: string };
+export type DayType = { visits: VisitType[]; date?: Date };
 export type TripType = {
   name: string;
   rating?: number;
@@ -25,8 +25,8 @@ export type TripType = {
   days?: DayType[];
   views?: number;
   image: string;
-  from_date?: string;
-  to_date?: string;
+  fromDate?: string;
+  toDate?: string;
   types?: string[];
 };
 const Trips = () => {

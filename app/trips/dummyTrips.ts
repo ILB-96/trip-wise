@@ -9,17 +9,17 @@ export const dummyTrips: TripType[] = [
     country: "Japan",
     days: [
       {
-        date: "2022-01-01",
+        date: new Date("2022-01-01"),
         visits: [
           {
             attraction: dummyAttractions[0],
-            from_time: "9:00 AM",
-            to_time: "11:00 AM",
+            fromTime: "9:00 AM",
+            toTime: "11:00 AM",
           },
           {
             attraction: dummyAttractions[1],
-            from_time: "12:00 PM",
-            to_time: "4:00 PM",
+            fromTime: "12:00 PM",
+            toTime: "4:00 PM",
           },
         ],
       },
@@ -34,27 +34,27 @@ export const dummyTrips: TripType[] = [
     country: "Germany",
     days: [
       {
-        date: "2022-05-15",
+        date: new Date("2022-05-15"),
         visits: [
           {
             attraction: dummyAttractions[3], // The Eiffel Tower
-            from_time: "10:00 AM",
-            to_time: "1:00 PM",
+            fromTime: "10:00 AM",
+            toTime: "1:00 PM",
           },
           {
             attraction: dummyAttractions[6], // The Colosseum
-            from_time: "3:00 PM",
-            to_time: "6:00 PM",
+            fromTime: "3:00 PM",
+            toTime: "6:00 PM",
           },
         ],
       },
       {
-        date: "2022-05-16",
+        date: new Date("2022-05-16"),
         visits: [
           {
             attraction: dummyAttractions[5], // The Great Wall of China
-            from_time: "9:00 AM",
-            to_time: "3:00 PM",
+            fromTime: "9:00 AM",
+            toTime: "3:00 PM",
           },
         ],
       },
@@ -69,22 +69,22 @@ export const dummyTrips: TripType[] = [
     country: "Peru",
     days: [
       {
-        date: "2022-09-10",
+        date: new Date("2022-09-10"),
         visits: [
           {
             attraction: dummyAttractions[7], // Machu Picchu
-            from_time: "5:00 AM",
-            to_time: "10:00 AM",
+            fromTime: "5:00 AM",
+            toTime: "10:00 AM",
           },
         ],
       },
       {
-        date: "2022-09-12",
+        date: new Date("2022-09-12"),
         visits: [
           {
             attraction: dummyAttractions[8], // The Statue of Liberty
-            from_time: "1:00 PM",
-            to_time: "4:00 PM",
+            fromTime: "1:00 PM",
+            toTime: "4:00 PM",
           },
         ],
       },
