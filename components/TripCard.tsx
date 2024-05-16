@@ -17,7 +17,7 @@ const TripCard = (trip: TripType) => {
   return (
     <>
       <div
-        className="rounded-lg overflow-hidden shadow-xl transform transition-transform hover:scale-[102%] cursor-pointer relative"
+        className="rounded-lg overflow-hidden shadow-xl cursor-pointer relative"
         onClick={navigateToTripDetail}
       >
         <div className="flex items-center">

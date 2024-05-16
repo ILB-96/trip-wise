@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Search, FilterX } from "lucide-react";
+import { Search } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
 
-import { AttractionType } from "../../app/attractions/page";
+import { AttractionType } from "@app/attractions/page";
 import { TripType } from "@app/trips/page";
 import FilterBox from "./FilterBox";
 import sortData from "@helpers/sortData";
@@ -19,6 +19,7 @@ type Option = {
 };
 
 export type DataItem = AttractionType | TripType;
+
 const FilterBar = ({
   options,
   data,
@@ -33,11 +34,13 @@ const FilterBar = ({
   );
   const [currentCities, setCurrentCities] = useState<string[]>([]);
   const [searchExpanded, setSearchExpanded] = useState<boolean>(false);
+
   const handleTextSearch = useSearchData(
     data,
     ["name", "country", "description"],
     onDataChange
   );
+
   const toggleSearch = () => {
     setSearchExpanded((prev) => !prev);
     if (!searchExpanded) {
@@ -85,7 +88,45 @@ const FilterBar = ({
 
   return (
     <div className="mt-2 w-full flex-1">
-      <div className="pl-2 bg-slate-100 shadow-2xl rounded-2xl flex items-center justify-between flex-wrap">
+      {/* Separate search bar for small screens */}
+      <div
+        className="md:hidden mb-2 px-2 py-2 bg-slate-100 shadow-2xl rounded-2xl flex items-center justify-between"
+        aria-label="Search bar"
+      >
+        <motion.div
+          transition={{
+            layout: { duration: 0.7, type: "spring" },
+          }}
+          layout
+          className="flex justify-end w-full"
+          id="div-search"
+        >
+          {searchExpanded && (
+            <motion.input
+              id="text-search"
+              type="text"
+              placeholder="Search"
+              aria-label="Search"
+              className="w-full h-full bg-transparent pl-2 rounded-xl border-y-0 border-r-0 border-l-2 focus:outline-none border-l-slate-200/60"
+              onChange={(e) => handleTextSearch(e.target.value)}
+            />
+          )}
+        </motion.div>
+        <Button
+          variant="ghost"
+          className="rounded-2xl hover:text-orange-300 ml-2"
+          aria-label="Toggle search"
+          onClick={toggleSearch}
+        >
+          <Search className="text-blue-500 hover:text-orange-300" />
+        </Button>
+      </div>
+
+      {/* Filter boxes */}
+      <div
+        className="px-2 py-2 bg-slate-100 shadow-2xl rounded-2xl flex items-center justify-between flex-wrap md:flex-nowrap"
+        aria-label="Filter options"
+      >
         {!searchExpanded &&
           options.map((option) => (
             <FilterBox
@@ -96,12 +137,15 @@ const FilterBar = ({
               }
               allowMultiple={option.disableMultiple ? false : true}
               onChange={handleFilterChange}
+              aria-label={`Filter by ${option.title}`}
             />
           ))}
+
+        {/* Search bar for larger screens */}
         <div
           className={
             (searchExpanded ? "w-full " : "") +
-            "flex justify-end focus:outline-none border-0"
+            "hidden md:flex justify-end focus:outline-none border-0 mt-2 md:mt-0"
           }
         >
           <motion.div
@@ -117,17 +161,19 @@ const FilterBar = ({
                 id="text-search"
                 type="text"
                 placeholder="Search"
-                className="w-1/4 h-full bg-transparent pl-2 rounded-xl border-y-0 border-r-0 border-l-2 focus:outline-none  border-l-slate-200/60"
+                aria-label="Search"
+                className="w-full md:w-1/4 h-full bg-transparent pl-2 rounded-xl border-y-0 border-r-0 border-l-2 focus:outline-none border-l-slate-200/60"
                 onChange={(e) => handleTextSearch(e.target.value)}
               />
             )}
           </motion.div>
           <Button
             variant="ghost"
-            className="rounded-2xl hover:text-red-600"
+            className="rounded-2xl hover:text-orange-300 ml-2"
+            aria-label="Toggle search"
             onClick={toggleSearch}
           >
-            <Search className="text-blue-500 hover:text-red-600" />
+            <Search className="text-blue-500 hover:text-orange-300" />
           </Button>
         </div>
       </div>

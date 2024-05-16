@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@components/ui/button";
+
 interface FilterProps {
   title: string;
   options: string[];
@@ -50,6 +51,7 @@ const FilterBox: React.FC<FilterProps> = ({
       }
     }
   };
+
   const handleCloseDropdown = useCallback((event: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -113,8 +115,11 @@ const FilterBox: React.FC<FilterProps> = ({
         <Button
           variant="ghost"
           onClick={handleDropdownToggle}
-          className="bg-slate-100 border-none h-8 w-fit text-left px-2 rounded-md focus:outline-none flex items-center"
+          className="bg-slate-100 border-none bg-transparent hover:bg-transparent hover:text-orange-300 h-8 w-fit text-left px-2 rounded-md focus:outline-none flex items-center"
           disabled={disableDropdown}
+          aria-haspopup="listbox"
+          aria-expanded={isOpen}
+          aria-controls="filter-options"
         >
           {title}
           <svg
@@ -135,8 +140,13 @@ const FilterBox: React.FC<FilterProps> = ({
           </svg>
         </Button>
         {isOpen && (
-          <div className="absolute z-10 overflow-clip">
-            <div className="w-44 md:max-h-[30rem] max-h-72 overflow-y-scroll bg-slate-100 border-none shadow-md rounded-md">
+          <div className="absolute z-10 overflow-clip" id="filter-options">
+            <div
+              className="w-44 md:max-h-[30rem] max-h-72 overflow-y-scroll bg-slate-100 border-none shadow-md rounded-md"
+              role="listbox"
+              aria-labelledby="filter-options"
+              tabIndex={-1}
+            >
               {sortedOptions.map((option, i) => (
                 <label
                   key={i}
@@ -144,6 +154,8 @@ const FilterBox: React.FC<FilterProps> = ({
                   className={`${
                     highlightedIndex === i ? "bg-gray-200 rounded-md" : ""
                   } hover:bg-slate-200 hover:rounded-md cursor-pointer block p-2`}
+                  role="option"
+                  aria-selected={selectedOptions.includes(option)}
                 >
                   <input
                     type="checkbox"
