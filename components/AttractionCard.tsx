@@ -4,29 +4,20 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
 import PopoverInfo from "./PopoverInfo";
-        
+import AddDateButton from "./AddDateButton";
+import { AttractionType } from "@app/attractions/page";
+import { DateRange } from "react-day-picker";
+
 interface CardProps {
-  name: string;
-  image: string;
-  location: string;
-  country: string;
-  description: string;
-  types?: string[];
-  price?: string | undefined;
-  rating?: number | undefined;
-  duration?: string | undefined;
+  item: AttractionType;
+  addAction?: (attraction: AttractionType, date: Date | undefined) => void;
+  dateRange?: DateRange | undefined;
 }
 
 const AttractionCard: React.FC<CardProps> = ({
-  name,
-  image,
-  location,
-  country,
-  description,
-  types = [],
-  price,
-  rating,
-  duration,
+  item,
+  addAction,
+  dateRange,
 }) => {
   const [showPopup, setShowPopup] = useState(false);
 
@@ -36,66 +27,71 @@ const AttractionCard: React.FC<CardProps> = ({
 
   return (
     <>
-      <div
-        className="rounded-lg overflow-hidden shadow-xl transform transition-transform hover:scale-[102%] cursor-pointer relative"
-        onClick={togglePopup}
-      >
-        <div className="flex items-center">
-          <Image
-            className="w-full h-48 object-cover"
-            width={500}
-            height={300}
-            src={image}
-            alt={name}
-            priority
-          />
-        </div>
-        <div className="p-4">
-          <div className="flex justify-between">
-            <h2 className="font-semibold text-xl">{name}</h2>
+      <div className="rounded-lg overflow-hidden shadow-xl cursor-pointer relative">
+        <div onClick={togglePopup}>
+          <div className="flex items-center ">
+            <Image
+              className="w-full object-cover overflow-hidden h-52"
+              width={500}
+              height={300}
+              src={item.image}
+              alt={item.name}
+              priority
+            />
           </div>
-          {duration && (
-            <Badge
-              className={
-                (price ? "top-8" : "top-2") +
-                " flex absolute left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer"
-              }
-            >
-              {duration}
-            </Badge>
-          )}
-          {price && (
-            <Badge className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
-              {price}
-            </Badge>
-          )}
-          {rating && <StarRating rating={rating} />}
-          <p className="text-gray-600">{location + ", " + country}</p>
-          <p className="text-gray-800">{description}</p>
-          <div>
-            {types.map((type, index) => (
+          <div className="p-4">
+            <div className="flex justify-between">
+              <h2 className="font-semibold text-xl">{item.name}</h2>
+            </div>
+            {item.duration && (
               <Badge
-                key={index}
-                className="transform transition-transform hover:scale-105 cursor-pointer"
-                variant="secondary"
+                className={
+                  (item.price ? "top-8" : "top-2") +
+                  " flex absolute left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer"
+                }
               >
-                {type}
+                {item.duration}
               </Badge>
-            ))}
+            )}
+            {item.price && (
+              <Badge className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
+                {item.price}
+              </Badge>
+            )}
+            {item.rating && <StarRating rating={item.rating} />}
+            <p className="text-gray-600">
+              {item.location + ", " + item.country}
+            </p>
+            {item.description !== "" && (
+              <p className="text-gray-800">{item.description}</p>
+            )}
+            <div>
+              {item?.types &&
+                item?.types.map((type: string, index: number) => (
+                  <Badge
+                    key={index}
+                    className={
+                      "transform transition-transform hover:scale-105 cursor-pointer"
+                    }
+                    variant="secondary"
+                  >
+                    {type}
+                  </Badge>
+                ))}
+            </div>
           </div>
         </div>
+        {addAction && (
+          <div className="flex float-end absolute top-10 right-1  ">
+            <AddDateButton
+              attraction={item}
+              addAction={addAction}
+              dateRange={dateRange}
+            />
+          </div>
+        )}
       </div>
-
-      <PopoverInfo
-        image={image}
-        name={name}
-        location={location}
-        country={country}
-        description={description}
-        badges={types}
-        isOpen={showPopup}
-        onClose={togglePopup}
-      />
+      <PopoverInfo item={item} isOpen={showPopup} onClose={togglePopup} />
     </>
   );
 };

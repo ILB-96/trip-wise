@@ -57,6 +57,7 @@ module.exports = {
         "benefit-card-6": "url(assets/benefits/card-6.svg)",
       },
       colors: {
+        "black-opacity-75": "rgba(0, 0, 0, 0.75)",
         color: {
           1: "#AC6AFF",
           2: "#FFC876",

@@ -1,6 +1,6 @@
 "use client";
 import * as React from "react";
-import { dummyData } from "@app/attractions/page";
+import { dummyAttractions } from "@app/attractions/dummyAttractions";
 import { Card, CardContent } from "@components/ui/card";
 import {
   Carousel,
@@ -24,7 +24,7 @@ export default function Slider() {
       <div className="relative w-full max-w-none">
         <Carousel className="p-5 w-full">
           <CarouselContent className="-ml-1">
-            {dummyData.map((attraction) => (
+            {dummyAttractions.map((attraction) => (
               <CarouselItem
                 key={attraction.name}
                 className="pl-1 basis-full sm:basis-1/2 md:basis-2/5 lg:basis-1/5" // Basis classes as previously adjusted
@@ -35,11 +35,7 @@ export default function Slider() {
                     <CardContent className="items-center justify-center p-1">
                       {" "}
                       <AttractionCard
-                        name={attraction.name}
-                        image={attraction.image}
-                        location={attraction.location}
-                        country={attraction.country}
-                        description=""
+                        item={{ ...attraction, description: "" }}
                       />
                     </CardContent>
                   </Card>

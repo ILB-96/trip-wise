@@ -1,215 +1,80 @@
 "use client";
-import { useState, useCallback, useEffect, useRef, useMemo } from "react";
-import FilterBox from "./FilterBox";
-import { AttractionType } from "../../app/attractions/page";
-import { Country, State, City } from "country-state-city";
-import { getCode } from "country-list";
+import { useState } from "react";
 import { Search, FilterX } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
-import Fuse from "fuse.js";
+
+import { AttractionType } from "../../app/attractions/page";
+import { TripType } from "@app/trips/page";
+import FilterBox from "./FilterBox";
+import sortData from "@helpers/sortData";
+import useSearchData from "@hooks/useSearchData";
+import getFilters from "@helpers/getFilters";
+import filterData from "@helpers/filterData";
 
 type Option = {
   title: string;
   selections: string[];
   disableMultiple?: boolean;
 };
-type isoCode = string;
 
+export type DataItem = AttractionType | TripType;
 const FilterBar = ({
   options,
   data,
   onDataChange,
 }: {
   options: Option[];
-  data: AttractionType[] | [];
-  onDataChange: (currentData: AttractionType[] | []) => void;
+  data: DataItem[];
+  onDataChange: (currentData: DataItem[]) => void;
 }) => {
   const [currentFilter, setCurrentFilter] = useState<Record<string, string[]>>(
     () => ({})
   );
   const [currentCities, setCurrentCities] = useState<string[]>([]);
   const [searchExpanded, setSearchExpanded] = useState<boolean>(false);
-  const handleSearchClick = () => {
-    setSearchExpanded((prevExpanded) => !prevExpanded);
-    document.getElementById("text-search")?.focus();
+  const handleTextSearch = useSearchData(
+    data,
+    ["name", "country", "description"],
+    onDataChange
+  );
+  const toggleSearch = () => {
+    setSearchExpanded((prev) => !prev);
+    if (!searchExpanded) {
+      setTimeout(() => document.getElementById("text-search")?.focus(), 300);
+    }
     onDataChange(data);
   };
 
-  const handleTextSearch = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      const fuse = new Fuse(data, {
-        keys: ["name", "location", "country", "description", "types"],
-        threshold: 0.4,
-      });
-      let query = event.target.value;
-      const result = fuse.search(query);
-      onDataChange(result.map((item) => item.item));
-      if (query.trim() === "" || !searchExpanded) {
-        onDataChange(data);
-      }
-    },
-    [data, searchExpanded, onDataChange]
-  );
-
   const handleFilterChange = (title: string, selectedOptions: string[]) => {
-    let filteredData: AttractionType[] = [];
-    const startFilter = {
+    const startFilters = {
       ...currentFilter,
       [title]: selectedOptions.filter((val) => val !== ""),
     };
 
-    let filter: Record<string, string[]> = {};
-    for (const key in startFilter) {
-      if (
-        (startFilter[key].length === 0 || startFilter[key][0] !== "") &&
-        title === "Country" &&
-        key === "Country"
-      )
-        setCurrentCities([]);
-      if (startFilter[key].length !== 0 && startFilter[key][0] !== "") {
-        filter[key] = startFilter[key];
+    let filters: Record<string, string[]> = getFilters(
+      title,
+      startFilters,
+      setCurrentCities
+    );
 
-        if (title === "Country" && key === "Country") {
-          const country = Country.getCountryByCode(
-            getCode(filter["Country"][0]) as isoCode
-          );
-          let cities: string[] = [];
-          if (country) {
-            const states = State.getStatesOfCountry(country.isoCode);
-            states.forEach((state) => {
-              const stateCities = City.getCitiesOfState(
-                country.isoCode,
-                state.isoCode
-              );
-              cities = cities.concat(
-                stateCities.map((city) => city.name as string)
-              );
-            });
-          }
-          setCurrentCities(cities);
-        }
-      }
-    }
-    data.forEach((item) => {
-      let isValid = true;
-      for (const key in filter) {
-        if (Object.prototype.hasOwnProperty.call(filter, key)) {
-          if (filter[key].length > 0) {
-            switch (key) {
-              case "Rating":
-                const rating = item.rating || 0;
-                const selectedRating = filter[key][0].split(" ")[0].length;
-                if (rating < selectedRating) {
-                  isValid = false;
-                }
-                break;
-              case "Price Range":
-                const price = item.price || "";
-                isValid = false;
-                for (let i = 0; i < filter[key].length; i++) {
-                  if (price === filter[key][i]) {
-                    isValid = true;
-                    break;
-                  }
-                }
-                break;
-              case "Sort By":
-                break;
-              default:
-                const lowerCaseKey = key.toLowerCase();
-                const itemValue =
-                  item[lowerCaseKey as keyof AttractionType]?.toString() || "";
-                isValid = false;
-                for (let i = 0; i < filter[key].length; i++) {
-                  if (itemValue.includes(filter[key][i])) {
-                    isValid = true;
-                    break;
-                  }
-                }
-                break;
-            }
-          }
-        }
-        if (!isValid) break;
-      }
-      if (isValid) {
-        filteredData.push(item);
-      }
-    });
+    let filteredData: DataItem[] = filterData(data, filters);
 
     let newData = data;
-    for (const key in filter) {
+    for (const key in filters) {
       if (
-        filter[key].length > 1 ||
-        (filter[key].length === 1 && filter[key][0] !== "")
+        filters[key].length > 1 ||
+        (filters[key].length === 1 && filters[key][0] !== "")
       ) {
         newData = filteredData;
         break;
       }
     }
 
-    for (const key in filter) {
-      if (key === "Sort By") {
-        switch (filter[key][0]) {
-          case "Price Ascending":
-            newData.sort((a, b) => {
-              const priceA = a.price || "";
-              const priceB = b.price || "";
-              if (priceA === priceB) return 0;
-              if (priceA === "") return 1;
-              if (priceB === "") return -1;
-              if (priceA === "Free") return -1;
-              if (priceB === "Free") return 1;
-              return priceA.length - priceB.length;
-            });
-            break;
-          case "Price Descending":
-            newData.sort((a, b) => {
-              const priceA = a.price || "";
-              const priceB = b.price || "";
-              if (priceA === priceB) return 0;
-              if (priceA === "Free") return 1;
-              if (!priceA) return 1;
-              if (!priceB) return -1;
-              if (priceB === "Free") return -1;
-              return priceB.length - priceA.length;
-            });
-            break;
-          case "Rating":
-            newData.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-            break;
-          case "Duration Descending":
-            newData.sort((a, b) => {
-              const durationA = a.duration || "";
-              const durationB = b.duration || "";
-              if (durationA === durationB) return 0;
-              if (!durationA) return 1;
-              if (!durationB) return -1;
-              const durA = parseInt(durationA.split("(")[1].split(" ")[0]);
-              const durB = parseInt(durationB.split("(")[1].split(" ")[0]);
-
-              return (durB || 0) - (durA || 0);
-            });
-            break;
-          case "Duration Ascending":
-            newData.sort((a, b) => {
-              const durationA = a.duration || "";
-              const durationB = b.duration || "";
-              if (durationA === durationB) return 0;
-              if (!durationA) return 1;
-              if (!durationB) return -1;
-              const durA = parseInt(durationA.split("(")[1].split(" ")[0]);
-              const durB = parseInt(durationB.split("(")[1].split(" ")[0]);
-
-              return (durA || 0) - (durB || 0);
-            });
-            break;
-          default:
-            break;
-        }
-      }
+    if (filters["Sort By"]) {
+      newData = sortData(newData, filters["Sort By"][0]);
     }
+
     setCurrentFilter((prevFilter) => ({
       ...prevFilter,
       [title]: selectedOptions,
@@ -233,11 +98,6 @@ const FilterBar = ({
               onChange={handleFilterChange}
             />
           ))}
-        {/* {!searchExpanded && (
-          <Button variant="ghost" onClick={handleClearInput}>
-            <FilterX color="red" />
-          </Button>
-        )} */}
         <div
           className={
             (searchExpanded ? "w-full " : "") +
@@ -252,23 +112,20 @@ const FilterBar = ({
             className="flex justify-end w-full"
             id="div-search"
           >
-            <motion.input
-              id="text-search"
-              type="text"
-              placeholder="Search"
-              value={!searchExpanded ? "" : undefined}
-              className={
-                !searchExpanded
-                  ? "w-0"
-                  : "w-1/4 h-full bg-transparent pl-2 rounded-xl border-y-0 border-r-0 border-l-2 focus:outline-none  border-l-slate-200/60"
-              }
-              onChange={(e) => handleTextSearch(e)}
-            />
+            {searchExpanded && (
+              <motion.input
+                id="text-search"
+                type="text"
+                placeholder="Search"
+                className="w-1/4 h-full bg-transparent pl-2 rounded-xl border-y-0 border-r-0 border-l-2 focus:outline-none  border-l-slate-200/60"
+                onChange={(e) => handleTextSearch(e.target.value)}
+              />
+            )}
           </motion.div>
           <Button
             variant="ghost"
             className="rounded-2xl hover:text-red-600"
-            onClick={handleSearchClick}
+            onClick={toggleSearch}
           >
             <Search className="text-blue-500 hover:text-red-600" />
           </Button>
