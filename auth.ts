@@ -2,7 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 
 import clientPromise from "@lib/db";
-import { getUserById } from "@lib/user";
+import { getUserById } from "@lib/user_object_get";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { JWT } from "next-auth/jwt"
 import User from "@models/user";
@@ -63,6 +63,7 @@ export const {
             if (token.role && session.user) {
                 session.user.role = token.role;
             }
+            // console.log({ session })
             return session;
         },
         async jwt({ token }) {
