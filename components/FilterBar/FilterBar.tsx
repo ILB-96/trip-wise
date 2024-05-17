@@ -87,10 +87,10 @@ const FilterBar = ({
   };
 
   return (
-    <div className="mt-2 w-full flex-1">
+    <div className="w-full flex-1 bg-transparent shadow rounded-2xl ">
       {/* Separate search bar for small screens */}
       <div
-        className="md:hidden mb-2 px-2 py-2 bg-slate-100 shadow-2xl rounded-2xl flex items-center justify-between"
+        className="md:hidden p-2 bg-transparent  flex items-center justify-between"
         aria-label="Search bar"
       >
         <motion.div
@@ -124,7 +124,7 @@ const FilterBar = ({
 
       {/* Filter boxes */}
       <div
-        className="px-2 py-2 bg-slate-100 shadow-2xl rounded-2xl flex items-center justify-between flex-wrap md:flex-nowrap"
+        className="px-2 py-2 bg-transparent shadow rounded-2xl flex items-center justify-between flex-wrap md:flex-nowrap"
         aria-label="Filter options"
       >
         {!searchExpanded &&

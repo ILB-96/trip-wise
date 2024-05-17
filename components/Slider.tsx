@@ -18,7 +18,7 @@ export default function Slider() {
         style={{ textAlign: "left" }}
         className="text-2xl font-semibold mb-4 pl-4"
       >
-        Best Trips to Experience
+        Best Attractions to Experience
       </h2>
 
       <div className="relative w-full max-w-none">
@@ -35,7 +35,7 @@ export default function Slider() {
                     <CardContent className="items-center justify-center p-1">
                       {" "}
                       <AttractionCard
-                        item={{ ...attraction, description: "" }}
+                        item={{ ...attraction, description: "", types: [] }}
                       />
                     </CardContent>
                   </Card>

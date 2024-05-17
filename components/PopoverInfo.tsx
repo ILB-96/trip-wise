@@ -33,7 +33,7 @@ const PopoverInfo: React.FC<PopoverProps> = ({ item, isOpen, onClose }) => {
   return (
     <>
       {isOpen && (
-        <div className="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
+        <div className=" absolute top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50">
           <div className="popover-info bg-white rounded-lg p-8 max-w-lg max-h-screen overflow-y-auto">
             <div className="flex items-center">
               <Image
@@ -51,15 +51,16 @@ const PopoverInfo: React.FC<PopoverProps> = ({ item, isOpen, onClose }) => {
             <p className="text-gray-800 mb-4">{item.description}</p>
             <div className="grid grid-flow-col">
               <div className="flex justify-start">
-                {item.types.map((type: string, index: number) => (
-                  <Badge
-                    key={index}
-                    variant="secondary"
-                    className="transform transition-transform hover:scale-105 cursor-pointer"
-                  >
-                    {type}
-                  </Badge>
-                ))}
+                {item?.types &&
+                  item.types.map((type: string, index: number) => (
+                    <Badge
+                      key={index}
+                      variant="secondary"
+                      className="transform transition-transform hover:scale-105 cursor-pointer"
+                    >
+                      {type}
+                    </Badge>
+                  ))}
               </div>
               <div className="flex justify-end">
                 <Button
