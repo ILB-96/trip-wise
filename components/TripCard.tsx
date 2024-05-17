@@ -11,7 +11,7 @@ const TripCard = (trip: TripType) => {
   const router = useRouter();
 
   const navigateToTripDetail = () => {
-    router.push("/itinerary"); // Navigate to the trip detail page
+    router.push("/trip"); // Navigate to the trip detail page
   };
 
   return (

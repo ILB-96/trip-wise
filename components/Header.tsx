@@ -43,7 +43,7 @@ const Logo: React.FC = () => {
             <span className="text-green-500">Wise</span>
           </h1>
           <h2 className="text-sm font-light font-inter max-sm:hidden">
-            Itinerary Planner
+            Trip Planner
           </h2>
         </div>
       </button>
