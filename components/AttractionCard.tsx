@@ -7,7 +7,7 @@ import PopoverInfo from "./PopoverInfo";
 import AddDateButton from "./AddDateButton";
 import { AttractionType } from "@app/attractions/page";
 import { DateRange } from "react-day-picker";
-
+import "@styles/globals.css";
 interface CardProps {
   item: AttractionType;
   addAction?: (attraction: AttractionType, date: Date | undefined) => void;
@@ -41,7 +41,7 @@ const AttractionCard: React.FC<CardProps> = ({
           </div>
           <div className="p-4">
             <div className="flex justify-between">
-              <h2 className="font-semibold text-xl">{item.name}</h2>
+              <h2 className="font-semibold text-xl truncate">{item.name}</h2>
             </div>
             {item.price && (
               <Badge className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
@@ -49,11 +49,11 @@ const AttractionCard: React.FC<CardProps> = ({
               </Badge>
             )}
             {item.rating && <StarRating rating={item.rating} />}
-            <p className="text-gray-600">
+            <p className="text-gray-600 truncate">
               {item.location + ", " + item.country}
             </p>
             {item.description !== "" && (
-              <p className="text-gray-800">{item.description}</p>
+              <p className="text-gray-800 truncate">{item.description}</p>
             )}
             <div>
               {item?.types &&

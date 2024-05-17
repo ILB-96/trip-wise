@@ -238,7 +238,11 @@
   align-items: center;
   display: flex;
 }
-
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .carousel-prev,
 .carousel-next {
   background-color: #fff; /* White background for previous button */
