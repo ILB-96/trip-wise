@@ -6,15 +6,6 @@ export const tripsOptions = [
     disableMultiple: true,
   },
   {
-    title: "Duration",
-    selections: [
-      "Short (1-3 hours)",
-      "Half-day (4-6 hours)",
-      "Full-day (7-10 hours)",
-      "Multiple days (11 + hours)",
-    ],
-  },
-  {
     title: "Rating",
     selections: [
       "⭐ and up",

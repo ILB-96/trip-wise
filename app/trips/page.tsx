@@ -21,7 +21,6 @@ export type TripType = {
   location?: string;
   description: string;
   price?: string;
-  duration?: string;
   days?: DayType[];
   views?: number;
   image: string;
@@ -56,7 +55,6 @@ const Trips = () => {
             description={trip.description}
             rating={trip.rating ? trip.rating : 0}
             views={trip.views ? trip.views : 0}
-            duration={trip.days ? trip.days.length.toString() : ""}
           />
         ))}
       </div>

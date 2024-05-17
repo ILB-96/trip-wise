@@ -15,7 +15,6 @@ export type AttractionType = {
   description: string;
   image: string;
   types?: string[];
-  duration?: string;
 };
 
 const Attractions = () => {
