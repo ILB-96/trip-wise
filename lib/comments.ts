@@ -1,31 +1,31 @@
 import { auth } from "@auth";
-import { IComment, ICommentBase } from "@models/comment"
-import Comment from "@models/comment";
-import Itinerary, { IItinerary } from "@models/itinerary";
+import { ITripComment, ITripCommentBase } from "@models/tripComment"
+import TripComment from "@models/tripComment";
+import Trip, { ITrip } from "@models/trip";
 import { connectToDB } from "@utils/database";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
 
 
-export const addComment = async (comment: ICommentBase): Promise<{ success: boolean, error?: string, comment?: ICommentBase }> => {
+export const addComment = async (comment: ITripCommentBase): Promise<{ success: boolean, error?: string, comment?: ITripCommentBase }> => {
     try {
         await connectToDB();
         // const session = await auth();
         // if (!session) return { success: false, error: "Not authenticated user" };
-        let itinerary: IItinerary | null = await Itinerary.findOne({
-            _id: comment.itineraryId,
+        let trip: ITrip | null = await Trip.findOne({
+            _id: comment.tripId,
         });
-        if (itinerary) {
-            const newComment: IComment = await Comment.create({
+        if (trip) {
+            const newComment: ITripComment = await TripComment.create({
                 ...comment,
             });
             if (!newComment) return { success: false, error: "Was not able to create the comment in DB" };
-            if (itinerary.comments === null) {
-                itinerary.comments = [];
+            if (trip.comments === null) {
+                trip.comments = [];
             }
-            itinerary.comments!.push(newComment._id);
-            await itinerary.save();
-            revalidatePath(`/itinerary/${comment.itineraryId}`);
+            trip.comments!.push(newComment._id);
+            await trip.save();
+            revalidatePath(`/itinerary/${comment.tripId}`);
             return { success: true, comment: newComment };
         }
         else {
@@ -38,13 +38,13 @@ export const addComment = async (comment: ICommentBase): Promise<{ success: bool
 export const getComments = async (itineraryId: string): Promise<{ success: boolean, error?: string, comments?: any[] }> => {
     try {
         await connectToDB();
-        if (!await Itinerary.exists({ _id: itineraryId })) {
+        if (!await Trip.exists({ _id: itineraryId })) {
             return { success: false, error: "Itinerary not found" };
         }
-        let itinerary: IItinerary = (await Itinerary.findOne({_id: itineraryId}))!;
+        let itinerary: ITrip = (await Trip.findOne({_id: itineraryId}))!;
         itinerary = await itinerary.populate("comments");
         itinerary = await itinerary.populate("comments.author", "email name image");
-        let comments: IComment[] | undefined = itinerary.comments;
+        let comments: ITripComment[] | undefined = itinerary.comments;
         if (!comments) {
             comments = [];
         }
