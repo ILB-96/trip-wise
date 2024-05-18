@@ -1,5 +1,6 @@
 import mongoose, { Types, Document } from "mongoose";
 import { ratingType } from "./attraction";
+import { ITripComment } from "./tripComment";
 
 export interface ITrip extends Document {
   createdAt: Date;
@@ -7,7 +8,7 @@ export interface ITrip extends Document {
   title: string;
   creator: Types.ObjectId;
   tripAttractionId: Types.ObjectId[];
-  tripCommentId: Types.ObjectId[];
+  comments: ITripComment[];
   startDate: Date;
   endDate: Date;
   views?: number;
@@ -34,11 +35,10 @@ const tripSchema = new mongoose.Schema<ITrip>(
         required: true,
       },
     ],
-    tripCommentId: [
+    comments: [
       {
         type: mongoose.Schema.Types.ObjectId,
         ref: "TripComment",
-        required: true,
       },
     ],
   },
