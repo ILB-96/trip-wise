@@ -5,7 +5,6 @@ interface IComment {
     email: string;
     content: string;
     createdAt: number;
-
 }
 export const dummyComments: IComment[] = [
     {
