@@ -11,12 +11,14 @@ const Contact = () => {
 
   const [status, setStatus] = useState("");
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setStatus("Sending...");
@@ -38,6 +40,7 @@ const Contact = () => {
       });
     } else {
       setStatus("Failed to send message.");
+      console.log(await response.json());
     }
   };
 
@@ -124,10 +127,10 @@ const Contact = () => {
               type="submit"
               className="w-full bg-primary text-white py-3 rounded hover:bg-primary-dark"
             >
-              {" "}
-              Send{" "}
+              Send
             </button>
           </form>
+          {status && <p className="mt-4 text-sm text-gray-600">{status}</p>}
         </div>
       </section>
     </div>
