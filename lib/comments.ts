@@ -25,7 +25,9 @@ export const addComment = async (comment: ITripCommentBase): Promise<{ success: 
             }
             trip.comments!.push(newComment._id);
             await trip.save();
+
             revalidatePath(`/trip/${comment.tripId}`); 
+
             return { success: true, comment: newComment };
         }
         else {
@@ -45,6 +47,7 @@ export const getComments = async (tripId: string): Promise<{ success: boolean, e
         desiredTrip = await desiredTrip.populate("comments");
         desiredTrip = await desiredTrip.populate("comments.author", "email name image");
         let comments: ITripComment[] | undefined = desiredTrip.comments;
+
         if (!comments) {
             comments = [];
         }

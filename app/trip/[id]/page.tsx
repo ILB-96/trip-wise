@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useRef, useState } from 'react';
@@ -49,7 +50,7 @@ const profile = [
     image: "https://avatars.githubusercontent.com/u/26360846?v=4",
   },
 ];
-const ItineraryPage = ({ params }: { params: { id: string } }) => {
+const TripPage = ({ params }: { params: { id: string } }) => {
 
   const [currentRating, setCurrentRating] = useState<number>(3);
 
@@ -199,4 +200,4 @@ const ItineraryPage = ({ params }: { params: { id: string } }) => {
   );
 };
 
-export default ItineraryPage;
+export default TripPage;
