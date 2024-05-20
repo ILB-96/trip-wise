@@ -24,9 +24,9 @@ export default async function RootLayout({
       <html lang="en">
         <body>
           {/* <Provider> */}
-          <div className="main">
-            <div className="gradient" />
-          </div>
+          {/* <div className="main"> */}
+            {/* <div className="gradient" /> */}
+          {/* </div> */}
           <div className="flex flex-col relative justify-start h-screen">
             <div>
               <HeaderProvider />

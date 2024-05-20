@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 export async function GET(request: Request, { params }: { params: { id: string } }) {
     try {
         const comments = await getComments(params.id);
-        return NextResponse.json({ comments });
+        return NextResponse.json(comments);
         
     } catch (error: any) {
         return NextResponse.json(
