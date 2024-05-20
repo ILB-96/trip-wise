@@ -18,6 +18,7 @@ const Contact = () => {
     setFormData({ ...formData, [id]: value });
   };
 
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
