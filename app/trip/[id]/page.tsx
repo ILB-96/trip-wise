@@ -1,64 +1,22 @@
-"use client"
+"use client";
 
-import React, { useRef, useState } from 'react';
-import { dummyDays } from '@utils/dummydays';
-import Image from 'next/image';
-import { Button } from '@components/ui/button';
-import { Badge } from '@components/ui/badge';
-import { Star } from 'lucide-react';
-import { BackgroundGradient } from '@components/ItineraryViewer/BackgroundGradient';
-import { Oswald } from 'next/font/google';
-import { cn } from '@lib/utils';
-import { AnimatedTooltip } from '@components/ItineraryViewer/AnimatedToolTip';
-import { useCurrentUser } from '@hooks/use-current-user';
-import CommentFeed from '@components/ItineraryViewer/CommentFeed';
-import CommentForm from '@components/ItineraryViewer/CommentForm';
-import Rating from '@components/ItineraryViewer/Rating';
-import { motion, useInView } from 'framer-motion';
-import HeartInteraction from '@components/ItineraryViewer/HeartInteraction';
-import CommentSection from '@components/ItineraryViewer/CommentSection';
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+const TripPage = ({ params }: { params: { id: string } }) => {
+  const [fetchedComments, setComments]: [any, Dispatch<SetStateAction<any>>] =
+    useState(null);
 
-const types = [
-  'Scenic',
-  'Outdoor',
-  'Historical',
-  'Cultural',
-  'Beaches',
-  'Short',
-  'Multiple days',
-];
+  useEffect(() => {
+    const fetchComments = async () => {
+      const response = await fetch(`/api/itinerary/${params.id}/getComments`, {
+        method: "GET",
+      });
+      const result = await response.json();
+      setComments(result);
+    };
+    fetchComments();
+  }, []);
 
-const borderLineColorClasses = [
-  'border-blue-500', 'border-red-500', 'border-green-500',
-  'border-yellow-500', 'border-purple-500', 'border-pink-500',
-];
-const getBorderLineColorClass = (dayNumber: number) => {
-  return borderLineColorClasses[(dayNumber - 1) % borderLineColorClasses.length];
-};
-const activityCardFont = Oswald({
-  subsets: ["latin"],
-  weight: ["500"],
-});
-
-const profile = [
-  {
-    id: 1,
-    name: "Jameel Gharra",
-    designation: "Admin",
-    image: "https://avatars.githubusercontent.com/u/26360846?v=4",
-  },
-];
-const ItineraryPage = ({ params }: { params: { id: string } }) => {
-
-  const [currentRating, setCurrentRating] = useState<number>(3);
-
-  const handleRate = (newRating: number) => {
-    setCurrentRating(newRating);
-    console.log('New rating:', newRating);
-  };
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
   return (
     <div className=''>
       <div className='relative w-full h-[500px] max-w-8xl mx-auto'>

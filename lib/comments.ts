@@ -25,7 +25,9 @@ export const addComment = async (comment: ITripCommentBase): Promise<{ success: 
             }
             trip.comments!.push(newComment._id);
             await trip.save();
+
             revalidatePath(`/trip/${comment.tripId}`); 
+
             return { success: true, comment: newComment };
         }
         else {
