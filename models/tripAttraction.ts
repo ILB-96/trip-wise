@@ -15,7 +15,7 @@ const tripAttractionSchema = new mongoose.Schema<ITripAttraction>(
     },
     attractionId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Atttraction",
+      ref: "Attraction",
       required: true,
     },
     day: { type: Date, required: true },
