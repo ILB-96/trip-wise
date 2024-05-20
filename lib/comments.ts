@@ -25,26 +25,26 @@ export const addComment = async (comment: ITripCommentBase): Promise<{ success: 
             }
             trip.comments!.push(newComment._id);
             await trip.save();
-            revalidatePath(`/itinerary/${comment.tripId}`);
+            revalidatePath(`/trip/${comment.tripId}`); 
             return { success: true, comment: newComment };
         }
         else {
-            return { success: false, error: "Itinerary not found" };
+            return { success: false, error: "Trip not found" };
         }
     } catch (error: any) {
         return { success: false, error: error.message };
     }
 }
-export const getComments = async (itineraryId: string): Promise<{ success: boolean, error?: string, comments?: any[] }> => {
+export const getComments = async (tripId: string): Promise<{ success: boolean, error?: string, comments?: any[] }> => {
     try {
         await connectToDB();
-        if (!await Trip.exists({ _id: itineraryId })) {
-            return { success: false, error: "Itinerary not found" };
+        if (!await Trip.exists({ _id: tripId })) {
+            return { success: false, error: "Trip not found" };
         }
-        let itinerary: ITrip = (await Trip.findOne({_id: itineraryId}))!;
-        itinerary = await itinerary.populate("comments");
-        itinerary = await itinerary.populate("comments.author", "email name image");
-        let comments: ITripComment[] | undefined = itinerary.comments;
+        let desiredTrip: ITrip = (await Trip.findOne({_id: tripId}))!;
+        desiredTrip = await desiredTrip.populate("comments");
+        desiredTrip = await desiredTrip.populate("comments.author", "email name image");
+        let comments: ITripComment[] | undefined = desiredTrip.comments;
         if (!comments) {
             comments = [];
         }

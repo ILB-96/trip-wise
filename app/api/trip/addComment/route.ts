@@ -3,8 +3,7 @@ import { NextResponse } from "next/server";
 
 export async function POST(request: Request, { params }: { params: { id: string } }) {
     try {
-        const { comment } = await request.json();
-        const result = await addComment(comment);
+        const result = await addComment(await request.json());
         return NextResponse.json(result);
     } catch (error: any) {
         return NextResponse.json(
