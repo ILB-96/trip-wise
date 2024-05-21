@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { attractionsFilter } from "@app/attractions/attractionsFilter";
 import { IAttraction } from "@models/attraction";
-
+import { ITripAttraction } from "@models/tripAttraction";
 const hasSelectedAttractions = (selectedAttractions: {
   [key: string]: IAttraction[];
 }): boolean => {
@@ -19,6 +19,10 @@ const hasSelectedAttractions = (selectedAttractions: {
     (key) => selectedAttractions[key].length > 0
   );
 };
+interface dayAttraction {
+  date: Date;
+  attraction: IAttraction;
+}
 const TripPlanner: React.FC = () => {
   const session = useSession()?.data;
   const [status, setStatus] = useState<string>("");
@@ -29,9 +33,9 @@ const TripPlanner: React.FC = () => {
   });
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAttractions, setSelectedAttractions] = useState<{
-    [key: string]: IAttraction[];
-  }>({});
+  const [selectedAttractions, setSelectedAttractions] = useState<
+    dayAttraction[]
+  >([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -72,65 +76,39 @@ const TripPlanner: React.FC = () => {
     date: Date | undefined
   ) => {
     setSelectedAttractions((prev) => {
-      const updated = { ...prev };
+      const updated = [...prev];
       if (!date) {
-        Object.keys(updated).forEach((key) => {
-          updated[key] = updated[key].filter((a) => a !== attraction);
-          if (updated[key].length === 0) {
-            delete updated[key];
-          }
-        });
-        return updated;
+        return updated.filter((a) => a.attraction !== attraction);
       }
-      const dateKey = date.toISOString().split("T")[0]; // Use ISO string for date keys
-      // Check if the attraction is already in the selected date
-      if (updated[dateKey]?.includes(attraction)) {
-        // Remove the attraction from the selected date
-        updated[dateKey] = updated[dateKey].filter((a) => a !== attraction);
-        if (updated[dateKey].length === 0) {
-          delete updated[dateKey]; // Remove the key if the array is empty
-        }
-      } else {
-        // Add the attraction to the specified date
-        if (!updated[dateKey]) {
-          updated[dateKey] = [];
-        }
-        updated[dateKey].push(attraction);
-
-        // Remove the attraction from other dates
-        Object.keys(updated).forEach((key) => {
-          if (key !== dateKey) {
-            updated[key] = updated[key].filter((a) => a !== attraction);
-            if (updated[key].length === 0) {
-              delete updated[key];
-            }
-          }
-        });
-      }
-
-      return updated;
+      let newSelected = [...updated, { date: date, attraction: attraction }];
+      const data = newSelected.filter(
+        (a) =>
+          a.attraction._id !== attraction._id ||
+          (a.date === date && a.attraction._id === attraction._id)
+      );
+      console.log(data);
+      return data;
     });
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (
-      !tripName ||
-      !hasSelectedAttractions(selectedAttractions) ||
-      !date?.from ||
-      !date?.to
-    ) {
+    if (!tripName || !selectedAttractions.length || !date?.from || !date?.to) {
       setStatus("Please fill out all required fields.");
       return;
     }
     setStatus("Sending...");
+    console.log();
     const formData = {
       title: tripName,
       startDate: date.from,
       endDate: date.to,
       creator: session?.user?.id,
+      image: selectedAttractions[0].attraction.image,
+      country: selectedAttractions[0].attraction.country,
       shared: true,
     };
+
     const response = await fetch("/api/trip/addTrip", {
       method: "POST",
       headers: {
@@ -143,31 +121,24 @@ const TripPlanner: React.FC = () => {
       const data = await response.json();
       const tripId = data._id;
       setStatus("Trip Created successfully!");
-      console.log(tripId);
-      for (const dateKey in selectedAttractions) {
-        const attractions = selectedAttractions[dateKey];
-        for (const attraction of attractions) {
-          const attractionData = {
-            tripId: tripId,
-            attractionId: attraction._id,
-            day: new Date(dateKey),
-          };
-          console.log(attractionData);
-          const re = await fetch("/api/tripAttraction", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(attractionData),
-          });
-          if (!re.ok) {
-            setStatus("Failed to Add Attractions.");
-            console.log(await re.json());
-          } else {
-            console.log(await re.json());
-          }
+      Array.from(selectedAttractions).forEach(async (val) => {
+        const attractionData = {
+          tripId: tripId,
+          attractionId: val.attraction._id,
+          day: val.date,
+        };
+        const re = await fetch("/api/tripAttraction", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(attractionData),
+        });
+        if (!re.ok) {
+          setStatus("Failed to Add Attractions.");
         }
-      }
+        console.log(await re.json());
+      });
     } else {
       setStatus("Failed to Create Trip.");
       console.log(await response.json());
@@ -176,9 +147,9 @@ const TripPlanner: React.FC = () => {
 
   if (loading) return <div>Loading...</div>;
   if (!filteredData.length) return <div>No attractions available</div>;
-  console.log(selectedAttractions);
+
   return (
-    <div className="block w-full p-2">
+    <form className="block w-full p-2" onSubmit={handleSubmit}>
       <h1
         id="trip-planner-heading"
         className="font-bold text-xl text-gray-700 mb-2"
@@ -204,11 +175,9 @@ const TripPlanner: React.FC = () => {
       </div>
       <div className="w-full flex justify-start mb-2">
         <Button
-          onClick={() => handleSubmit}
-          disabled={!tripName || !hasSelectedAttractions(selectedAttractions)}
-          aria-disabled={
-            !tripName || !hasSelectedAttractions(selectedAttractions)
-          }
+          type="submit"
+          disabled={!tripName || !selectedAttractions.length}
+          aria-disabled={!tripName || !selectedAttractions.length}
         >
           Create Trip
         </Button>
@@ -237,7 +206,7 @@ const TripPlanner: React.FC = () => {
           />
         ))}
       </div>
-    </div>
+    </form>
   );
 };
 
