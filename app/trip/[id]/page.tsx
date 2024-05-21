@@ -62,50 +62,34 @@ const TripPage = ({ params }: { params: { id: string } }) => {
     console.log('New rating:', newRating);
   };
   if (loading) {
-    const loadingVariants = {
-      loading: {
-        scale: 1,
-        opacity: 1,
-        transition: { duration: 1.5, ease: 'easeInOut' },
-      },
-      hidden: {
-        scale: 0,
-        opacity: 0,
-        transition: { duration: 0.5 },
-      },
+    const variants = {
+      hidden: { opacity: 0 },
+      visible: { opacity: 1 },
     };
 
     return (
       <motion.div
-        className="loading-container fixed top-0 left-0 w-full h-full bg-gray-100 z-50"
-        variants={loadingVariants}
-        initial="hidden"
-        animate="loading"
-      >
-        <motion.svg
-          className="w-20 h-20 mx-auto animate-spin"
-          viewBox="0 0 100 100"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <circle
-            cx="50"
-            cy="50"
-            r="40"
-            stroke="#3b82f6"
-            strokeWidth="5"
-            strokeLinecap="round"
-          />
-          <circle
-            cx="50"
-            cy="50"
-            r="30"
-            stroke="#e0e0e0"
-            strokeWidth="3"
-            strokeLinecap="round"
-          />
-        </motion.svg>
-      </motion.div>
+      className="fixed top-0 left-0 w-full h-full bg-gray-900 z-50 flex items-center justify-center"
+      variants={variants}
+      initial="hidden"
+      animate="visible"
+      transition={{ duration: 1 }}
+    >
+      <motion.div
+        className="w-20 h-20 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600"
+        variants={{
+          scale: {
+            from: 0,
+            to: 1,
+          },
+          rotate: {
+            from: 0,
+            to: 360,
+          },
+        }}
+        transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity }}
+      />
+    </motion.div>
     );
   }
   else {
