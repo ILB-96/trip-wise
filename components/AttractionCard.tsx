@@ -5,12 +5,13 @@ import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
 import PopoverInfo from "./PopoverInfo";
 import AddDateButton from "./AddDateButton";
-import { AttractionType } from "@app/attractions/page";
 import { DateRange } from "react-day-picker";
 import "@styles/globals.css";
+import { IAttraction } from "@models/attraction";
+import { getStars } from "@helpers/starsCalc";
 interface CardProps {
-  item: AttractionType;
-  addAction?: (attraction: AttractionType, date: Date | undefined) => void;
+  item: IAttraction;
+  addAction?: (attraction: IAttraction, date: Date | undefined) => void;
   dateRange?: DateRange | undefined;
 }
 
@@ -35,20 +36,20 @@ const AttractionCard: React.FC<CardProps> = ({
               width={500}
               height={300}
               src={item.image}
-              alt={item.name}
+              alt={item.title}
               priority
             />
           </div>
           <div className="p-4">
             <div className="flex justify-between">
-              <h2 className="font-semibold text-xl truncate">{item.name}</h2>
+              <h2 className="font-semibold text-xl truncate">{item.title}</h2>
             </div>
             {item.price && (
               <Badge className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
                 {item.price}
               </Badge>
             )}
-            {item.rating && <StarRating rating={item.rating} />}
+            {item.rating && <StarRating rating={getStars(item.rating)} />}
             <p className="text-gray-600 truncate">
               {item.location + ", " + item.country}
             </p>

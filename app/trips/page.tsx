@@ -1,61 +1,54 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import FilterBar from "@components/FilterBar/FilterBar";
 import TripCard from "@components/TripCard";
 
-import { dummyTrips } from "./dummyTrips";
 import { tripsOptions } from "./tripsFilters";
-import { AttractionType } from "@app/attractions/page";
+import { ITrip } from "@models/trip";
 
-export type VisitType = {
-  attraction: AttractionType;
-  fromTime?: string;
-  toTime?: string;
-};
-export type DayType = { visits: VisitType[]; date?: Date };
-export type TripType = {
-  name: string;
-  rating?: number;
-  country: string;
-  location?: string;
-  description: string;
-  price?: string;
-  days?: DayType[];
-  views?: number;
-  image: string;
-  fromDate?: string;
-  toDate?: string;
-  types?: string[];
-};
 const Trips = () => {
-  const [filteredData, setFilteredData] = useState<TripType[]>(
-    () => dummyTrips
-  );
+  const [filteredData, setFilteredData] = useState<ITrip[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const handleDataChange = (data: TripType[]) => {
-    setFilteredData(data);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/trip/getTrip");
+        if (!res.ok) {
+          throw new Error(`HTTP status ${res.status}`);
+        }
+        const result = await res.json(); // This will be an object with an 'attractions' key
+        setFilteredData(result.attractions); // Make sure to access the 'attractions' key here
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch attractions:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+  const handleDataChange = (newData: ITrip[]) => {
+    setFilteredData(newData);
   };
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!Array.isArray(filteredData) || filteredData.length === 0) {
+    return <div>No attractions available</div>; // Default to 0 if the ratings array is invalid
+  }
 
   return (
     <>
       <FilterBar
         options={tripsOptions}
-        data={dummyTrips}
+        data={filteredData}
         onDataChange={handleDataChange}
       />
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {filteredData.map((trip, index) => (
-          <TripCard
-            key={trip.name + index}
-            name={trip.name}
-            country={trip.country}
-            days={trip.days}
-            image={trip.image}
-            description={trip.description}
-            rating={trip.rating ? trip.rating : 0}
-            views={trip.views ? trip.views : 0}
-          />
+        {filteredData.map((trip: ITrip, index: number) => (
+          <TripCard key={trip.title + index} trip={trip} />
         ))}
       </div>
     </>

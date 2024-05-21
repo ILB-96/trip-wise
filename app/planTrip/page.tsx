@@ -1,73 +1,182 @@
 "use client";
-import React, { useState } from "react";
-import { AttractionType } from "@app/attractions/page";
-import { dummyAttractions } from "@app/attractions/dummyAttractions";
-import FilterBar from "@components/FilterBar/FilterBar";
-import DateRangePicker from "@components/DateRangePicker";
-import { Input } from "@/components/ui/input";
-import { attractionsFilter } from "@app/attractions/attractionsFilter";
-import { Button } from "@/components/ui/button";
-import AttractionCard from "@components/AttractionCard";
+import React, { useState, useEffect } from "react";
 import { DateRange } from "react-day-picker";
 import { addDays } from "date-fns";
+import { useSession } from "next-auth/react";
 
+import FilterBar from "@components/FilterBar/FilterBar";
+import DateRangePicker from "@components/DateRangePicker";
+import AttractionCard from "@components/AttractionCard";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { attractionsFilter } from "@app/attractions/attractionsFilter";
+import { IAttraction } from "@models/attraction";
+
+const hasSelectedAttractions = (selectedAttractions: {
+  [key: string]: IAttraction[];
+}): boolean => {
+  return Object.keys(selectedAttractions).some(
+    (key) => selectedAttractions[key].length > 0
+  );
+};
 const TripPlanner: React.FC = () => {
+  const session = useSession()?.data;
+  const [status, setStatus] = useState<string>("");
   const [tripName, setTripName] = useState<string>("");
   const [date, setDate] = useState<DateRange | undefined>({
     from: new Date(),
     to: addDays(new Date(), 1),
   });
-  const [filteredData, setFilteredData] =
-    useState<AttractionType[]>(dummyAttractions);
+  const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedAttractions, setSelectedAttractions] = useState<{
+    [key: string]: IAttraction[];
+  }>({});
 
-  const handleDataChange = (data: AttractionType[]) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/attraction/getAttraction");
+        if (!res.ok) {
+          throw new Error(`HTTP status ${res.status}`);
+        }
+        const result = await res.json(); // This will be an object with an 'attractions' key
+        setFilteredData(result.attractions); // Make sure to access the 'attractions' key here
+        setLoading(false);
+
+        // Update attraction types for the filter
+        const attractionTypes: string[] = Array.from(
+          new Set(
+            result.attractions
+              .map((attraction: IAttraction) => attraction.types)
+              .flat()
+          )
+        );
+        attractionsFilter[2].selections = attractionTypes.filter(
+          (type) => type && type.trim() !== ""
+        );
+      } catch (error) {
+        console.error("Failed to fetch attractions:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDataChange = (data: IAttraction[]) => {
     setFilteredData(data);
   };
-
-  const [selectedAttractions, setSelectedAttractions] = useState<
-    Map<Date, AttractionType[]>
-  >(new Map());
-
-  if (!attractionsFilter[2].selections.length) {
-    const attractionTypes = Array.from(
-      new Set(dummyAttractions.map((attraction) => attraction.types).flat())
-    );
-
-    attractionsFilter[2].selections = attractionTypes.filter(
-      (type) => type !== undefined && type.trim() !== ""
-    );
-  }
-
   const handleAddAttraction = (
-    attraction: AttractionType,
+    attraction: IAttraction,
     date: Date | undefined
   ) => {
     setSelectedAttractions((prev) => {
-      const updated = new Map(prev);
-
-      if (date) {
-        // Add the attraction to the specified date
-        if (!updated.has(date)) {
-          updated.set(date, []);
-        }
-        updated.get(date)!.push(attraction);
-      }
-      // Remove the attraction from all dates
-      updated.forEach((attractions, key) => {
-        const index = attractions.indexOf(attraction);
-        if (index !== -1 && date !== key) {
-          attractions.splice(index, 1);
-          if (attractions.length === 0) {
-            updated.delete(key);
+      const updated = { ...prev };
+      if (!date) {
+        Object.keys(updated).forEach((key) => {
+          updated[key] = updated[key].filter((a) => a !== attraction);
+          if (updated[key].length === 0) {
+            delete updated[key];
           }
+        });
+        return updated;
+      }
+      const dateKey = date.toISOString().split("T")[0]; // Use ISO string for date keys
+      // Check if the attraction is already in the selected date
+      if (updated[dateKey]?.includes(attraction)) {
+        // Remove the attraction from the selected date
+        updated[dateKey] = updated[dateKey].filter((a) => a !== attraction);
+        if (updated[dateKey].length === 0) {
+          delete updated[dateKey]; // Remove the key if the array is empty
         }
-      });
+      } else {
+        // Add the attraction to the specified date
+        if (!updated[dateKey]) {
+          updated[dateKey] = [];
+        }
+        updated[dateKey].push(attraction);
+
+        // Remove the attraction from other dates
+        Object.keys(updated).forEach((key) => {
+          if (key !== dateKey) {
+            updated[key] = updated[key].filter((a) => a !== attraction);
+            if (updated[key].length === 0) {
+              delete updated[key];
+            }
+          }
+        });
+      }
 
       return updated;
     });
   };
-  console.log(selectedAttractions);
 
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (
+      !tripName ||
+      !hasSelectedAttractions(selectedAttractions) ||
+      !date?.from ||
+      !date?.to
+    ) {
+      setStatus("Please fill out all required fields.");
+      return;
+    }
+    setStatus("Sending...");
+    const formData = {
+      title: tripName,
+      startDate: date.from,
+      endDate: date.to,
+      creator: session?.user?.id,
+      shared: true,
+    };
+    const response = await fetch("/api/trip/addTrip", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      const tripId = data._id;
+      setStatus("Trip Created successfully!");
+      console.log(tripId);
+      for (const dateKey in selectedAttractions) {
+        const attractions = selectedAttractions[dateKey];
+        for (const attraction of attractions) {
+          const attractionData = {
+            tripId: tripId,
+            attractionId: attraction._id,
+            day: new Date(dateKey),
+          };
+          console.log(attractionData);
+          const re = await fetch("/api/tripAttraction", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(attractionData),
+          });
+          if (!re.ok) {
+            setStatus("Failed to Add Attractions.");
+            console.log(await re.json());
+          } else {
+            console.log(await re.json());
+          }
+        }
+      }
+    } else {
+      setStatus("Failed to Create Trip.");
+      console.log(await response.json());
+    }
+  };
+
+  if (loading) return <div>Loading...</div>;
+  if (!filteredData.length) return <div>No attractions available</div>;
+  console.log(selectedAttractions);
   return (
     <div className="block w-full p-2">
       <h1
@@ -93,19 +202,24 @@ const TripPlanner: React.FC = () => {
       <div className="w-full flex mb-1">
         <DateRangePicker className="font-inter" date={date} setDate={setDate} />
       </div>
-      <div className="w-full flex justify-start">
+      <div className="w-full flex justify-start mb-2">
         <Button
-          onClick={() => console.log("Share Trip")}
-          disabled={!tripName || !selectedAttractions.size}
-          aria-disabled={!tripName || !selectedAttractions.size}
+          onClick={() => handleSubmit}
+          disabled={!tripName || !hasSelectedAttractions(selectedAttractions)}
+          aria-disabled={
+            !tripName || !hasSelectedAttractions(selectedAttractions)
+          }
         >
           Create Trip
         </Button>
+        {status && (
+          <div className="ml-2 flex items-center text-green-500">{status}</div>
+        )}
       </div>
       <div className="w-full mb-2">
         <FilterBar
           options={attractionsFilter}
-          data={dummyAttractions}
+          data={filteredData}
           onDataChange={handleDataChange}
         />
       </div>
@@ -114,15 +228,14 @@ const TripPlanner: React.FC = () => {
         aria-live="polite"
         aria-atomic="true"
       >
-        {dummyAttractions &&
-          filteredData.map((attraction: AttractionType, index: number) => (
-            <AttractionCard
-              key={attraction.name + index}
-              item={attraction}
-              addAction={handleAddAttraction}
-              dateRange={date}
-            />
-          ))}
+        {filteredData.map((attraction: IAttraction, index: number) => (
+          <AttractionCard
+            key={attraction.title + index}
+            item={attraction}
+            addAction={handleAddAttraction}
+            dateRange={date}
+          />
+        ))}
       </div>
     </div>
   );
