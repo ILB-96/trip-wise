@@ -5,6 +5,7 @@ import Trip, { ITrip } from "@models/trip";
 import { connectToDB } from "@utils/database";
 import { Types } from "mongoose";
 import { revalidatePath } from "next/cache";
+import User from "@models/user";
 
 
 export const addComment = async (comment: ITripCommentBase): Promise<{ success: boolean, error?: string, comment?: ITripCommentBase }> => {
@@ -16,6 +17,10 @@ export const addComment = async (comment: ITripCommentBase): Promise<{ success: 
             _id: comment.tripId,
         });
         if (trip) {
+            const user = await User.findOne({ _id: comment.author });
+            if(!user) {
+                return { success: false, error: "Invalid user, could be another different database" };
+            }
             const newComment: ITripComment = await TripComment.create({
                 ...comment,
             });

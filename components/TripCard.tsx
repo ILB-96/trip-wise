@@ -9,7 +9,6 @@ import { Eye } from "lucide-react";
 
 const TripCard = (trip: TripType) => {
   const router = useRouter();
-
   const navigateToTripDetail = () => {
     router.push("/trip"); // Navigate to the trip detail page
   };
