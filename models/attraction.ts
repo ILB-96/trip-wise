@@ -1,5 +1,4 @@
-import mongoose, { Schema, Document } from 'mongoose';
-import {ITripComment} from "@models/tripComment";
+import mongoose, { Schema, Document } from "mongoose";
 
 export type ratingType = 0 | 0.5 | 1 | 1.5 | 2 | 2.5 | 3 | 3.5 | 4 | 4.5 | 5;
 
@@ -14,7 +13,6 @@ export interface IAttraction extends Document {
   types?: string[];
 }
 
-
 const attractionSchema: Schema = new mongoose.Schema({
   title: { type: String, required: true, unique: true },
   location: { type: String, required: true },
@@ -26,10 +24,7 @@ const attractionSchema: Schema = new mongoose.Schema({
   types: [{ type: String }],
 });
 const Attraction =
-    mongoose.models?.Attraction ||
-    mongoose.model<IAttraction>("Attraction", attractionSchema);
+  mongoose.models?.Attraction ||
+  mongoose.model<IAttraction>("Attraction", attractionSchema);
 
 export default Attraction;
-
-
-
