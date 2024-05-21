@@ -14,12 +14,12 @@ const Trips = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/trip/getTrip");
+        const res = await fetch("/api/trip/getSharedTrips");
         if (!res.ok) {
           throw new Error(`HTTP status ${res.status}`);
         }
         const result = await res.json(); // This will be an object with an 'attractions' key
-        setFilteredData(result.attractions); // Make sure to access the 'attractions' key here
+        setFilteredData(result.trips); // Make sure to access the 'attractions' key here
         setLoading(false);
       } catch (error) {
         console.error("Failed to fetch attractions:", error);

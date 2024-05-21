@@ -14,7 +14,6 @@ interface TripCardProps {
 const TripCard: React.FC<TripCardProps> = ({ trip }) => {
   const router = useRouter();
   const navigateToTripDetail = () => {
-    console.log(trip);
     router.push(`/trip/${trip._id}`); // Navigate to the trip detail page
   };
 
@@ -25,16 +24,14 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
         onClick={navigateToTripDetail}
       >
         <div className="flex items-center">
-          {/* {trip.attraction && (
-            <Image
-              className="w-full h-48 object-cover"
-              width={500}
-              height={300}
-              src={trip.image}
-              alt={trip.title}
-              priority
-            />
-          )} */}
+          <Image
+            className="w-full h-48 object-cover"
+            width={500}
+            height={300}
+            src={trip.image}
+            alt={trip.title}
+            priority
+          />
         </div>
         <div className="p-4">
           <h2 className="font-semibold text-xl">{trip.title}</h2>
@@ -45,6 +42,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
             </Badge>
           )}
           {trip.rating && <StarRating rating={getStars(trip.rating)} />}
+          <p className="text-gray-600">{trip.country}</p>
         </div>
       </div>
     </>
