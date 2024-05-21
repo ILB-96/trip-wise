@@ -1,33 +1,25 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { navigation } from '@constants/navigation';
-import { usePathname } from 'next/navigation';
-import { Button } from './Header/Button';
-import { ButtonGradient } from './Header/ButtonGradient';
-import MenuSvg from './Header/MenuSvg';
-import { disablePageScroll, enablePageScroll } from 'scroll-lock';
-import { ProfileButton } from './Header/ProfileButton';
-import { User } from 'next-auth';
+"use client";
+import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import { navigation } from "@constants/navigation";
+import { usePathname } from "next/navigation";
+import { Button } from "./Header/Button";
+import { ButtonGradient } from "./Header/ButtonGradient";
+import MenuSvg from "./Header/MenuSvg";
+import { disablePageScroll, enablePageScroll } from "scroll-lock";
+import { ProfileButton } from "./Header/ProfileButton";
+import { User } from "next-auth";
 import { useRouter } from "next/navigation";
 
 const Logo: React.FC = () => {
   const router = useRouter();
   const navigateToHomePage = () => {
-    router.push("/"); // Navigate to the trip detail page
+    router.push("/"); // Navigate to the home page
   };
   return (
     <>
       <button className=" flex items-center" onClick={navigateToHomePage}>
-        <div
-          className="py-1 lg:py-0"
-          // style={{
-          //   width: "70px",
-          //   height: "70px",
-          //   minWidth: "70px",
-          //   minHeight: "70px",
-          // }}
-        >
+        <div className="py-1 lg:py-0">
           <Image
             src="/assets/icons/logo.png"
             alt="logo"
@@ -50,9 +42,11 @@ const Logo: React.FC = () => {
     </>
   );
 };
+
 interface HeaderProps {
   currentUser: User | undefined;
 }
+
 const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   const [user, setUser] = useState<any>(currentUser);
 
@@ -60,7 +54,8 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
     if (user) setUser(null);
     else setUser("");
   };
-  const currentPath = usePathname(); // to know which page are we in]
+
+  const currentPath = usePathname(); // to know which page are we in
   const [openNavigation, setOpenNavigation] = React.useState(false);
   const toggleNavigation = () => {
     if (openNavigation) {
@@ -76,6 +71,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
     enablePageScroll();
     setOpenNavigation(false);
   };
+
   return (
     <header
       className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
@@ -126,7 +122,14 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
       )}
       <ButtonGradient />
       <div className="flex items-center justify-center space-x-4">
-        {user && <ProfileButton changeUserState={changeUserState} />}
+        {user && (
+          <>
+            <Button className="mr-4" href="/planTrip">
+              Plan Trip
+            </Button>
+            <ProfileButton changeUserState={changeUserState} />
+          </>
+        )}
         <Button
           className="ml-auto lg:hidden"
           px="px-3"
