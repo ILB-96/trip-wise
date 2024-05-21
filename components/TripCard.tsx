@@ -4,14 +4,18 @@ import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
 import { useRouter } from "next/navigation";
-import { TripType } from "@app/trips/page";
 import { Eye } from "lucide-react";
+import { ITrip } from "@models/trip";
+import { getStars } from "@helpers/starsCalc";
+interface TripCardProps {
+  trip: ITrip;
+}
 
-const TripCard = (trip: TripType) => {
+const TripCard: React.FC<TripCardProps> = ({ trip }) => {
   const router = useRouter();
-
   const navigateToTripDetail = () => {
-    router.push("/trip"); // Navigate to the trip detail page
+    console.log(trip);
+    router.push(`/trip/${trip._id}`); // Navigate to the trip detail page
   };
 
   return (
@@ -21,33 +25,26 @@ const TripCard = (trip: TripType) => {
         onClick={navigateToTripDetail}
       >
         <div className="flex items-center">
-          {trip.image && (
+          {/* {trip.attraction && (
             <Image
               className="w-full h-48 object-cover"
               width={500}
               height={300}
               src={trip.image}
-              alt={trip.name}
+              alt={trip.title}
               priority
             />
-          )}
+          )} */}
         </div>
         <div className="p-4">
-          <h2 className="font-semibold text-xl">{trip.name}</h2>
+          <h2 className="font-semibold text-xl">{trip.title}</h2>
           {trip.views && (
-            <Badge
-              className={
-                (trip.price ? "top-8" : "top-2") +
-                " flex absolute left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer"
-              }
-            >
+            <Badge className="top-2 flex absolute left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
               <Eye className="w-4 h-4 mr-1" />
               {trip.views}
             </Badge>
           )}
-          {trip.rating && <StarRating rating={trip.rating} />}
-          <p className="text-gray-600">{trip.country}</p>
-          <p className="text-gray-800">{trip.description}</p>
+          {trip.rating && <StarRating rating={getStars(trip.rating)} />}
         </div>
       </div>
     </>

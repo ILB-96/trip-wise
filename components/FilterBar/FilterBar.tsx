@@ -4,13 +4,13 @@ import { Search } from "lucide-react";
 import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
 
-import { AttractionType } from "@app/attractions/page";
-import { TripType } from "@app/trips/page";
 import FilterBox from "./FilterBox";
 import sortData from "@helpers/sortData";
 import useSearchData from "@hooks/useSearchData";
 import getFilters from "@helpers/getFilters";
 import filterData from "@helpers/filterData";
+import { IAttraction } from "@models/attraction";
+import { ITrip } from "@models/trip";
 
 type Option = {
   title: string;
@@ -18,7 +18,7 @@ type Option = {
   disableMultiple?: boolean;
 };
 
-export type DataItem = AttractionType | TripType;
+export type DataItem = IAttraction | ITrip;
 
 const FilterBar = ({
   options,

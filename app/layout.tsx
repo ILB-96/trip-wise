@@ -23,9 +23,8 @@ export default async function RootLayout({
     <Provider session={session}>
       <html lang="en">
         <body>
-          {/* <Provider> */}
           {/* <div className="main"> */}
-            {/* <div className="gradient" /> */}
+          {/* <div className="gradient" /> */}
           {/* </div> */}
           <div className="flex flex-col relative justify-start h-screen">
             <div>
@@ -36,8 +35,6 @@ export default async function RootLayout({
               <Footer />
             </div>
           </div>
-          {/* </main> */}
-          {/* </Provider> */}
         </body>
       </html>
     </Provider>

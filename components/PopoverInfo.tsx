@@ -2,12 +2,11 @@
 import { useEffect } from "react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
-import { MouseEventHandler } from "react";
 import { Button } from "./ui/button";
-import { AttractionType } from "@app/attractions/page";
+import { IAttraction } from "@models/attraction";
 
 interface PopoverProps {
-  item: AttractionType;
+  item: IAttraction;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -41,10 +40,10 @@ const PopoverInfo: React.FC<PopoverProps> = ({ item, isOpen, onClose }) => {
                 width={800}
                 height={500}
                 src={item.image}
-                alt={item.name}
+                alt={item.title}
               />
             </div>
-            <h2 className="font-semibold text-xl mb-4">{item.name}</h2>
+            <h2 className="font-semibold text-xl mb-4">{item.title}</h2>
             <div className="text-gray-600 mb-4">
               {item.location + ", " + item.country}
             </div>

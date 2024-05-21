@@ -1,8 +1,9 @@
 import React from "react";
 import { Star, StarHalf } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { ratingType } from "@models/attraction";
 
-const StarRating: React.FC<{ rating: number }> = ({ rating }) => {
+const StarRating: React.FC<{ rating: ratingType }> = ({ rating }) => {
   const fullStars = Math.floor(rating);
   const halfStar = rating - fullStars >= 0.5 ? 1 : 0;
 

@@ -11,14 +11,14 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { AttractionType } from "@app/attractions/page";
 import { DateRange, DayPicker } from "react-day-picker";
 import "react-day-picker/dist/style.css";
+import { IAttraction } from "@models/attraction";
 
 type AddDateButtonProps = {
-  addAction: (attraction: AttractionType, newDate: Date | undefined) => void;
+  addAction: (attraction: IAttraction, newDate: Date | undefined) => void;
   dateRange: DateRange | undefined;
-  attraction: AttractionType;
+  attraction: IAttraction;
 };
 
 const AddDateButton: React.FC<AddDateButtonProps> = ({
