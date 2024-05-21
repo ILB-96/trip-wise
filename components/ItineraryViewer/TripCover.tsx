@@ -52,7 +52,7 @@ const TripCover = ({ tripName, tripImage, numberOfDays, tripRating, tripProfile,
           </span>
           <div className="flex items-center space-x-5 mt-3">
             <AnimatedTooltip items={[tripProfile]} />
-            <span className='font-semibold text-orange-300 italic pl-3'>Jameel Gharra</span>
+            <span className='font-semibold text-orange-300 italic pl-3'>{tripProfile.name}</span>
           </div>
         </div>
         {/* <div className="">
