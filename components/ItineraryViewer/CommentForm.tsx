@@ -23,6 +23,12 @@ const CommentForm = ({ tripId, onCommentSubmitted }: CommentFormProps) => {
         const formDataCopy = formData;
         ref.current?.reset();
         try {
+            console.log("Set data from form");
+            console.log(JSON.stringify({
+                author: user.id,
+                tripId: tripId,
+                content: formDataCopy.get('commentInput') as string,
+            }));
             return await fetch(`/api/trip/addComment`, {
                 method: 'POST',
                 body: JSON.stringify({
@@ -45,7 +51,6 @@ const CommentForm = ({ tripId, onCommentSubmitted }: CommentFormProps) => {
                 let result = await handleCommentAction(data);
                 result = await result.json();
                 if(result.success) await onCommentSubmitted();
-                console.log(result);
                 toast({
                     title: result.success ? 'Success' : 'Failure',
                     description: result.success ? 'Comment posted!' : 'Error posting comment',

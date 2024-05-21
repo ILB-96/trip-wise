@@ -25,7 +25,7 @@ const tripAttractionSchema = new mongoose.Schema<ITripAttraction>(
   }
 );
 
-const tripAttraction =
-  mongoose.models?.Day ||
-  mongoose.model<ITripAttraction>("Day", tripAttractionSchema);
-export default tripAttraction;
+const TripAttraction =
+  mongoose.models?.TripAttraction ||
+  mongoose.model<ITripAttraction>("TripAttraction", tripAttractionSchema);
+export default TripAttraction;
