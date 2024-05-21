@@ -1,20 +1,17 @@
+"use client";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { ITrip } from "@models/trip";
 
 interface CardProps {
   title: string;
   imgUrl: string;
-  readTime: string;
-  isMain: boolean;
+  onClick: () => void;
+  isMain?: boolean;
 }
 
-interface Story {
-  title: string;
-  imgUrl: string;
-  readTime: string;
-  isMain: boolean;
-}
-
-const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
+const Card: React.FC<CardProps> = ({ title, imgUrl, onClick, isMain }) => {
   if (isMain) {
     return (
       <div
@@ -24,14 +21,9 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
           maxHeight: "600px",
           minHeight: "250px",
         }}
+        onClick={onClick}
       >
-        <Image
-          src={imgUrl}
-          alt={title}
-/*           layout="fill" */
-        fill
-          className="object-cover"
-        />
+        <Image src={imgUrl} alt={title} fill className="object-cover" />
         <div
           className="absolute bottom-0 left-0 w-full p-4 bg-black opacity-85 flex flex-col justify-end"
           style={{ minHeight: "100px" }}
@@ -39,7 +31,6 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
           <h3 className="text-lg font-semibold text-white absolute top-2">
             {title}
           </h3>
-          <p className="text-sm text-white">{readTime}</p>
         </div>
       </div>
     );
@@ -47,7 +38,8 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
     return (
       <div
         className="relative cursor-pointer rounded-lg overflow-hidden transition duration-300 ease-in-out shadow-lg bg-white hover:bg-purple-500"
-        style={{ width: "100%", height: "auto", maxHeight: "500px" }} // Max height for uniformity
+        style={{ width: "100%", height: "auto", maxHeight: "600px" }}
+        onClick={onClick}
       >
         <div className="flex items-center" style={{ padding: "10px" }}>
           <div
@@ -61,10 +53,8 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
             <Image
               src={imgUrl}
               alt={title}
-/*               layout="responsive" */
               width={150}
               height={150}
-/*               objectFit="cover" */
               className="rounded-l-lg object-cover"
             />
           </div>
@@ -72,9 +62,6 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
             <h3 className="text-lg font-semibold text-gray-800 hover:text-white absolute top-2">
               {title}
             </h3>
-            <p className="text-sm text-gray-600 hover:text-white absolute bottom-2">
-              {readTime}
-            </p>
           </div>
         </div>
       </div>
@@ -83,62 +70,46 @@ const Card: React.FC<CardProps> = ({ title, imgUrl, readTime, isMain }) => {
 };
 
 const TripsStoriesSection: React.FC = () => {
-  const stories: Story[] = [
-    {
-      title: "October: Festive seasons across the globe",
-      imgUrl: "/assets/images/TripsStoriesSection/bigOne.jpg",
-      readTime: "3 min read",
-      isMain: true,
-    },
-    {
-      title: "Turkey: A Journey Through the Ottoman Empire",
-      imgUrl: "/assets/images/TripsStoriesSection/Image68.jpg",
-      readTime: "4 min read",
-      isMain: false,
-    },
-    {
-      title: "Indonesia: Exploring Bali and Beyond",
-      imgUrl: "/assets/images/TripsStoriesSection/Image69.jpg",
-      readTime: "5 min read",
-      isMain: false,
-    },
-    {
-      title: "Israel: From Jerusalem to the Desert",
-      imgUrl: "/assets/images/TripsStoriesSection/Image70.jpg",
-      readTime: "3 min read",
-      isMain: false,
-    },
-    {
-      title: "Turkey: A Journey Through the Ottoman Empire",
-      imgUrl: "/assets/images/TripsStoriesSection/Image68.jpg",
-      readTime: "4 min read",
-      isMain: false,
-    },
-    {
-      title: "Indonesia: Exploring Bali and Beyond",
-      imgUrl: "/assets/images/TripsStoriesSection/Image69.jpg",
-      readTime: "5 min read",
-      isMain: false,
-    },
-    {
-      title: "Israel: From Jerusalem to the Desert",
-      imgUrl: "/assets/images/TripsStoriesSection/Image70.jpg",
-      readTime: "3 min read",
-      isMain: false,
-    },
-  ];
+  const [trips, setTrips] = useState<ITrip[]>([]);
+  const [loading, setLoading] = useState(true);
+  const router = useRouter();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/trip/getLastSevenTrips");
+        if (!res.ok) {
+          throw new Error(`HTTP status ${res.status}`);
+        }
+        const result = await res.json();
+        setTrips(result.trips);
+        setLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch trips:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  if (loading) return <div>Loading...</div>;
+
+  if (!Array.isArray(trips) || trips.length === 0) {
+    return <div>No trips available</div>;
+  }
 
   return (
     <div className="max-w-8xl mx-auto px-10 py-10">
-      <h2 className="text-3xl font-bold mb-6">Latest Trips & Stories</h2>
+      <h2 className="text-3xl font-bold mb-6">Latest Trips</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-        {stories.map((story) => (
+        {trips.map((trip, index) => (
           <Card
-            key={story.title}
-            title={story.title}
-            imgUrl={story.imgUrl}
-            readTime={story.readTime}
-            isMain={story.isMain}
+            key={trip._id}
+            title={trip.title}
+            imgUrl={trip.image}
+            onClick={() => router.push(`/trip/${trip._id}`)}
+            isMain={index === 0}
           />
         ))}
       </div>
