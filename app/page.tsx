@@ -2,8 +2,10 @@ import Link from "next/link";
 import Slider from "@components/Slider";
 import ScrollButton from "@components/ui/button/ScrollButton";
 import TripsStoriesSection from "@components/TripsStoriesSection";
+import { auth } from "@auth";
 
-const Home = () => {
+const Home = async () => {
+  const session = await auth();
   return (
     <>
       <div
@@ -13,7 +15,7 @@ const Home = () => {
         <h1 className="text-6xl mb-5">Discover story-worthy travel moments</h1>
         <p className="text-2xl mb-5">Plan Your Trip - Travel Like a Pro</p>
         <Link
-          href="/auth/login"
+          href={session?.user ? "/planTrip" : "/auth/login"}
           className="mt-5 py-3 px-6 text-lg bg-purple-700 rounded-full hover:bg-purple-800 transition-colors cursor-pointer"
         >
           START
@@ -25,7 +27,7 @@ const Home = () => {
       >
         <h1 className="text-6xl">Share your experience with the world</h1>
         <Link
-          href="/auth/login"
+          href={session?.user ? "/planTrip" : "/auth/login"}
           className="mt-5 py-3 px-6 text-lg bg-purple-700 rounded-full hover:bg-purple-800 transition-colors cursor-pointer"
         >
           SHARE
