@@ -5,15 +5,14 @@ import {addAttraction} from "@lib/attraction";
 
 export async function POST(request: Request ) {
     try {
-          await connectToDB();
-        const attraction = new Attraction(await request.json());
-        const result = await addAttraction(attraction);
-        return NextResponse.json(result);
+      const attraction = new Attraction(await request.json());
+      const result = await addAttraction(attraction);
+      return NextResponse.json(result);
     } catch (error: any) {
-        return NextResponse.json(
-            { error: "Adding comment error: "+error.message },
-            { status: 500 }
-        );
+      return NextResponse.json(
+        { error: "Adding comment error: " + error.message },
+        { status: 500 }
+      );
     }
 }
 
