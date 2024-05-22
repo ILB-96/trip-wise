@@ -3,6 +3,8 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { CirclePlus } from "lucide-react";
+import TimePicker from "react-time-picker";
+import "react-time-picker/dist/TimePicker.css";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -27,12 +29,31 @@ const AddDateButton: React.FC<AddDateButtonProps> = ({
   attraction,
 }) => {
   const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [time, setTime] = React.useState<string>("12:00");
   const start = dateRange?.from ? dateRange.from : new Date();
   const end = dateRange?.to ? dateRange.to : new Date();
 
   const handleSelect = (selectedDate: Date | undefined) => {
     setDate(selectedDate); // Deselect the date
-    addAction(attraction, selectedDate);
+  };
+
+  const handleTimeChange = (newTime: string) => {
+    setTime(newTime);
+  };
+
+  const handleConfirm = () => {
+    if (date) {
+      let [hours, minutes] = [0, 0];
+      if (time) {
+        [hours, minutes] = time.split(":").map(Number);
+      }
+      console.log(hours, minutes);
+      const dateTime = new Date(date);
+      dateTime.setHours(hours, minutes);
+      addAction(attraction, dateTime);
+    } else {
+      addAction(attraction, undefined);
+    }
   };
 
   return (
@@ -46,7 +67,7 @@ const AddDateButton: React.FC<AddDateButtonProps> = ({
           )}
         >
           {date ? (
-            format(date, "PPP")
+            format(date, "PPP") + " " + (time ? time : "")
           ) : (
             <span>
               <CirclePlus />
@@ -63,6 +84,12 @@ const AddDateButton: React.FC<AddDateButtonProps> = ({
           defaultMonth={start}
           initialFocus
         />
+        <div className="p-4">
+          <TimePicker onChange={handleTimeChange} value={time} disableClock />
+          <Button onClick={handleConfirm} className="mt-2">
+            Confirm
+          </Button>
+        </div>
       </PopoverContent>
     </Popover>
   );
