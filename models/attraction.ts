@@ -14,7 +14,7 @@ export interface IAttraction extends Document {
 }
 
 const attractionSchema: Schema = new mongoose.Schema({
-  title: { type: String, required: true },
+  title: { type: String, required: true, unique: true },
   location: { type: String, required: true },
   country: { type: String, required: true },
   price: { type: String },
