@@ -1,20 +1,21 @@
 "use client";
 
-import * as React from "react";
+import "react-time-picker/dist/TimePicker.css";
+import "react-day-picker/dist/style.css";
+
 import { format } from "date-fns";
 import { CirclePlus } from "lucide-react";
+import * as React from "react";
+import { DateRange, DayPicker } from "react-day-picker";
 import TimePicker from "react-time-picker";
-import "react-time-picker/dist/TimePicker.css";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { DateRange, DayPicker } from "react-day-picker";
-import "react-day-picker/dist/style.css";
+import { cn } from "@/lib/utils";
 import { IAttraction } from "@models/attraction";
 
 type AddDateButtonProps = {

@@ -1,5 +1,6 @@
-import React from "react";
 import { Star, StarHalf } from "lucide-react";
+import React from "react";
+
 import { Badge } from "@/components/ui/badge";
 import { ratingType } from "@models/attraction";
 

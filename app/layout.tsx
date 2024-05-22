@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import "@styles/globals.css";
-import Header from "@components/Header";
-import Provider from "@context/Provider";
+
 import { auth } from "@auth";
-import { HeaderProvider } from "@components/Header/HeaderProvider";
 import Footer from "@components/Footer";
+import { HeaderProvider } from "@components/Header/HeaderProvider";
+import Provider from "@context/Provider";
+
 export const metadata: Metadata = {
   title: "TripWise",
   description: "Discover & Share Trips",

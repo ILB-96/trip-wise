@@ -1,9 +1,11 @@
 "use client";
-import { useEffect } from "react";
 import Image from "next/image";
+import { useEffect } from "react";
+
 import { Badge } from "@/components/ui/badge";
-import { Button } from "./ui/button";
 import { IAttraction } from "@models/attraction";
+
+import { Button } from "./ui/button";
 
 interface PopoverProps {
   item: IAttraction;

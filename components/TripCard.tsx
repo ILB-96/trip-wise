@@ -1,12 +1,14 @@
 "use client";
 
+import { Eye } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
+
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
-import { useRouter } from "next/navigation";
-import { Eye } from "lucide-react";
-import { ITrip } from "@models/trip";
 import { getStars } from "@helpers/starsCalc";
+import { ITrip } from "@models/trip";
+
 interface TripCardProps {
   trip: ITrip;
 }

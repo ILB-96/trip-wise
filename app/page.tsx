@@ -1,8 +1,8 @@
 import Link from "next/link";
-import Slider from "@components/Slider";
-import ScrollButton from "@components/ui/button/ScrollButton";
-import TripsStoriesSection from "@components/TripsStoriesSection";
+
 import { auth } from "@auth";
+import Slider from "@components/Slider";
+import TripsStoriesSection from "@components/TripsStoriesSection";
 
 const Home = async () => {
   const session = await auth();
