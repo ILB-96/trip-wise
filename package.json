@@ -40,7 +40,7 @@
     "mongodb": "^6.5.0",
     "mongoos": "^0.0.1-security",
     "mongoose": "^8.3.2",
-    "next": "14.2.1",
+    "next": "^14.2.3",
     "next-auth": "^5.0.0-beta.16",
     "nodemailer": "^6.9.13",
     "react": "^18",

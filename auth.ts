@@ -8,6 +8,7 @@ import { JWT } from "next-auth/jwt"
 import User from "@models/user";
 import { DB_NAME, connectToDB } from "@utils/database";
 import { Types } from "mongoose";
+import { signOut as signOutUser } from "@auth";
 
 declare module "next-auth/jwt" {
     interface JWT {
@@ -57,6 +58,7 @@ export const {
     callbacks: {
         async session({ token, session }) { // injecting the ID inside our session
             // console.log({ tokenSession: token });
+
             if (token.sub && session.user) {
                 session.user.id = token.sub;
             }
@@ -64,13 +66,16 @@ export const {
                 session.user.role = token.role;
             }
             // console.log({ session })
+            
             return session;
         },
         async jwt({ token }) {
-            
             if (!token.sub) return token; // the user is not logged in
             const existingUser = await getUserById(token.sub);
-            if (!existingUser) return token;
+            if (!existingUser) {
+                await signOutUser({redirectTo:"/auth/login"});
+                return null;
+            }
             token.role = existingUser.role;
             return token;
         },
