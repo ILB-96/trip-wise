@@ -1,6 +1,7 @@
 import Link from "next/link";
+
+import { auth } from "@auth";
 import Slider from "@components/Slider";
-import ScrollButton from "@components/ui/button/ScrollButton";
 import TripsStoriesSection from "@components/TripsStoriesSection";
 import { auth } from "@auth";
 

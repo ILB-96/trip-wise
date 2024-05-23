@@ -1,14 +1,18 @@
 "use client";
-import React, { useState } from "react";
+import "@styles/globals.css";
+
 import Image from "next/image";
+import React, { useState } from "react";
+import { DateRange } from "react-day-picker";
+
 import { Badge } from "@/components/ui/badge";
 import StarRating from "@components/StarRating";
-import PopoverInfo from "./PopoverInfo";
-import AddDateButton from "./AddDateButton";
-import { DateRange } from "react-day-picker";
-import "@styles/globals.css";
-import { IAttraction } from "@models/attraction";
 import { getStars } from "@helpers/starsCalc";
+import { IAttraction } from "@models/attraction";
+
+import AddDateButton from "./AddDateButton";
+import PopoverInfo from "./PopoverInfo";
+
 interface CardProps {
   item: IAttraction;
   addAction?: (attraction: IAttraction, date: Date | undefined) => void;

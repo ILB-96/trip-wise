@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 
 import FilterBar from "@components/FilterBar/FilterBar";
 import TripCard from "@components/TripCard";
+import { ITrip } from "@models/trip";
 
 import { tripsOptions } from "./tripsFilters";
-import { ITrip } from "@models/trip";
 
 const Trips = () => {
   const [filteredData, setFilteredData] = useState<ITrip[]>([]);

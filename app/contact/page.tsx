@@ -1,4 +1,3 @@
-// pages/contact.js
 "use client";
 import React, { useState } from "react";
 
@@ -17,7 +16,6 @@ const Contact = () => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
-
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
