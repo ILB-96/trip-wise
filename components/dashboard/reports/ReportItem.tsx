@@ -23,6 +23,7 @@ const ReportItem = ({ report }) => {
       </TableCell>
       <TableCell>
         {report.snitchId ? `${report.snitchId.email}` : "N/A"}
+
       </TableCell>
       <TableCell>{report.reason}</TableCell>
       <TableCell>

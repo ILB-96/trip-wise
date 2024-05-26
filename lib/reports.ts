@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 import TripComment from "@models/tripComment";
 
 export const REPORTS_PER_PAGE = 5;
-
 export const getReports = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {

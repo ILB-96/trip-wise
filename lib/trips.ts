@@ -31,6 +31,7 @@ export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   return Trip.find({ editor: editorId });
 };
 
+
 export const TRIPS_PER_PAGE = 5;
 export const getTrips = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
