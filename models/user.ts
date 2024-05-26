@@ -1,7 +1,7 @@
 import { IAccount } from '@models/account';
 import mongoose, { Document, Schema } from 'mongoose';
 
-type Role = "ADMIN" | "USER";
+export type Role = "ADMIN" | "USER";
 export interface IUser extends Document {
   id: string;
   name?: string;
