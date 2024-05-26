@@ -1,4 +1,4 @@
-import { addReport } from "@lib/reports";
+import { addReport, getReports } from "@lib/reports";
 import { NextResponse } from "next/server";
 
 export async function POST(request: Request) {
