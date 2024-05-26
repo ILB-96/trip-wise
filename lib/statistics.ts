@@ -18,10 +18,9 @@ export const getFormattedData = async () => {
     data[item.date] = { ...data[item.date], trip: item.count, attraction: 0 };
   }
   for (let item of attractionsData) {
-    data[item.date] = { ...data[item.date], trip: item.count };
+    data[item.date] = { ...data[item.date], attraction: item.count };
   }
-  console.log(data);
-  // Create a new array of that length and map over it
+
   let formattedData = [];
   for (let key in data) {
     formattedData.push({
