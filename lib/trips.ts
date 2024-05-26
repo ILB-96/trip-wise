@@ -159,7 +159,6 @@ export const getTripsChart = async () => {
       count: groupedData[date],
     }));
 
-    console.log(formattedData);
     return { tripsData: formattedData };
   } catch (error) {
     console.error("Failed to fetch users statistics", error);

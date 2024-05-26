@@ -67,7 +67,6 @@ export const getUsersStatistics = async () => {
 
 export const getUsersChart = async () => {
   try {
-    console.log("Fetching weekly data");
     await connectToDB();
 
     const today = startOfDay(new Date());
