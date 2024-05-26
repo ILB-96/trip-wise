@@ -24,7 +24,7 @@ export const getAttractionById = async (
   return Attraction.findById(id);
 };
 
-export const ATTRACTIONS_PER_PAGE = 2;
+export const ATTRACTIONS_PER_PAGE = 5;
 export const getAttractions = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {

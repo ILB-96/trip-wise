@@ -31,7 +31,7 @@ export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   return Trip.find({ editor: editorId });
 };
 
-export const TRIPS_PER_PAGE = 2;
+export const TRIPS_PER_PAGE = 5;
 export const getTrips = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {
@@ -50,7 +50,16 @@ export const getTrips = async (q: string | RegExp, page: number) => {
           as: "creatorDetails",
         },
       },
-      { $unwind: "$creatorDetails" },
+      {
+        $addFields: {
+          creatorDetails: {
+            $ifNull: [
+              { $arrayElemAt: ["$creatorDetails", 0] },
+              { _id: null, name: null, email: "DELETED" },
+            ],
+          },
+        },
+      },
       { $skip: TRIPS_PER_PAGE * (page - 1) },
       { $limit: TRIPS_PER_PAGE },
       {
@@ -69,7 +78,7 @@ export const getTrips = async (q: string | RegExp, page: number) => {
 
     trips.forEach((trip) => {
       trip._id = trip._id.toString();
-      trip.creator._id = trip.creator._id.toString();
+      trip.creator._id = trip.creator._id?.toString() ?? null;
     });
 
     return { count, trips };
