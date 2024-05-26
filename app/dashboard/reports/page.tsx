@@ -24,7 +24,8 @@ interface ReportsPageProps {
 
 const ReportsPage: React.FC<ReportsPageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
-  const page = parseInt(searchParams?.page as string, 10) || 1;
+  const page = searchParams?.page || 1;
+
 
   const { count, reports } = await getReports(q, page);
 

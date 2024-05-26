@@ -23,7 +23,7 @@ export const getUserById = async (id: string) => {
   }
 };
 
-export const USERS_PER_PAGE = 2;
+export const USERS_PER_PAGE = 5;
 export const getUsers = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {

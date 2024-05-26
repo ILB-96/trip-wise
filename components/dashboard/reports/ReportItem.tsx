@@ -19,12 +19,11 @@ const ReportItem = ({ report }) => {
   return (
     <TableRow>
       <TableCell>
-        {report.tripCommentId ? report.tripCommentId.commentText : "N/A"}
+        {report.tripCommentId ? report.tripCommentId.content : "N/A"}
       </TableCell>
       <TableCell>
-        {report.snitchId
-          ? `${report.snitchId.username} (${report.snitchId.email})`
-          : "N/A"}
+        {report.snitchId ? `${report.snitchId.email}` : "N/A"}
+
       </TableCell>
       <TableCell>{report.reason}</TableCell>
       <TableCell>
