@@ -18,19 +18,19 @@ const Dashboard = async () => {
       title: "Total Users",
       number: totalUsers,
       change: usersChange,
-      icon: <Users size={24} />,
+      icon: <Users size={30} />,
     },
     {
       title: "Total Trips",
       number: totalTrips,
       change: tripsChange,
-      icon: <Plane size={24} />,
+      icon: <Plane size={30} />,
     },
     {
       title: "Total Attractions",
       number: totalAttractions,
       change: attractionsChange,
-      icon: <FerrisWheel size={24} />,
+      icon: <FerrisWheel size={30} />,
     },
   ];
   return (
