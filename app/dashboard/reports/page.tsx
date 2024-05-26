@@ -1,4 +1,3 @@
-// pages/reports.tsx
 import React from "react";
 import { getReports } from "@lib/reports";
 import Pagination from "@components/dashboard/pagination/Pagination";
@@ -12,7 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
-
+export const REPORTS_PER_PAGE = 5;
 interface SearchParams {
   q?: string;
   page?: number;
@@ -25,7 +24,6 @@ interface ReportsPageProps {
 const ReportsPage: React.FC<ReportsPageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
-
 
   const { count, reports } = await getReports(q, page);
 
@@ -49,7 +47,7 @@ const ReportsPage: React.FC<ReportsPageProps> = async ({ searchParams }) => {
           ))}
         </TableBody>
       </Table>
-      <Pagination count={count} />
+      <Pagination count={count} items_per_page={REPORTS_PER_PAGE} />
     </div>
   );
 };
