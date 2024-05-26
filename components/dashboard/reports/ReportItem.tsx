@@ -11,10 +11,10 @@ const ReportItem = ({ report }) => {
       <TableCell>
         {report.tripCommentId ? report.tripCommentId.content : "N/A"}
       </TableCell>
-      <TableCell>
+      <TableCell className="max-sm:hidden">
         {report.snitchId ? `${report.snitchId.email}` : "N/A"}
       </TableCell>
-      <TableCell>{report.reason}</TableCell>
+      <TableCell className="max-sm:hidden">{report.reason}</TableCell>
       <TableCell>
         <div className={styles.buttons}>
           <form action={deleteTripCommentReport}>

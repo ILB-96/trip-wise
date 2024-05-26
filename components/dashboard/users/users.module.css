@@ -59,3 +59,8 @@
 .delete{
   background-color: crimson;
 }
+
+.tableCell {
+  white-space: normal;
+  word-break: break-word;
+}

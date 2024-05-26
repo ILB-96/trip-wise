@@ -1,24 +1,25 @@
 import mongoose from 'mongoose';
 
-let is_connected = false;
-const MONGO_URI: string = process.env.MONGO_URI || 'your_default_connection_string';
+const MONGO_URI: string =
+  process.env.MONGO_URI || "your_default_connection_string";
 export const DB_NAME = "share_prompt";
 
+let connection: mongoose.ConnectionStates;
+
 export const connectToDB = async () => {
-    mongoose.set('strictQuery', true);
-    if (is_connected) {
-        console.log('mongodb already connected');
-        return;
-    }
-    try {
-        await mongoose.connect(MONGO_URI, {
-            dbName: DB_NAME // corrected a small typo in dbName
-        });
-        is_connected = true; // Update connection status on successful connect
-        console.log('MongoDB connection established');
-    } catch (error) {
-        console.error('Failed to connect to MongoDB', error);
-    }
-}
+  mongoose.set("strictQuery", true);
+  if (connection) {
+    return;
+  }
+  try {
+    const db = await mongoose.connect(MONGO_URI, {
+      dbName: DB_NAME,
+    });
+    connection = db.connections[0].readyState;
+    console.log("MongoDB connection established");
+  } catch (error) {
+    console.error("Failed to connect to MongoDB", error);
+  }
+};
 
 

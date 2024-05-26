@@ -32,9 +32,9 @@ const DashAttractionsPage: React.FC<AttractionsPageProps> = async ({
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
-            <TableHead>Country</TableHead>
-            <TableHead>Location</TableHead>
-            <TableHead>Last Update</TableHead>
+            <TableHead className="max-sm:hidden">Country</TableHead>
+            <TableHead className="max-sm:hidden">Location</TableHead>
+            <TableHead className="max-sm:hidden">Last Update</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

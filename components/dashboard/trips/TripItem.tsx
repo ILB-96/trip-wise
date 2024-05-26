@@ -14,12 +14,14 @@ const TripItem = ({ trip }) => {
   return (
     <TableRow>
       <TableCell>{trip?.title}</TableCell>
-      <TableCell>{trip?.creator?.email}</TableCell>
+      <TableCell className="max-sm:hidden">{trip?.creator?.email}</TableCell>
       <TableCell>{trip?.shared ? "True" : "False"}</TableCell>
-      <TableCell>{formatDate(trip?.updatedAt)}</TableCell>
+      <TableCell className="max-sm:hidden">
+        {formatDate(trip?.updatedAt)}
+      </TableCell>
       <TableCell>
         <div className={styles.buttons}>
-          <Link href={`/dashboard/trip/${trip?._id}`}>
+          <Link href={`/trip/${trip?._id}`}>
             <Button variant="outline">
               <View />
             </Button>

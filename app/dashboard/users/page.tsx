@@ -2,10 +2,15 @@ import { Trash2, View } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
+
 import Pagination from "@components/dashboard/pagination/Pagination";
 import SearchComp from "@components/dashboard/search/Search";
 import styles from "@components/dashboard/users/users.module.css";
-import { getUsers, USERS_PER_PAGE } from "@lib/user_object_get";
+import {
+  getUsers,
+  getUsersStatistics,
+  USERS_PER_PAGE,
+} from "@lib/user_object_get";
 import { deleteUser } from "@lib/userActions";
 import { SearchParams } from "@models/types";
 import {
@@ -17,6 +22,7 @@ import {
   TableRow,
 } from "@components/ui/table";
 import { Button } from "@components/ui/button";
+import Card from "@components/dashboard/card/Card";
 
 interface UsersPageProps {
   searchParams: SearchParams;
@@ -26,18 +32,19 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
   const q = searchParams?.q || "";
   const page = searchParams?.page || 1;
   const { count, users } = await getUsers(q, page);
+
   return (
     <div className={styles.container}>
-      <div className={styles.top}>
+      <div className="flex justify-between">
         <SearchComp placeholder="Search for a user..." />
         <Link href="/dashboard/users/add">
           <Button>Add New</Button>
         </Link>
       </div>
-      <Table className={styles.table}>
+      <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Name</TableHead>
+            <TableHead className="max-sm:hidden">Name</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
             <TableHead>Action</TableHead>
@@ -46,7 +53,7 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
         <TableBody>
           {users.map((user) => (
             <TableRow key={user._id}>
-              <TableCell>
+              <TableCell className="max-sm:hidden">
                 <div className={styles.user}>
                   <Image
                     src={user?.image || "/assets/images/noavatar.png"}
@@ -58,9 +65,9 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
                   {user?.name}
                 </div>
               </TableCell>
-              <TableCell>{user?.email}</TableCell>
-              <TableCell>{user?.role}</TableCell>
-              <TableCell>
+              <TableCell className={styles.tableCell}>{user?.email}</TableCell>
+              <TableCell className={styles.tableCell}>{user?.role}</TableCell>
+              <TableCell className={styles.tableCell}>
                 <div className={styles.buttons}>
                   <Link href={`/dashboard/users/${user?._id}`}>
                     <Button variant="outline">

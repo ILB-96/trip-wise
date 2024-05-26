@@ -5,6 +5,8 @@ import styles from "./navbar.module.css";
 import { MessageSquareText, Earth, Bell, Search } from "lucide-react";
 import { getReports } from "@lib/reports";
 import Link from "next/link";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { menuItems } from "../sidebar/menuItems";
 
 const Navbar = () => {
   const pathname = usePathname();
@@ -21,20 +23,32 @@ const Navbar = () => {
 
     fetchCommentReportsCount();
   }, []);
-  console.log(commentReportsCount);
-  return (
-    <div className={styles.container}>
-      <div className={styles.title}>{pathname.split("/").pop()}</div>
-      <div className={styles.menu}>
-        <div className={styles.icons}>
-          <Link href="/dashboard/reports" className={styles.notification}>
-            <Bell size={20} />
 
-            {commentReportsCount > 0 && (
-              <span className={styles.badge}>{commentReportsCount}</span>
-            )}
-          </Link>
-        </div>
+  return (
+    <div className="flex flex-col">
+      <Tabs
+        defaultValue="Dashboard"
+        className="w-full m-2 md:hidden flex items-center justify-center"
+      >
+        <TabsList>
+          {menuItems.map((cat) =>
+            cat.list.map((item) => (
+              <TabsTrigger key={item.title} value={item.title}>
+                <Link href={item.path}>{item.icon}</Link>
+              </TabsTrigger>
+            ))
+          )}
+        </TabsList>
+      </Tabs>
+      <div className="w-full flex justify-between  items-center font-bold font-satoshi text-xl p-2">
+        {pathname.split("/").pop()?.toLocaleUpperCase()}
+        <Link href="/dashboard/reports" className={styles.notification}>
+          <Bell size={20} />
+
+          {commentReportsCount > 0 && (
+            <span className={styles.badge}>{commentReportsCount}</span>
+          )}
+        </Link>
       </div>
     </div>
   );

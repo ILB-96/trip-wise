@@ -1,5 +1,6 @@
 "use client";
 import styles from "./chart.module.css";
+import React from "react";
 import {
   LineChart,
   Line,
@@ -10,45 +11,17 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const data = [
-  {
-    name: "Sun",
-    visit: 4000,
-    click: 2400,
-  },
-  {
-    name: "Mon",
-    visit: 3000,
-    click: 1398,
-  },
-  {
-    name: "Tue",
-    visit: 2000,
-    click: 3800,
-  },
-  {
-    name: "Wed",
-    visit: 2780,
-    click: 3908,
-  },
-  {
-    name: "Thu",
-    visit: 1890,
-    click: 4800,
-  },
-  {
-    name: "Fri",
-    visit: 2390,
-    click: 3800,
-  },
-  {
-    name: "Sat",
-    visit: 3490,
-    click: 4300,
-  },
-];
-
-const Chart = () => {
+const Chart = (data: { data: any[] | undefined }) => {
+  const tooltipStyle = {
+    backgroundColor: "white",
+    borderColor: "black",
+    borderStyle: "solid",
+    borderWidth: 1,
+    borderRadius: "1%",
+    fontFamily: "helvetica, sans-serif",
+    fontSize: "16px",
+    padding: "5px",
+  };
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Weekly Recap</h2>
@@ -56,7 +29,7 @@ const Chart = () => {
         <LineChart
           width={500}
           height={300}
-          data={data}
+          data={data.data}
           margin={{
             top: 5,
             right: 30,
@@ -66,19 +39,25 @@ const Chart = () => {
         >
           <XAxis dataKey="name" />
           <YAxis />
-          <Tooltip contentStyle={{ background: "#151c2c", border: "none" }} />
+          <Tooltip contentStyle={tooltipStyle} />
           <Legend />
           <Line
             type="monotone"
-            dataKey="visit"
+            dataKey="user"
             stroke="#8884d8"
             strokeDasharray="5 5"
           />
           <Line
             type="monotone"
-            dataKey="click"
+            dataKey="trip"
             stroke="#82ca9d"
             strokeDasharray="3 4 5 2"
+          />
+          <Line
+            type="monotone"
+            dataKey="attraction"
+            stroke="#f88070"
+            strokeDasharray="3 4 5 4"
           />
         </LineChart>
       </ResponsiveContainer>

@@ -5,6 +5,8 @@ import Trip, { ITrip } from "../models/trip";
 import { connectToDB } from "../utils/database";
 import { revalidatePath } from "next/cache";
 import { TRIPS_PER_PAGE } from "@app/dashboard/trips/page";
+import { startOfDay, subDays } from "date-fns";
+import { Types } from "mongoose";
 export const addTrip = async (tripData: Partial<ITrip>): Promise<ITrip> => {
   await connectToDB();
   const trip = new Trip(tripData);
@@ -97,4 +99,70 @@ export const deleteTrip = async (
   }
 
   revalidatePath("/dashboard/trips");
+};
+
+export const getTripsStatistics = async () => {
+  try {
+    await connectToDB();
+
+    const totalTrips = await Trip.countDocuments();
+
+    const oneWeekAgo = subDays(new Date(), 6);
+    const newTripsThisWeek = await Trip.countDocuments({
+      _id: {
+        $gte: Types.ObjectId.createFromTime(
+          Math.floor(oneWeekAgo.getTime() / 1000)
+        ),
+      },
+    });
+    let tripsChange = 0;
+    if (totalTrips !== newTripsThisWeek) {
+      tripsChange = (newTripsThisWeek / (totalTrips - newTripsThisWeek)) * 100;
+    }
+
+    return { totalTrips, tripsChange: tripsChange.toFixed(2) };
+  } catch (error) {
+    throw new Error("Failed to fetch trips statistics");
+  }
+};
+
+export const getTripsChart = async () => {
+  try {
+    await connectToDB();
+
+    const today = startOfDay(new Date());
+    const oneWeekAgo = subDays(today, 7);
+
+    const data = await Trip.find({
+      _id: {
+        $gte: Types.ObjectId.createFromTime(
+          Math.floor(oneWeekAgo.getTime() / 1000)
+        ),
+      },
+    }).sort({ _id: 1 });
+
+    // Group data by day
+    const groupedData = data.reduce((acc, item) => {
+      const date = new Date(item._id.getTimestamp())
+        .toISOString()
+        .split("T")[0];
+      if (!acc[date]) {
+        acc[date] = 0;
+      }
+      acc[date]++;
+      return acc;
+    }, {});
+
+    // Format data for the chart
+    const formattedData = Object.keys(groupedData).map((date) => ({
+      date,
+      count: groupedData[date],
+    }));
+
+    console.log(formattedData);
+    return { tripsData: formattedData };
+  } catch (error) {
+    console.error("Failed to fetch users statistics", error);
+    throw new Error("Failed to fetch users statistics");
+  }
 };

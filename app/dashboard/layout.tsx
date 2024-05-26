@@ -54,7 +54,7 @@ export default function DashBoardLayout({
   }
   return (
     <div className="flex">
-      <div className="p-2 border-gray-500/50 border-r-2">
+      <div className="p-2 border-gray-500/50 border-r-2 max-md:hidden">
         <SideBar />
       </div>
       <div className={styles.content}>

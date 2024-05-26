@@ -20,13 +20,13 @@ export default async function RootLayout({
   children: React.ReactNode;
 }) {
   const session = await auth();
+
+  // Move the hook call inside the component body
+
   return (
     <Provider session={session}>
       <html lang="en">
         <body>
-          {/* <div className="main"> */}
-          {/* <div className="gradient" /> */}
-          {/* </div> */}
           <div className="flex flex-col relative justify-start h-screen">
             <div>
               <HeaderProvider />

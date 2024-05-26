@@ -23,9 +23,9 @@ const DashTripsPage: React.FC<TripsPageProps> = async ({ searchParams }) => {
         <TableHeader>
           <TableRow>
             <TableHead>Title</TableHead>
-            <TableHead>Author</TableHead>
+            <TableHead className="max-sm:hidden">Author</TableHead>
             <TableHead>Shared</TableHead>
-            <TableHead>Last Update</TableHead>
+            <TableHead className="max-sm:hidden">Last Update</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>

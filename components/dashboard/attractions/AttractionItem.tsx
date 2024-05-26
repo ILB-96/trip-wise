@@ -13,9 +13,15 @@ const AttractionItem = ({ attraction }) => {
   return (
     <TableRow>
       <TableCell>{attraction?.title}</TableCell>
-      <TableCell>{attraction?.country || "#N/A"}</TableCell>
-      <TableCell>{attraction?.location || "#N/A"}</TableCell>
-      <TableCell>{formatDate(attraction?.updatedAt)}</TableCell>
+      <TableCell className="max-sm:hidden">
+        {attraction?.country || "#N/A"}
+      </TableCell>
+      <TableCell className="max-sm:hidden">
+        {attraction?.location || "#N/A"}
+      </TableCell>
+      <TableCell className="max-sm:hidden">
+        {formatDate(attraction?.updatedAt)}
+      </TableCell>
       <TableCell>
         <div className={styles.buttons}>
           <Link href={`/dashboard/attractions/${attraction?._id}`}>
