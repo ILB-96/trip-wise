@@ -5,6 +5,7 @@ import {useEffect, useState} from "react";
 import AttractionCard from "@components/AttractionCard";
 import { attractionsFilter } from "./attractionsFilter";
 import { IAttraction } from "@models/attraction";
+import ThreeDotsWave from "@components/ThreeDotsLoading";
 const Attractions = () => {
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +44,7 @@ const Attractions = () => {
     setFilteredData(newData);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ThreeDotsWave />;
   if (!filteredData.length) return <div>No attractions available</div>;
 
   return (
