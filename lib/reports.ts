@@ -22,11 +22,10 @@ export const getReports = async (q: string | RegExp, page: number) => {
       .limit(REPORTS_PER_PAGE)
       .skip(REPORTS_PER_PAGE * (page - 1))
       .lean();
-
+    console.log(reports);
     reports.forEach((report) => {
-      report._id = report._id.toString();
-      report._id = report.tripCommentId._id.toString();
-      report._id = report.snitchId._id.toString();
+      report._id = report._id.toString("base64");
+      report.tripCommentId._id = report.tripCommentId._id.toString("base64");
     });
     return { count, reports };
   } catch (err) {

@@ -3,7 +3,6 @@ import Link from "next/link";
 import { auth } from "@auth";
 import Slider from "@components/Slider";
 import TripsStoriesSection from "@components/TripsStoriesSection";
-import { auth } from "@auth";
 
 const Home = async () => {
   const session = await auth();
