@@ -1,8 +1,9 @@
+"use server";
 import { revalidatePath } from "next/cache";
 import Attraction, { IAttraction } from "../models/attraction";
 import { connectToDB } from "../utils/database";
 import { redirect } from "next/navigation";
-
+import { ATTRACTIONS_PER_PAGE } from "@app/dashboard/attractions/page";
 export const addAttraction = async (
   attractionData: IAttraction
 ): Promise<IAttraction> => {
@@ -24,7 +25,6 @@ export const getAttractionById = async (
   return Attraction.findById(id);
 };
 
-export const ATTRACTIONS_PER_PAGE = 5;
 export const getAttractions = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {
@@ -37,9 +37,6 @@ export const getAttractions = async (q: string | RegExp, page: number) => {
       .skip(ATTRACTIONS_PER_PAGE * (page - 1))
       .lean();
 
-    attractions.forEach((attraction) => {
-      attraction._id = attraction._id.toString();
-    });
     return { count, attractions };
   } catch (err) {
     throw new Error("Failed to fetch reports!");

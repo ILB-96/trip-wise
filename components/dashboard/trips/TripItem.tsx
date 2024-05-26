@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Trash2, View } from "lucide-react";
 import styles from "@components/dashboard/users/users.module.css";
@@ -9,7 +7,7 @@ import { TableCell, TableRow } from "@components/ui/table";
 import { Button } from "@components/ui/button";
 
 const TripItem = ({ trip }) => {
-  const formatDate = (date) => {
+  const formatDate = (date: Date) => {
     return new Date(date).toLocaleString();
   };
 
@@ -27,11 +25,7 @@ const TripItem = ({ trip }) => {
             </Button>
           </Link>
           <form action={deleteTrip}>
-            <input
-              type="hidden"
-              name="id"
-              value={trip?._id.toString("base64")}
-            />
+            <input type="hidden" name="id" value={trip?._id} />
             <Button variant="destructive">
               <Trash2 />
             </Button>

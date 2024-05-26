@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Trash2, View } from "lucide-react";
 import styles from "@components/dashboard/users/users.module.css";
@@ -26,11 +24,7 @@ const AttractionItem = ({ attraction }) => {
             </Button>
           </Link>
           <form action={deleteAttraction}>
-            <input
-              type="hidden"
-              name="id"
-              value={attraction?._id.toString("base64")}
-            />
+            <input type="hidden" name="id" value={attraction?._id} />
             <Button variant="destructive">
               <Trash2 />
             </Button>

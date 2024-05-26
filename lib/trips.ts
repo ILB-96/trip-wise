@@ -1,8 +1,10 @@
-import User from '@models/user';
-import Trip, { ITrip } from '../models/trip';
-import { connectToDB, cachedConnectToDB } from "../utils/database";
-import { revalidatePath } from "next/cache";
+"use server";
 
+import User from "@models/user";
+import Trip, { ITrip } from "../models/trip";
+import { connectToDB } from "../utils/database";
+import { revalidatePath } from "next/cache";
+import { TRIPS_PER_PAGE } from "@app/dashboard/trips/page";
 export const addTrip = async (tripData: Partial<ITrip>): Promise<ITrip> => {
   await connectToDB();
   const trip = new Trip(tripData);
@@ -31,8 +33,6 @@ export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   return Trip.find({ editor: editorId });
 };
 
-
-export const TRIPS_PER_PAGE = 5;
 export const getTrips = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {
@@ -76,11 +76,6 @@ export const getTrips = async (q: string | RegExp, page: number) => {
         },
       },
     ]);
-
-    trips.forEach((trip) => {
-      trip._id = trip._id.toString();
-      trip.creator._id = trip.creator._id?.toString() ?? null;
-    });
 
     return { count, trips };
   } catch (err) {

@@ -1,11 +1,11 @@
 import Pagination from "@components/dashboard/pagination/Pagination";
 import SearchComp from "@components/dashboard/search/Search";
 import styles from "@components/dashboard/users/users.module.css";
-import { getTrips, TRIPS_PER_PAGE } from "@lib/trips";
+import { getTrips } from "@lib/trips";
 import { SearchParams } from "@models/types";
 import TripItem from "@components/dashboard/trips/TripItem";
 import { Table, TableHead, TableHeader, TableRow } from "@components/ui/table";
-
+export const TRIPS_PER_PAGE = 5;
 interface TripsPageProps {
   searchParams: SearchParams;
 }

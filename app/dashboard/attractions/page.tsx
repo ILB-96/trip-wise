@@ -1,14 +1,7 @@
-import { Trash2, View } from "lucide-react";
-import Link from "next/link";
-
 import Pagination from "@components/dashboard/pagination/Pagination";
 import SearchComp from "@components/dashboard/search/Search";
 import styles from "@components/dashboard/users/users.module.css";
-import {
-  ATTRACTIONS_PER_PAGE,
-  deleteAttraction,
-  getAttractions,
-} from "@lib/attraction";
+import { getAttractions } from "@lib/attraction";
 import { SearchParams } from "@models/types";
 import AttractionItem from "@components/dashboard/attractions/AttractionItem";
 import {
@@ -18,6 +11,7 @@ import {
   TableHeader,
   TableRow,
 } from "@components/ui/table";
+export const ATTRACTIONS_PER_PAGE = 5;
 
 interface AttractionsPageProps {
   searchParams: SearchParams;
