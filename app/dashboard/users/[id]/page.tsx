@@ -35,11 +35,16 @@ const SingleUserPage = async ({ params }) => {
         <form action={updateUser} className={styles.form}>
           <Input type="hidden" name="id" value={user?._id} />
           <Label htmlFor="name">name</Label>
-          <Input type="text" name="name" placeholder={user?.name} />
+          <Input type="text" id="name" name="name" placeholder={user?.name} />
           <Label htmlFor="email">Email</Label>
-          <Input type="email" name="email" placeholder={user?.email} />
+          <Input
+            type="email"
+            id="email"
+            name="email"
+            placeholder={user?.email}
+          />
           <Label htmlFor="password">Password</Label>
-          <Input type="password" name="password" />
+          <Input type="password" id="password" name="password" />
           <Label htmlFor="role">Role</Label>
           <Select name="role">
             <SelectTrigger>
