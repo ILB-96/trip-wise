@@ -80,3 +80,24 @@ export const addReport = async (
     return { success: false, error: error.message };
   }
 };
+
+export const addTripReport = async (
+  formData: Iterable<readonly [PropertyKey, any]>
+) => {
+  const { snitchId, id, reason } = Object.fromEntries(formData);
+
+  try {
+    await connectToDB(); // Ensure the database connection is awaited
+
+    const newReport = await TripCommentReport.findOneAndUpdate(
+      { tripCommentId: id, snitchId },
+      { $set: { reason } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+
+    revalidatePath("/dashboard/reports");
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to add report!");
+  }
+};
