@@ -165,3 +165,13 @@ export const getTripsChart = async () => {
     throw new Error("Failed to fetch users statistics");
   }
 };
+
+export const addTripView = async (tripId: string) => {
+  try {
+    await connectToDB();
+    await Trip.updateOne({ _id: tripId }, { $inc: { views: 1 } });
+  } catch (error) {
+    console.error("Failed to add trip view", error);
+    throw new Error("Failed to add trip view");
+  }
+};

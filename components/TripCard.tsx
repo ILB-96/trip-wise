@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 
 import { ITrip } from "@models/trip";
+import { addTripView } from "@lib/trips";
 
 interface TripCardProps {
   trip: ITrip;
@@ -14,8 +15,9 @@ interface TripCardProps {
 
 const TripCard: React.FC<TripCardProps> = ({ trip }) => {
   const router = useRouter();
-  const navigateToTripDetail = () => {
+  const navigateToTripDetail = async () => {
     router.push(`/trip/${trip._id}`); // Navigate to the trip detail page
+    await addTripView(trip._id); // Increment the view count
   };
 
   return (
