@@ -1,10 +1,12 @@
 "use client";
 
 import FilterBar from "@components/FilterBar/FilterBar";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import AttractionCard from "@components/AttractionCard";
 import { attractionsFilter } from "./attractionsFilter";
 import { IAttraction } from "@models/attraction";
+import { AuthProvider } from "@/context/AuthContext"; // Ensure this path is correct
+
 const Attractions = () => {
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -22,14 +24,14 @@ const Attractions = () => {
 
         // Update attraction types for the filter
         const attractionTypes: string[] = Array.from(
-          new Set(
-            result.attractions
-              .map((attraction: IAttraction) => attraction.types)
-              .flat()
-          )
+            new Set(
+                result.attractions
+                    .map((attraction: IAttraction) => attraction.types)
+                    .flat()
+            )
         );
         attractionsFilter[2].selections = attractionTypes.filter(
-          (type) => type && type.trim() !== ""
+            (type) => type && type.trim() !== ""
         );
       } catch (error) {
         console.error("Failed to fetch attractions:", error);
@@ -39,6 +41,7 @@ const Attractions = () => {
 
     fetchData();
   }, []);
+
   const handleDataChange = (newData: IAttraction[]) => {
     setFilteredData(newData);
   };
@@ -47,18 +50,18 @@ const Attractions = () => {
   if (!filteredData.length) return <div>No attractions available</div>;
 
   return (
-    <>
-      <FilterBar
-        options={attractionsFilter}
-        data={filteredData}
-        onDataChange={handleDataChange}
-      />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        {filteredData.map((attraction: IAttraction, index: number) => (
-          <AttractionCard key={attraction.title + index} item={attraction} />
-        ))}
-      </div>
-    </>
+      <AuthProvider>
+        <FilterBar
+            options={attractionsFilter}
+            data={filteredData}
+            onDataChange={handleDataChange}
+        />
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+          {filteredData.map((attraction: IAttraction, index: number) => (
+              <AttractionCard key={attraction.title + index} item={attraction} />
+          ))}
+        </div>
+      </AuthProvider>
   );
 };
 
