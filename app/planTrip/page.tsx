@@ -19,10 +19,12 @@ const hasSelectedAttractions = (selectedAttractions: {
     (key) => selectedAttractions[key].length > 0
   );
 };
+
 interface dayAttraction {
   date: Date;
   attraction: IAttraction;
 }
+
 const TripPlanner: React.FC = () => {
   const session = useSession()?.data;
   const [status, setStatus] = useState<string>("");
@@ -36,6 +38,7 @@ const TripPlanner: React.FC = () => {
   const [selectedAttractions, setSelectedAttractions] = useState<
     dayAttraction[]
   >([]);
+  const [isPrivate, setIsPrivate] = useState<boolean>(false); // State for checkbox
 
   useEffect(() => {
     const fetchData = async () => {
@@ -71,6 +74,7 @@ const TripPlanner: React.FC = () => {
   const handleDataChange = (data: IAttraction[]) => {
     setFilteredData(data);
   };
+
   const handleAddAttraction = (
     attraction: IAttraction,
     date: Date | undefined
@@ -107,7 +111,7 @@ const TripPlanner: React.FC = () => {
       creator: session?.user?.id,
       image: selectedAttractions[0].attraction.image,
       country: selectedAttractions[0].attraction.country,
-      shared: true,
+      shared: !isPrivate, // Set the shared property based on the checkbox state
     };
 
     const response = await fetch("/api/trip/addTrip", {
@@ -172,10 +176,12 @@ const TripPlanner: React.FC = () => {
           aria-labelledby="trip-planner-heading"
         />
       </div>
+
       <div className="w-full flex mb-1">
         <DateRangePicker className="font-inter" date={date} setDate={setDate} />
       </div>
-      <div className="w-full flex justify-start mb-2">
+
+      <div className="w-full flex justify-start items-center mb-2">
         <Button
           type="submit"
           disabled={!tripName || !selectedAttractions.length}
@@ -183,10 +189,22 @@ const TripPlanner: React.FC = () => {
         >
           Create Trip
         </Button>
+        <div className="ml-4 flex items-center">
+          <label className="flex items-center space-x-2">
+            <input
+              type="checkbox"
+              checked={isPrivate}
+              onChange={(e) => setIsPrivate(e.target.checked)}
+              className="form-checkbox h-4 w-4 text-blue-600"
+            />
+            <span className="text-gray-700 font-bold">Keep trip private</span>
+          </label>
+        </div>
         {status && (
           <div className="ml-2 flex items-center text-green-500">{status}</div>
         )}
       </div>
+
       <div className="w-full mb-2">
         <FilterBar
           options={attractionsFilter}

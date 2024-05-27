@@ -128,6 +128,9 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
             <Button className="mr-4" href="/planTrip">
               Plan Trip
             </Button>
+            <Button className="mr-4" href="/myTrips">
+              My Trips
+            </Button>
             <ProfileButton changeUserState={changeUserState} />
           </>
         )}
