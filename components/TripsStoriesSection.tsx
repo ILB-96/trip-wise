@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ITrip } from "@models/trip";
 import ThreeDotsWave from "./ThreeDotsLoading";
+import { addTripView } from "@lib/trips";
 interface CardProps {
   title: string;
   imgUrl: string;
@@ -98,6 +99,10 @@ const TripsStoriesSection: React.FC = () => {
   if (!Array.isArray(trips) || trips.length === 0) {
     return <div>No trips available</div>;
   }
+  const navigateToTripDetail = async (id) => {
+    router.push(`/trip/${id}`); // Navigate to the trip detail page
+    await addTripView(id); // Increment the view count
+  };
 
   return (
     <div className="max-w-8xl mx-auto px-10 py-10">
@@ -108,7 +113,7 @@ const TripsStoriesSection: React.FC = () => {
             key={trip._id}
             title={trip.title}
             imgUrl={trip.image}
-            onClick={() => router.push(`/trip/${trip._id}`)}
+            onClick={() => navigateToTripDetail(trip._id)}
             isMain={index === 0}
           />
         ))}
