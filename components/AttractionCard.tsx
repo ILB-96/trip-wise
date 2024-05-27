@@ -1,7 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
+import "@styles/globals.css";
+
 import Image from "next/image";
+import React, { useState } from "react";
+import { DateRange } from "react-day-picker";
+
 import { Badge } from "@/components/ui/badge";
 import RatingComponent from "@/components/StarRating"; // Adjust the path as needed
 import PopoverInfo from "./PopoverInfo";
@@ -9,7 +14,6 @@ import AddDateButton from "./AddDateButton";
 import { DateRange } from "react-day-picker";
 import "@styles/globals.css";
 import { IAttraction } from "@models/attraction";
-
 interface CardProps {
     item: IAttraction;
     addAction?: (attraction: IAttraction, date: Date | undefined) => void;

@@ -7,6 +7,8 @@ import { attractionsFilter } from "./attractionsFilter";
 import { IAttraction } from "@models/attraction";
 import { AuthProvider } from "@/context/AuthContext"; // Ensure this path is correct
 
+import ThreeDotsWave from "@components/ThreeDotsLoading";
+
 const Attractions = () => {
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
@@ -46,7 +48,7 @@ const Attractions = () => {
     setFilteredData(newData);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ThreeDotsWave />;
   if (!filteredData.length) return <div>No attractions available</div>;
 
   return (

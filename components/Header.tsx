@@ -1,15 +1,16 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { User } from "next-auth";
 import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { disablePageScroll, enablePageScroll } from "scroll-lock";
+
 import { navigation } from "@constants/navigation";
-import { usePathname } from "next/navigation";
+
 import { Button } from "./Header/Button";
 import { ButtonGradient } from "./Header/ButtonGradient";
 import MenuSvg from "./Header/MenuSvg";
-import { disablePageScroll, enablePageScroll } from "scroll-lock";
 import { ProfileButton } from "./Header/ProfileButton";
-import { User } from "next-auth";
-import { useRouter } from "next/navigation";
 
 const Logo: React.FC = () => {
   const router = useRouter();

@@ -1,11 +1,12 @@
+import { Check } from "lucide-react";
 import React, {
-  useState,
-  useRef,
+  useCallback,
   useEffect,
   useMemo,
-  useCallback,
+  useRef,
+  useState,
 } from "react";
-import { Check } from "lucide-react";
+
 import { Button } from "@components/ui/button";
 
 interface FilterProps {
@@ -23,7 +24,6 @@ const FilterBox: React.FC<FilterProps> = ({
   allowMultiple = true,
   onChange,
   disableDropdown = false,
-  clearInput = false,
 }) => {
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
   const [isOpen, setIsOpen] = useState(false);

@@ -1,16 +1,17 @@
 "use client";
-import { useState } from "react";
-import { Search } from "lucide-react";
-import { Button } from "@components/ui/button";
 import { motion } from "framer-motion";
+import { Search } from "lucide-react";
+import { useState } from "react";
 
-import FilterBox from "./FilterBox";
+import { Button } from "@components/ui/button";
+import filterData from "@helpers/filterData";
+import getFilters from "@helpers/getFilters";
 import sortData from "@helpers/sortData";
 import useSearchData from "@hooks/useSearchData";
-import getFilters from "@helpers/getFilters";
-import filterData from "@helpers/filterData";
 import { IAttraction } from "@models/attraction";
 import { ITrip } from "@models/trip";
+
+import FilterBox from "./FilterBox";
 
 type Option = {
   title: string;

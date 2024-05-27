@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 
 import FilterBar from "@components/FilterBar/FilterBar";
 import TripCard from "@components/TripCard";
+import { ITrip } from "@models/trip";
 
 import { tripsOptions } from "./tripsFilters";
-import { ITrip } from "@models/trip";
+import ThreeDotsWave from "@components/ThreeDotsLoading";
 
 const Trips = () => {
   const [filteredData, setFilteredData] = useState<ITrip[]>([]);
@@ -33,7 +34,7 @@ const Trips = () => {
     setFilteredData(newData);
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <ThreeDotsWave />;
 
   if (!Array.isArray(filteredData) || filteredData.length === 0) {
     return <div>No attractions available</div>; // Default to 0 if the ratings array is invalid

@@ -1,17 +1,17 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { DateRange } from "react-day-picker";
 import { addDays } from "date-fns";
 import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
+import { DateRange } from "react-day-picker";
 
-import FilterBar from "@components/FilterBar/FilterBar";
-import DateRangePicker from "@components/DateRangePicker";
-import AttractionCard from "@components/AttractionCard";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { attractionsFilter } from "@app/attractions/attractionsFilter";
+import AttractionCard from "@components/AttractionCard";
+import DateRangePicker from "@components/DateRangePicker";
+import FilterBar from "@components/FilterBar/FilterBar";
 import { IAttraction } from "@models/attraction";
-import { ITripAttraction } from "@models/tripAttraction";
+
 const hasSelectedAttractions = (selectedAttractions: {
   [key: string]: IAttraction[];
 }): boolean => {
@@ -97,6 +97,7 @@ const TripPlanner: React.FC = () => {
       setStatus("Please fill out all required fields.");
       return;
     }
+
     setStatus("Sending...");
     console.log();
     const formData = {
@@ -156,6 +157,7 @@ const TripPlanner: React.FC = () => {
       >
         Create your trip
       </h1>
+
       <div className="mb-1">
         <label htmlFor="tripName" className="sr-only">
           Trip Name

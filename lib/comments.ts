@@ -63,3 +63,19 @@ export const getComments = async (tripId: string): Promise<{ success: boolean, e
         return { success: false, error: error.message };
     }
 }
+
+export const deleteTripComment = async (
+  formData: Iterable<readonly [PropertyKey, any]>
+) => {
+  const { id } = Object.fromEntries(formData);
+
+  try {
+    connectToDB();
+    await TripComment.findByIdAndDelete(id);
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete comment!");
+  }
+
+  revalidatePath("/dashboard/reports");
+};
