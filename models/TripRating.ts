@@ -27,8 +27,10 @@ const tripRatingSchema = new mongoose.Schema<ITripRating>(
   },
   { timestamps: true }
 );
+tripRatingSchema.index({ tripId: 1, author: 1 }, { unique: true });
 
 const TripRating =
   mongoose.models?.TripRating ||
   mongoose.model<ITripRating>("TripRating", tripRatingSchema);
 export default TripRating;
+

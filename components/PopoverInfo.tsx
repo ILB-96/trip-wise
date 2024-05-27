@@ -4,6 +4,7 @@ import { useEffect } from "react";
 
 import { Badge } from "@/components/ui/badge";
 import { IAttraction } from "@models/attraction";
+import RatingComponent from "@/components/StarRating"; // Ensure the path is correct
 
 import { Button } from "./ui/button";
 
@@ -57,6 +58,9 @@ const PopoverInfo: React.FC<PopoverProps> = ({ item, isOpen, onClose }) => {
                   {item.location + ", " + item.country}
                 </div>
                 <p className="text-gray-800 mb-4">{item.description}</p>
+                <div className="mb-4">
+                  <RatingComponent attractionId={item._id} />
+                </div>
                 <div className="flex justify-between">
                   <div className="flex flex-wrap">
                     {item.types &&

@@ -50,7 +50,6 @@ export default function Slider() {
 
   const handleClose = () => {
     setSelectedAttraction(null);
-    // onClose();
   };
 
   if (loading) return <ThreeDotsWave />;
