@@ -1,5 +1,7 @@
 import mongoose, { Types, Document } from "mongoose";
 
+
+
 export interface ITripCommentReportBase {
   tripCommentId: Types.ObjectId;
   snitchId: Types.ObjectId;
@@ -28,6 +30,10 @@ const TripCommentReportSchema = new mongoose.Schema<ITripCommentReport>(
     },
   },
   { timestamps: true }
+);
+TripCommentReportSchema.index(
+  { tripCommentId: 1, snitchId: 1 },
+  { unique: true }
 );
 
 const TripCommentReport =
