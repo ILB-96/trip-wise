@@ -19,15 +19,17 @@ const attractionRatingSchema = new mongoose.Schema<IAttractionRating>(
       ref: "User",
       required: true,
     },
-      attractionId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Attraction",
-          required: true,
-      },
+    attractionId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Attraction",
+      required: true,
+    },
     rating: { type: Number, required: true },
   },
   { timestamps: true }
 );
+
+attractionRatingSchema.index({ attractionId: 1, author: 1 }, { unique: true });
 
 const AttractionRating =
     mongoose.models?.AttractionRating ||

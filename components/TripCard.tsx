@@ -5,8 +5,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { Badge } from "@/components/ui/badge";
-import StarRating from "@components/StarRating";
-import { getStars } from "@helpers/starsCalc";
+
 import { ITrip } from "@models/trip";
 
 interface TripCardProps {
@@ -43,7 +42,6 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
               {trip.views}
             </Badge>
           )}
-          {trip.rating && <StarRating rating={getStars(trip.rating)} />}
           <p className="text-gray-600">{trip.country}</p>
         </div>
       </div>
