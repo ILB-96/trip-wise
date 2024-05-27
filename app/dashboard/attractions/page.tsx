@@ -39,7 +39,7 @@ const DashAttractionsPage: React.FC<AttractionsPageProps> = async ({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {attractions.map((attraction) => (
+          {attractions.map((attraction: any) => (
             <AttractionItem
               key={attraction._id.toString("base64")}
               attraction={attraction}

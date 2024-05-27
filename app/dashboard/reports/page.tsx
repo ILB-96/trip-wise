@@ -42,7 +42,7 @@ const ReportsPage: React.FC<ReportsPageProps> = async ({ searchParams }) => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {reports.map((report) => (
+          {reports.map((report: any) => (
             <ReportItem key={report._id.toString("base64")} report={report} />
           ))}
         </TableBody>

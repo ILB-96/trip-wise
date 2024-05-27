@@ -52,7 +52,7 @@ const UsersPage: React.FC<UsersPageProps> = async ({ searchParams }) => {
         </TableHeader>
         <TableBody>
           {users.map((user) => (
-            <TableRow key={user._id}>
+            <TableRow key={user._id.toString("base64")}>
               <TableCell className="max-sm:hidden">
                 <div className={styles.user}>
                   <Image
