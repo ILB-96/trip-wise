@@ -7,7 +7,6 @@ import { revalidatePath } from "next/cache";
 import { TRIPS_PER_PAGE } from "@app/dashboard/trips/page";
 import { startOfDay, subDays } from "date-fns";
 import { Types } from "mongoose";
-import TripAttraction from "@models/tripAttraction";
 export const addTrip = async (tripData: Partial<ITrip>): Promise<ITrip> => {
   await connectToDB();
   const trip = new Trip(tripData);
@@ -25,67 +24,15 @@ export const getAllSharedTrips = async (): Promise<ITrip[]> => {
 };
 export const getTripById = async (id: string): Promise<any | null> => {
   await connectToDB();
-  // const desiredTrip = await Trip.findById(id);
-  // if (!User) {
-  //   // I forced mongoose to load the model if it is not loaded pre-populate, do not remove!>!>!>
-  // }
-  const objectId = new Types.ObjectId(id);
-  const trip = await Trip.aggregate([
-    { $match: { _id: objectId } },
-    {
-      $lookup: {
-        from: "users",
-        localField: "creator",
-        foreignField: "_id",
-        as: "creatorDetails",
-      },
-    },
-    {
-      $addFields: {
-        creatorDetails: {
-          $ifNull: [
-            { $arrayElemAt: ["$creatorDetails", 0] },
-            {
-              _id: "DELETED",
-              name: "DELETED",
-              email: "DELETED",
-              role: "DELETED",
-              image: "/assets/images/noavatar.png",
-            },
-          ],
-        },
-      },
-    },
-    {
-      $project: {
-        title: 1,
-        shared: 1,
-        createdAt: 1,
-        updatedAt: 1,
-        rating: 1,
-        views: 1,
-        country: 1,
-        image: 1,
-        startDate: 1,
-        endDate: 1,
-        tripAttractionId: 1,
-        creator: {
-          _id: "$creatorDetails._id",
-          name: "$creatorDetails.name",
-          email: "$creatorDetails.email",
-          role: "$creatorDetails.role",
-          image: "$creatorDetails.image",
-        },
-      },
-    },
-  ]);
-  return trip[0] || null;
-
-  // return await desiredTrip.populate("creator", "email name image role");
+  const desiredTrip = await Trip.findById(id);
+  if (!User) {
+    // I forced mongoose to load the model if it is not loaded pre-populate, do not remove!>!>!>
+  }
+  return await desiredTrip.populate("creator", "email name image role");
 };
 export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   await connectToDB();
-  return Trip.find({ editor: editorId });
+  return Trip.find({ creator: editorId });
 };
 
 export const getTrips = async (q: string | RegExp, page: number) => {
