@@ -1,10 +1,11 @@
 import mongoose, { Types, Document } from "mongoose";
 import { ratingType } from "./attraction";
 
+
 export interface IAttractionRatingBase {
   author: Types.ObjectId;
   rating: ratingType;
-  tripId: Types.ObjectId;
+  attractionId: Types.ObjectId;
 }
 export interface IAttractionRating extends Document, IAttractionRatingBase {
   createdAt: Date;
@@ -18,17 +19,17 @@ const attractionRatingSchema = new mongoose.Schema<IAttractionRating>(
       ref: "User",
       required: true,
     },
-    tripId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Trip",
-      required: true,
-    },
+      attractionId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Attraction",
+          required: true,
+      },
     rating: { type: Number, required: true },
   },
   { timestamps: true }
 );
 
-const TripRating =
-  mongoose.models?.TripRating ||
-  mongoose.model<IAttractionRating>("TripRating", attractionRatingSchema);
-export default TripRating;
+const AttractionRating =
+    mongoose.models?.AttractionRating ||
+    mongoose.model<IAttractionRating>("AttractionRating", attractionRatingSchema);
+export default AttractionRating;
