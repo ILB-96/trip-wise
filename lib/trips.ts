@@ -1,12 +1,13 @@
 "use server";
 
-import User from "@models/user";
 import Trip, { ITrip } from "../models/trip";
 import { connectToDB } from "../utils/database";
 import { revalidatePath } from "next/cache";
 import { TRIPS_PER_PAGE } from "@app/dashboard/trips/page";
 import { startOfDay, subDays } from "date-fns";
 import { Types } from "mongoose";
+import { calculateTripAverageRating } from "@/helpers/starsCalc";
+
 export const addTrip = async (tripData: Partial<ITrip>): Promise<ITrip> => {
   await connectToDB();
   const trip = new Trip(tripData);
@@ -18,10 +19,25 @@ export const getAllTrips = async (): Promise<ITrip[]> => {
   await connectToDB();
   return Trip.find({});
 };
-export const getAllSharedTrips = async (): Promise<ITrip[]> => {
+export interface ITripWithRating extends ITrip {
+  averageRating: number;
+  ratingCount: number;
+}
+
+export const getAllSharedTrips = async (): Promise<ITripWithRating[]> => {
   await connectToDB();
-  return Trip.find({ shared: true }); // Only return trips where 'shared' is true
+  const trips = await Trip.find({ shared: true }).lean();
+
+  const tripsWithRatings: ITripWithRating[] = await Promise.all(
+      trips.map(async (trip) => {
+        const { averageRating, ratingCount } = await calculateTripAverageRating(trip._id.toString());
+        return { ...trip, averageRating, ratingCount } as ITripWithRating;
+      })
+  );
+
+  return tripsWithRatings;
 };
+
 export const getTripById = async (id: string): Promise<any | null> => {
   await connectToDB();
   const objectId = new Types.ObjectId(id);
@@ -76,9 +92,10 @@ export const getTripById = async (id: string): Promise<any | null> => {
   ]);
   return trip[0] || null;
 };
+
 export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   await connectToDB();
-  return Trip.find({ creator: editorId });
+  return Trip.find({ editor: editorId });
 };
 
 export const getTrips = async (q: string | RegExp, page: number) => {
@@ -133,7 +150,7 @@ export const getTrips = async (q: string | RegExp, page: number) => {
 };
 
 export const deleteTrip = async (
-  formData: Iterable<readonly [PropertyKey, any]>
+    formData: Iterable<readonly [PropertyKey, any]>
 ) => {
   const { id } = Object.fromEntries(formData);
 
@@ -157,7 +174,7 @@ export const getTripsStatistics = async () => {
     const newTripsThisWeek = await Trip.countDocuments({
       _id: {
         $gte: Types.ObjectId.createFromTime(
-          Math.floor(oneWeekAgo.getTime() / 1000)
+            Math.floor(oneWeekAgo.getTime() / 1000)
         ),
       },
     });
@@ -182,16 +199,15 @@ export const getTripsChart = async () => {
     const data = await Trip.find({
       _id: {
         $gte: Types.ObjectId.createFromTime(
-          Math.floor(oneWeekAgo.getTime() / 1000)
+            Math.floor(oneWeekAgo.getTime() / 1000)
         ),
       },
     }).sort({ _id: 1 });
 
-    // Group data by day
     const groupedData = data.reduce((acc, item) => {
       const date = new Date(item._id.getTimestamp())
-        .toISOString()
-        .split("T")[0];
+          .toISOString()
+          .split("T")[0];
       if (!acc[date]) {
         acc[date] = 0;
       }
@@ -199,7 +215,6 @@ export const getTripsChart = async () => {
       return acc;
     }, {});
 
-    // Format data for the chart
     const formattedData = Object.keys(groupedData).map((date) => ({
       date,
       count: groupedData[date],
