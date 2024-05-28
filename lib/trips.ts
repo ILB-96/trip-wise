@@ -6,7 +6,7 @@ import { revalidatePath } from "next/cache";
 import { TRIPS_PER_PAGE } from "@app/dashboard/trips/page";
 import { startOfDay, subDays } from "date-fns";
 import { Types } from "mongoose";
-import { calculateTripAverageRating } from "@/helpers/starsCalc"; // Adjust the import path if necessary
+import { calculateTripAverageRating } from "@/helpers/starsCalc";
 
 export const addTrip = async (tripData: Partial<ITrip>): Promise<ITrip> => {
   await connectToDB();
