@@ -74,24 +74,19 @@ const RatingComponent = ({ attractionId }) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(requestData),
       });
-      console.log("Hey");
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+
         setMessage("Rating submitted successfully");
         setAverageRating(data.newAverageRating || 0);
         setRatingCount(data.newRatingCount || 0);
         setUserRating(newRating);
-        console.log("Updated averageRating:", data.averageRating);
-        console.log("Updated ratingCount:", data.ratingCount);
         await fetchRatings();
       } else {
         console.log(response);
         setMessage(response.statusText);
       }
     } catch (error) {
-      console.error("Error submitting rating:", error);
-      alert("step bad");
       setMessage(`Error submitting rating`);
     }
   };

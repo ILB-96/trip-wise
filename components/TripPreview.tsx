@@ -1,4 +1,3 @@
-// components/TripPreview.tsx
 import { AttractionType } from "@app/attractions/page";
 
 type TripPreviewProps = {
