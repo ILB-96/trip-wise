@@ -1,5 +1,5 @@
 import { IAccount } from '@models/account';
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 
 export type Role = "ADMIN" | "USER";
 export interface IUser extends Document {
@@ -11,6 +11,7 @@ export interface IUser extends Document {
   password?: string;
   role: Role;
   accounts: IAccount[];
+  chats: Types.ObjectId[];
 }
 
 const UserSchema: Schema = new mongoose.Schema({
@@ -22,6 +23,7 @@ const UserSchema: Schema = new mongoose.Schema({
   password: { type: String },
   role: { type: String, required: true, default: "USER" },
   accounts: [{ type: Schema.Types.ObjectId, ref: "Account" }],
+  chats: [{ type: Schema.Types.ObjectId, ref: "Chat" }],
 });
 
 const User = mongoose.models?.User || mongoose.model<IUser>('User', UserSchema);

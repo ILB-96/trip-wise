@@ -17,6 +17,9 @@ export default auth((req) => {
     const isPublicRoute = publicRoutes.includes(nextUrl.pathname);
     const isAuthRoute = authRoutes.includes(nextUrl.pathname);
 
+    if ((nextUrl.pathname.startsWith('/chats') || nextUrl.pathname.startsWith('/api/chats')) && !isLoggedIn) {
+        return Response.redirect(new URL("/auth/login", nextUrl));
+    }
     // if(isApiAuthRoute) {
     //     return ;
     // }
@@ -29,7 +32,7 @@ export default auth((req) => {
     // if(!isLoggedIn && !isPublicRoute) {
     //     return Response.redirect(new URL("/auth/login", nextUrl));
     // }
-    return ;
+    return;
 })
 
 export const config = {

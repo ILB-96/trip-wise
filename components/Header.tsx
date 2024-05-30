@@ -82,7 +82,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
       <Logo />
       <nav
         className={`${openNavigation ? "flex" : "hidden"}  
-                    fixed top-[4rem] left-0 right-0 bottom-0 bg-n-8
+                    fixed md:top-[5rem] sm:top-[4rem] max-sm:top-[4rem] left-0 right-0 bottom-0 bg-n-8
                     lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}
         aria-label="Main Navigation"
       >
@@ -122,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
         </>
       )}
       <ButtonGradient />
-      <div className="flex items-center justify-center space-x-4">
+      <div className="flex items-center justify-center md:space-x-4 text-sm max-sm:space-x-2 sm:space-x-3">
         {user && (
           <>
             <Button className="mr-4" href="/planTrip">

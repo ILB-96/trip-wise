@@ -14,4 +14,9 @@ export const navigation = [
     title: "ATTRACTIONS",
     url: "/attractions",
   },
+  {
+    id: "3",
+    title: "COMMUNITY",
+    url: "/chats",
+  },
 ];
