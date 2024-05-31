@@ -36,7 +36,7 @@ const ReportsPage: React.FC<ReportsPageProps> = async ({ searchParams }) => {
         <TableHeader>
           <TableRow>
             <TableHead>Comment</TableHead>
-            <TableHead className="max-sm:hidden">Snitch</TableHead>
+            <TableHead className="max-sm:hidden">Author</TableHead>
             <TableHead className="max-sm:hidden">Reason</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
