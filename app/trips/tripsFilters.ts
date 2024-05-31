@@ -1,11 +1,11 @@
 import { getNames } from "country-list";
-export const tripsOptions = [
-  {
+export const tripsOptions = {
+  country: {
     title: "Country",
     selections: getNames().sort(),
     disableMultiple: true,
   },
-  {
+  rating: {
     title: "Rating",
     selections: [
       "⭐ and up",
@@ -16,14 +16,9 @@ export const tripsOptions = [
     ],
     disableMultiple: true,
   },
-  {
+  sortBy: {
     title: "Sort By",
-    selections: [
-      "Rating",
-      "Views",
-      "Duration Ascending",
-      "Duration Descending",
-    ],
+    selections: ["Rating", "Views", "Newest", "Oldest"],
     disableMultiple: true,
   },
-];
+};
