@@ -17,7 +17,13 @@ export const getReports = async (q: string | RegExp, page: number) => {
     }).countDocuments();
 
     const reports = await TripCommentReport.find({ reason: { $regex: regex } })
-      .populate("tripCommentId") // Populate the tripCommentId field
+      .populate({
+        path: "tripCommentId", // Populate the tripCommentId field
+        populate: {
+          path: "author", // Populate the author field within tripCommentId
+          model: "User", // Assuming 'User' is your user model
+        },
+      })
       .populate("snitchId") // Populate the snitchId field
       .limit(REPORTS_PER_PAGE)
       .skip(REPORTS_PER_PAGE * (page - 1))
@@ -34,7 +40,6 @@ export const deleteTripCommentReport = async (
 ) => {
   const { tripCommentId, id } = Object.fromEntries(formData);
 
-  console.log("commentIdObject", tripCommentId);
   try {
     await connectToDB(); // Ensure the database connection is awaited
     const deletedComment = await TripComment.findByIdAndDelete(tripCommentId);
@@ -54,7 +59,25 @@ export const deleteTripCommentReport = async (
     throw new Error("Failed to delete comment!");
   }
 };
+export const deleteTripReport = async (
+  formData: Iterable<readonly [PropertyKey, any]>
+) => {
+  const { id } = Object.fromEntries(formData);
 
+  try {
+    await connectToDB(); // Ensure the database connection is awaited
+    const deletedReport = await TripCommentReport.findByIdAndDelete(id);
+    if (!deletedReport) {
+      throw new Error(`Failed to delete TripCommentReport with ID: ${id}`);
+    }
+
+    revalidatePath("/dashboard");
+    revalidatePath("/dashboard/reports");
+  } catch (err) {
+    console.log(err);
+    throw new Error("Failed to delete comment!");
+  }
+};
 export const addReport = async (
   report: ITripCommentReportBase
 ): Promise<{
@@ -85,7 +108,7 @@ export const addTripReport = async (
   formData: Iterable<readonly [PropertyKey, any]>
 ) => {
   const { snitchId, id, reason } = Object.fromEntries(formData);
-
+  console.log(snitchId, id, reason);
   try {
     await connectToDB(); // Ensure the database connection is awaited
 

@@ -45,19 +45,19 @@ const Chart = (data: { data: any[] | undefined }) => {
             type="monotone"
             dataKey="user"
             stroke="#8884d8"
-            strokeDasharray="5 5"
+            strokeDasharray="20 4"
           />
           <Line
             type="monotone"
             dataKey="trip"
             stroke="#82ca9d"
-            strokeDasharray="3 4 5 2"
+            strokeDasharray="20 4"
           />
           <Line
             type="monotone"
             dataKey="attraction"
             stroke="#f88070"
-            strokeDasharray="3 4 5 4"
+            strokeDasharray="20 4"
           />
         </LineChart>
       </ResponsiveContainer>

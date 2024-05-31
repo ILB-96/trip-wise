@@ -9,7 +9,9 @@ import { Separator } from '@components/ui/separator'
 import { CommentSectionProps } from './CommentSection'
 import Report from "@components/report/Report";
 import { addTripReport } from "@lib/reports";
+import { useSession } from "next-auth/react";
 function CommentFeed({ comments }: any) {
+  const { data: session } = useSession();
   return (
     <div className="space-y-2 mt-5 pl-20">
       <div className="font-bold text-2xl">
@@ -27,11 +29,13 @@ function CommentFeed({ comments }: any) {
                     <FaUser />
                   </AvatarFallback>
                 </Avatar>
-                <Report
-                  id={comment._id}
-                  snitchId={comment.author._id}
-                  reportAction={addTripReport}
-                />
+                {session?.user && (
+                  <Report
+                    id={comment._id}
+                    snitchId={session?.user.id}
+                    reportAction={addTripReport}
+                  />
+                )}
               </div>
               <div
                 className="bg-gray-100 px-4 py-2 rounded-md w-full 

@@ -20,6 +20,24 @@ export const getFormattedData = async () => {
   for (let item of attractionsData) {
     data[item.date] = { ...data[item.date], attraction: item.count };
   }
+  // Add the rest of the days of the last 6 days that were not in the data objects
+  let today = new Date();
+  for (let i = 6; i >= 0; i--) {
+    let date = new Date();
+    date.setDate(today.getDate() - i);
+    let key = date.toISOString().split("T")[0];
+    console.log(key);
+    if (!data[key]) {
+      data[key] = { user: 0, trip: 0, attraction: 0 };
+    }
+  }
+  // sort the data object by date
+  data = Object.keys(data)
+    .sort()
+    .reduce((acc, key: string) => {
+      acc[key] = data[key];
+      return acc;
+    }, {} as { [key: string]: { user: number; trip: number; attraction: number } });
 
   let formattedData = [];
   for (let key in data) {
