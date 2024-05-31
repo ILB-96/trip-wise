@@ -29,10 +29,12 @@ export const getAllSharedTrips = async (): Promise<ITripWithRating[]> => {
   const trips = await Trip.find({ shared: true }).lean();
 
   const tripsWithRatings: ITripWithRating[] = await Promise.all(
-      trips.map(async (trip) => {
-        const { averageRating, ratingCount } = await calculateTripAverageRating(trip._id.toString());
-        return { ...trip, averageRating, ratingCount } as ITripWithRating;
-      })
+    trips.map(async (trip) => {
+      const { averageRating, ratingCount } = await calculateTripAverageRating(
+        trip._id.toString()
+      );
+      return { ...trip, averageRating, ratingCount } as ITripWithRating;
+    })
   );
 
   return tripsWithRatings;
@@ -149,9 +151,7 @@ export const getTrips = async (q: string | RegExp, page: number) => {
   }
 };
 
-export const deleteTrip = async (
-    formData: Iterable<readonly [PropertyKey, any]>
-) => {
+export const deleteTrip = async (formData: Iterable<readonly [PropertyKey, any]>) => {
   const { id } = Object.fromEntries(formData);
 
   try {
@@ -174,7 +174,7 @@ export const getTripsStatistics = async () => {
     const newTripsThisWeek = await Trip.countDocuments({
       _id: {
         $gte: Types.ObjectId.createFromTime(
-            Math.floor(oneWeekAgo.getTime() / 1000)
+          Math.floor(oneWeekAgo.getTime() / 1000)
         ),
       },
     });
@@ -199,15 +199,15 @@ export const getTripsChart = async () => {
     const data = await Trip.find({
       _id: {
         $gte: Types.ObjectId.createFromTime(
-            Math.floor(oneWeekAgo.getTime() / 1000)
+          Math.floor(oneWeekAgo.getTime() / 1000)
         ),
       },
     }).sort({ _id: 1 });
 
     const groupedData = data.reduce((acc, item) => {
       const date = new Date(item._id.getTimestamp())
-          .toISOString()
-          .split("T")[0];
+        .toISOString()
+        .split("T")[0];
       if (!acc[date]) {
         acc[date] = 0;
       }
@@ -234,5 +234,170 @@ export const addTripView = async (tripId: string) => {
   } catch (error) {
     console.error("Failed to add trip view", error);
     throw new Error("Failed to add trip view");
+  }
+};
+
+export const getTripsPage = async (
+  q: { [key: string]: string },
+  page: number,
+  shared: boolean
+) => {
+  let regex;
+  try {
+    console.log("q", q);
+    regex = new RegExp(q.q, "i");
+  } catch (err) {
+    console.error("Invalid regex pattern:", err);
+    regex = new RegExp("", "i"); // Default to an empty pattern
+  }
+  try {
+    await connectToDB();
+
+    // Building the $match condition
+    let matchConditions = [
+      { shared: shared },
+      {
+        $or: [
+          { title: { $regex: regex } },
+          { "creatorDetails.name": { $regex: regex } },
+          { country: { $regex: regex } },
+        ],
+      },
+    ];
+
+    // Conditionally adding the country condition if q.country is not empty
+    if (q.country && q.country.trim() !== "") {
+      matchConditions.push({ country: q.country });
+    }
+
+    const aggregatePipeline = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "creator",
+          foreignField: "_id",
+          as: "creatorDetails",
+        },
+      },
+      {
+        $addFields: {
+          creatorDetails: {
+            $ifNull: [
+              { $arrayElemAt: ["$creatorDetails", 0] },
+              { _id: "DELETED", name: "DELETED", email: "DELETED" },
+            ],
+          },
+          averageRating: { $avg: "$rating" },
+        },
+      },
+      {
+        $match: {
+          $and: matchConditions,
+        },
+      },
+    ];
+
+    // If the rating filter is provided, add it to the pipeline
+    if (q.rating && q.rating.trim() !== "") {
+      aggregatePipeline.push({
+        $match: {
+          averageRating: { $gte: parseFloat(q.rating) },
+        },
+      });
+    }
+
+    // Add sorting based on the sortBy parameter
+    if (q.sortBy && q.sortBy.trim() !== "") {
+      let sortField;
+      switch (q.sortBy) {
+        case "Rating":
+          sortField = { averageRating: -1 };
+          break;
+        case "Views":
+          sortField = { views: -1 };
+          break;
+        case "Newest":
+          sortField = { createdAt: -1 };
+          break;
+        case "Oldest":
+          sortField = { createdAt: 1 };
+          break;
+        default:
+          sortField = { createdAt: -1 }; // Default to Newest
+      }
+      aggregatePipeline.push({ $sort: sortField });
+    }
+
+    aggregatePipeline.push(
+      { $skip: 20 * (page - 1) },
+      { $limit: 20 },
+      {
+        $project: {
+          title: 1,
+          createdAt: 1,
+          updatedAt: 1,
+          views: 1,
+          rating: 1,
+          image: 1,
+          country: 1,
+          averageRating: 1,
+          creator: {
+            name: "$creatorDetails.name",
+          },
+        },
+      }
+    );
+
+    const trips = await Trip.aggregate(aggregatePipeline);
+
+    // Count the total number of trips matching the conditions
+    const countAggregatePipeline = [
+      {
+        $lookup: {
+          from: "users",
+          localField: "creator",
+          foreignField: "_id",
+          as: "creatorDetails",
+        },
+      },
+      {
+        $addFields: {
+          creatorDetails: {
+            $ifNull: [
+              { $arrayElemAt: ["$creatorDetails", 0] },
+              { _id: "DELETED", name: "DELETED", email: "DELETED" },
+            ],
+          },
+          averageRating: { $avg: "$rating" },
+        },
+      },
+      {
+        $match: {
+          $and: matchConditions,
+        },
+      },
+      {
+        $count: "count",
+      },
+    ];
+
+    // If the rating filter is provided, add it to the count pipeline
+    if (q.rating && q.rating.trim() !== "") {
+      countAggregatePipeline.push({
+        $match: {
+          averageRating: { $gte: parseFloat(q.rating) },
+        },
+      });
+    }
+
+    const countResult = await Trip.aggregate(countAggregatePipeline);
+    const count = countResult[0]?.count || 0;
+
+    console.log("count", count);
+    console.log(trips[0].averageRating);
+    return { count, trips };
+  } catch (err) {
+    console.error("Error fetching trips:", err);
+    throw new Error("Failed to fetch trips!");
   }
 };
