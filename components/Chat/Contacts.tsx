@@ -40,7 +40,7 @@ const Contacts = () => {
     }
     const router = useRouter();
     const createChat = async () => {
-        const response = await fetch("api/chats/addChat", {
+        const response = await fetch("/api/chats/addChat", {
             method: "POST",
             body: JSON.stringify({
                 currentUserEmail: session.data?.user.email,
@@ -61,7 +61,7 @@ const Contacts = () => {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
             />
-            <div className='h-screen w-1/2 max-lg:w-full flex flex-col gap-5 bg-white rounded-3xl py-5 px-8 mb-20'>
+            <div className='h-screen w-1/2 max-lg:w-full flex flex-col gap-5 bg-white rounded-3xl py-5 px-8 mb-20 overflow-y-scroll max-h-[80vh]'>
                 <p className='font-bold'>
                     Select or unselect
                 </p>

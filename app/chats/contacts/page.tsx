@@ -4,7 +4,7 @@ import React from 'react'
 
 const ContactsPage = () => {
   return (
-    <div className='h-screen justify-center items-center z-0'>
+    <div className='h-screen justify-center items-center z-0 bg-gray-100'>
       <div className='px-10 py-6 mb-20 items-center'>
         <Contacts />
       </div>

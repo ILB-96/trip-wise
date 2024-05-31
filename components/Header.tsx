@@ -126,10 +126,10 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
         {user && (
           <>
             <Button className="mr-4" href="/planTrip">
-              Plan Trip
+              <span className="whitespace-nowrap">Plan Trip</span>
             </Button>
             <Button className="mr-4" href="/myTrips">
-              My Trips
+              <span className="whitespace-nowrap">My Trips</span>
             </Button>
             <ProfileButton changeUserState={changeUserState} />
           </>

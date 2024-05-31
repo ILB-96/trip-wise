@@ -1,35 +1,42 @@
 "use client"
-import { useCurrentUser } from '@hooks/use-current-user'
 import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import CommentFeed from './CommentFeed'
 import CommentForm from './CommentForm'
+import ThreeDotsWave from '@components/ThreeDotsLoading'
+import { useSession } from 'next-auth/react'
 
 export interface CommentSectionProps {
-    tripId: string;
+  tripId: string;
 }
 
 const CommentSection = ({ tripId }: CommentSectionProps) => {
-    const [comments, setComments] = useState<any>(null);
+  const [comments, setComments] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+  const session = useSession();
+  const user = session.data?.user;
 
-    const fetchComments = async () => {
-      const response = await fetch(`/api/trip/${tripId}/getComments`, {
-        method: 'GET',
-      });
-      const result = await response.json();
-      setComments(result.success ? result.comments : null);
-    };
-  
-    useEffect(() => {
-      fetchComments();
-    }, []);
-  
-    const handleCommentSubmitted = async () => {
-      await fetchComments();
-    };
+  const fetchComments = async () => {
+    const response = await fetch(`/api/trip/${tripId}/getComments`, {
+      method: 'GET',
+    });
+    const result = await response.json();
+    setComments(result.success ? result.comments : null);
+    if (result.success)
+      setLoading(false);
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  const handleCommentSubmitted = async () => {
+    await fetchComments();
+  };
   return (
-    <div>
-        {useCurrentUser() && (
+    loading ? (<ThreeDotsWave />) : (
+      <div>
+        {user && (
           <motion.div
             initial="hidden"
             animate="visible"
@@ -49,10 +56,9 @@ const CommentSection = ({ tripId }: CommentSectionProps) => {
             visible: { opacity: 1, transition: { duration: 0.7 } },
           }}
         >
-        {comments && <CommentFeed comments={comments} />}
+          {comments && <CommentFeed comments={comments} />}
         </motion.div>
-    </div>
-  )
+      </div>));
 }
 
 export default CommentSection

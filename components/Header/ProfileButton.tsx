@@ -10,13 +10,14 @@ import {
     DropdownMenuTrigger,
 } from '@components/ui/dropdown-menu';
 
-import { 
+import {
     Avatar,
     AvatarImage,
     AvatarFallback,
 } from '@components/ui/avatar';
 import { logout } from '@actions/logout';
 import { useSession } from 'next-auth/react';
+import Image from 'next/image';
 
 
 interface ProfileButtonProps {
@@ -32,12 +33,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ changeUserState })
     return (
         <DropdownMenu>
             <DropdownMenuTrigger>
-                <Avatar>
-                    <AvatarImage src={user?.image || ""} />
-                    <AvatarFallback className='bg-orange-300'>
-                        <FaUser />
-                    </AvatarFallback>
-                </Avatar>
+                {user?.image ? <Image src={user.image} alt="profile" className="w-10 h-10 rounded-full" width={40} height={40} /> : <FaUser />}
             </DropdownMenuTrigger>
             <DropdownMenuContent>
                 <DropdownMenuItem onClick={handleClick}>
