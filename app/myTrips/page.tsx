@@ -4,6 +4,9 @@ import { useSession } from "next-auth/react";
 import TripCard from "@components/TripCard";
 import { ITrip } from "@models/trip";
 import ThreeDotsWave from "@components/ThreeDotsLoading";
+import { auth } from "@auth";
+import { AuthProvider } from "@context/AuthContext";
+import withAuthProvider from "@app/withAuthProvider";
 
 const MyTrips = () => {
   const { data: session, status } = useSession();
@@ -11,7 +14,7 @@ const MyTrips = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUserId = async (email) => {
+    const fetchUserId = async (email: string): Promise<string | null> => {
       try {
         const res = await fetch(`/api/user/getUserByEmail/?email=${email}`);
         if (!res.ok) {
@@ -75,4 +78,4 @@ const MyTrips = () => {
   );
 };
 
-export default MyTrips;
+export default withAuthProvider(MyTrips);
