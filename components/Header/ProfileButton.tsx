@@ -12,17 +12,14 @@ import {
 
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
+import { useContext } from 'react';
+import { UserContext } from '@context/UserContext';
 
 
-interface ProfileButtonProps {
-    changeUserState: () => void;
-}
-
-export const ProfileButton: React.FC<ProfileButtonProps> = ({ changeUserState }) => {
+export const ProfileButton = () => {
     const user = useSession().data?.user;
+    const { changeUserState } = useContext(UserContext);
     return (
-
-
         <DropdownMenu>
             <DropdownMenuTrigger>
                 {user?.image ? <Image src={user.image} alt="profile" className="w-10 h-10 rounded-full" width={40} height={40} /> : <FaUser />}
@@ -30,7 +27,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ changeUserState })
             <DropdownMenuContent>
                 <DropdownMenuItem onClick={
                     async () => {
-                        await signOut({callbackUrl: "/auth/login"});
+                        await signOut({ callbackUrl: "/auth/login" });
                         changeUserState();
                     }
                 }
@@ -40,8 +37,5 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ changeUserState })
                 </DropdownMenuItem>
             </DropdownMenuContent>
         </DropdownMenu>
-
-
-
     );
 }

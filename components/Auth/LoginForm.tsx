@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 
 import * as z from "zod";
 import { useForm } from 'react-hook-form';
@@ -21,6 +21,7 @@ import { Button } from '@components/ui/button';
 import { FormError } from './FormError';
 import { FormSuccess } from './FormSuccess';
 import { login } from '@actions/login';
+import { UserContext } from '@context/UserContext';
 export const LoginForm = () => {
 
   const searchParams = useSearchParams();
@@ -31,6 +32,7 @@ export const LoginForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
+  const { changeUserState } = useContext(UserContext);
   const form = useForm<z.infer<typeof LoginSchema>>({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -45,6 +47,9 @@ export const LoginForm = () => {
     startTransition(async () => {
       const data = await login(values);
       setError(data?.error);
+      if(!data?.error) {
+        changeUserState();
+      }
       // setSuccess(data?.success);
     });
   };

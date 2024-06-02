@@ -49,13 +49,6 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
-  const [user, setUser] = useState<any>(currentUser);
-
-  const changeUserState = () => {
-    if (user) setUser(null);
-    else setUser("");
-  };
-
   const currentPath = usePathname(); // to know which page are we in
   const [openNavigation, setOpenNavigation] = React.useState(false);
   const toggleNavigation = () => {
@@ -107,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
           ))}
         </div>
       </nav>
-      {!user && (
+      {!currentUser && (
         <>
           <a
             href="/auth/register"
@@ -123,7 +116,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
       )}
       <ButtonGradient />
       <div className="flex items-center justify-center md:space-x-4 text-sm max-sm:space-x-2 sm:space-x-3">
-        {user && (
+        {currentUser && (
           <>
             <Button className="mr-4" href="/planTrip">
               <span className="whitespace-nowrap">Plan Trip</span>
@@ -131,7 +124,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
             <Button className="mr-4" href="/myTrips">
               <span className="whitespace-nowrap">My Trips</span>
             </Button>
-            <ProfileButton changeUserState={changeUserState} />
+            <ProfileButton />
           </>
         )}
         <Button
