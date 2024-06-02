@@ -50,13 +50,24 @@ const AttractionCard: React.FC<CardProps> = ({
                             <h2 className="font-semibold text-xl truncate">{item.title}</h2>
                         </div>
                         {item.price && (
-                            <Badge className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
+                            <Badge
+                                className="flex absolute top-2 left-2 text-green-600 px-1 py-0 transform transition-transform hover:scale-105 cursor-pointer">
                                 {item.price}
                             </Badge>
                         )}
-                        <div onClick={(e) => e.stopPropagation()}>
-                            <RatingComponent attractionId={item._id} />
+                        <div onClick={(e) => e.stopPropagation()} style={{marginBottom: '10px'}}>
+                            <div style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis'
+                            }}>
+                                <RatingComponent attractionId={item._id}/>
+                            </div>
                         </div>
+
+
                         <p className="text-gray-600 truncate">
                             {item.location + ", " + item.country}
                         </p>

@@ -45,13 +45,15 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
                             </Badge>
                         )}
                         <p className="text-gray-600">{trip.country}</p>
+                        <div onClick={stopPropagation} style={{ marginBottom: '10px' }}>
+                            <TripRatingComponent tripId={trip._id}/>
+                        </div>
                     </div>
-                </div>
-                <div className="p-4" onClick={stopPropagation}>
-                    <TripRatingComponent tripId={trip._id} />
                 </div>
             </div>
         </>
+
+
     );
 };
 
