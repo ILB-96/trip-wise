@@ -7,6 +7,7 @@ import TripCover from '@components/ItineraryViewer/TripCover';
 import DaysViewer from '@components/ItineraryViewer/DaysViewer';
 import TripRatingComponent from '@components/tripRating';
 import withAuthProvider from "@app/withAuthProvider";
+import ThreeDotsWave from '@components/ThreeDotsLoading';
 
 const getFormattedDate = (date: string) => {
   const dateObject = new Date(date);
@@ -15,7 +16,6 @@ const getFormattedDate = (date: string) => {
 };
 
 const TripPage = ({ params }: { params: { id: string } }) => {
-  const [currentRating, setCurrentRating] = useState<number>(3);
   const [trip, setTrip] = useState<any>(null);
   const [attractions, setAttractions] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,68 +37,33 @@ const TripPage = ({ params }: { params: { id: string } }) => {
     fetchTripData();
   }, [params.id]);
 
-  const handleRate = (newRating: number) => {
-    setCurrentRating(newRating);
-  };
 
-  if (loading) {
-    const variants = {
-      hidden: { opacity: 0 },
-      visible: { opacity: 1 },
-    };
-
-    return (
-        <motion.div
-            className="fixed top-0 left-0 w-full h-full bg-gray-900 z-50 flex items-center justify-center"
-            variants={variants}
-            initial="hidden"
-            animate="visible"
-            transition={{ duration: 1 }}
-        >
-          <motion.div
-              className="w-20 h-20 rounded-full bg-gradient-to-r from-indigo-500 to-purple-600"
-              variants={{
-                scale: {
-                  from: 0,
-                  to: 1,
-                },
-                rotate: {
-                  from: 0,
-                  to: 360,
-                },
-              }}
-              transition={{ duration: 2, ease: 'easeInOut', repeat: Infinity }}
+  return (
+    loading ? <ThreeDotsWave /> :
+      <div>
+        {trip && attractions && (
+          <TripCover
+            tripName={trip.title}
+            tripImage={trip.image}
+            numberOfDays={attractions.length}
+            averageRating={trip.averageRating || 0}
+            tripProfile={{ id: 1, name: trip.creator.name, designation: trip.creator.role, image: trip.creator.image }}
+            tripCreatedAt={getFormattedDate(trip.createdAt)}
+            tripCountry={trip.country}
           />
-        </motion.div>
-    );
-  } else {
-    return (
-        <div className="">
-          {trip && attractions && (
-              <TripCover
-                  tripName={trip.title}
-                  tripImage={trip.image}
-                  numberOfDays={attractions.length}
-                  averageRating={trip.averageRating || 0}
-                  tripId={trip._id}
-                  tripProfile={{ id: 1, name: trip.creator.name, designation: trip.creator.role, image: trip.creator.image }}
-                  tripCreatedAt={getFormattedDate(trip.createdAt)}
-                  tripCountry={trip.country}
-              />
-          )}
-          <DaysViewer tripDays={attractions} />
-          <div className="space-y-10">
-            <div className="pl-20 flex items-center py-8 px-4 bg-gradient-to-r from-gray-100 to-teal-200 rounded-lg shadow-md">
-              <div className="text-center mt-2 flex space-x-5 items-center">
-                <p className="text-gray-600 font-medium">How would you rate this itinerary?</p>
-                <TripRatingComponent tripId={params.id} /> {/* Use TripRatingComponent */}
-              </div>
+        )}
+        <DaysViewer tripDays={attractions} />
+        <div className="space-y-10">
+          <div className="pl-20 flex items-center py-8 px-4 bg-gradient-to-r from-gray-100 to-teal-200 rounded-lg shadow-md">
+            <div className="text-center mt-2 flex space-x-5 items-center">
+              <p className="text-gray-600 font-medium">How would you rate this itinerary?</p>
+              <TripRatingComponent tripId={params.id} /> {/* Use TripRatingComponent */}
             </div>
-            <CommentSection tripId={params.id} />
           </div>
+          <CommentSection tripId={params.id} />
         </div>
-    );
-  }
-};
+      </div>
+  );
+}
 
 export default withAuthProvider(TripPage);

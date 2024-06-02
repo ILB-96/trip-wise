@@ -103,7 +103,8 @@ const ChatDetails = ({ chatId }: { chatId: any }) => {
                 )}
                 <div ref={bottomRef} />
             </div>
-            <div className=' w-full flex items-center justify-between px-7 py-3 rounded-3xl cursor-pointer bg-white'>
+            <div className='w-full flex items-center justify-between px-7 py-3 rounded-3xl cursor-pointer bg-white'>
+
                 <div className='flex items-center gap-4'>
                     <input
                         className='w-[300px] max-sm:w-full bg-white outline-none'
