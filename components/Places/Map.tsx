@@ -62,14 +62,12 @@ const Map = (latlong: any) => {
     const fetchImage = async (placeName: string): Promise<string> => {
         const response = await fetch(`/api/trip/unsplash/${placeName}`);
         const data = await response.json();
-        // console.log(data)
         setPlaceImage(data.imgUrl);
         return data.imgUrl;
     }
     const fetchDetails = async (placeId: string, placeName: string): Promise<string | null> => {
         const response = await fetch(`https://places.googleapis.com/v1/places/${placeId}?fields=id,editorialSummary&key=${googleAPIKey}`);
         const data = await response.json();
-        // console.log(data);
         let placeDetails: string | null = null;
         if (!data?.editorialSummary?.text) {
             console.log("I am using the gemini api")
@@ -85,7 +83,6 @@ const Map = (latlong: any) => {
         return placeDetails;
     }
     const addAttraction = async (data: any) => {
-        // console.log(data);
         try {
             const res = await fetch("/api/attraction/addAttraction", {
                 method: "POST",
