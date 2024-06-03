@@ -1,7 +1,6 @@
 "use client";
 import { useForm, FormProvider } from "react-hook-form";
-import { Search } from "lucide-react";
-import styles from "./search.module.css";
+import { Search, Trash2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,16 +14,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@components/ui/separator";
-import { useEffect } from "react";
+
 const SearchComp = ({ options }: { options: Record<string, any> }) => {
   const methods = useForm();
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    router.replace(pathname);
-  }, [pathname, router]);
   const onSubmit = (data: any) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", "1");
@@ -57,6 +53,10 @@ const SearchComp = ({ options }: { options: Record<string, any> }) => {
 
     router.replace(`${pathname}?${params.toString()}`);
   };
+  const handleClearParams = () => {
+    methods.reset();
+    router.replace(pathname);
+  };
 
   return (
     <>
@@ -68,7 +68,14 @@ const SearchComp = ({ options }: { options: Record<string, any> }) => {
               className="flex w-3/5 flex-col gap-3 my-2"
             >
               <div className="flex justify-center gap-3 max-md:flex-col">
-                {/* iterate over key value in options*/}
+                <Button
+                  className="flex w-fit rounded-3xl "
+                  variant="destructive"
+                  type="button"
+                  onClick={handleClearParams}
+                >
+                  <Trash2 />
+                </Button>
                 {Object.entries(options).map(([key, value]) => {
                   return (
                     <FormField
@@ -110,8 +117,9 @@ const SearchComp = ({ options }: { options: Record<string, any> }) => {
                     </FormItem>
                   )}
                 />
+
                 <Button
-                  className="flex w-fit rounded-3xl"
+                  className="flex w-fit rounded-3xl bg-blue-400"
                   variant="outline"
                   type="submit"
                 >
