@@ -1,30 +1,32 @@
 "use client"
 
 import ThreeDotsWave from '@components/ThreeDotsLoading';
+import { Input } from '@components/ui/input';
+import { toast } from '@components/ui/use-toast';
 import { Library } from '@googlemaps/js-api-loader';
 import { PlaceAddress, getPlaceAddress, googleAPIKey } from '@lib/places';
 import { useJsApiLoader } from '@react-google-maps/api';
 import React, { useEffect, useRef, useState } from 'react'
 
 export interface InputAutoCompleteProps {
-    id: string;
     type: string;
     className: string;
-    onChange: (e: any) => void;
+    field: any;
 }
 const libs: Library[] = [
     "core",
     "places",
 ];
 
-const InputAutoComplete = ({ id, type, className, onChange }: InputAutoCompleteProps) => {
+const InputAutoComplete = ({ type, className, field }: InputAutoCompleteProps) => {
     const { isLoaded } = useJsApiLoader({
         googleMapsApiKey: googleAPIKey,
         libraries: libs,
     });
     const placeAutoCompleteRef = useRef<HTMLInputElement>(null);
+
     const [autoComplete, setAutoComplete] = useState<google.maps.places.Autocomplete | null>(null);
-    const [inputText, setInputText] = useState<string>("");
+    // const [inputText, setInputText] = useState<string>("");
     useEffect(() => {
         if (isLoaded) {
             const gAutoComplete = new google.maps.places.Autocomplete(
@@ -45,14 +47,20 @@ const InputAutoComplete = ({ id, type, className, onChange }: InputAutoCompleteP
             if (data.title == null || data.location == null || data.country == null || data.description == null || data.image == null) {
                 return;
             }
-            await fetch("/api/attraction/addAttraction", {
+            const response = await fetch("/api/attraction/addAttraction", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(data),
             });
-            setInputText("");
+            const attraction = await response.json();
+            toast({
+                title: response.ok ? `${attraction.title} - added` : "Failed to add attraction",
+                description: response.ok ? "Check the last page" : "Please try some other attraction to add",
+            })
+
+            // setInputText("");
         }
         catch (error: any) {
             console.log(`Failed to add attraction: ${error.message}`);
@@ -85,16 +93,17 @@ const InputAutoComplete = ({ id, type, className, onChange }: InputAutoCompleteP
     }, [autoComplete]);
     return (
         <>
-            {isLoaded ? (<input
+            {isLoaded ? (<Input
+                name={field.name}
+                onBlur={field.onBlur}
                 ref={placeAutoCompleteRef}
                 className={className}
-                id={id}
                 type={type}
                 onChange={(e) => {
-                    setInputText(e.target.value);
-                    onChange(e);
+                    // setInputText(e.target.value);
+                    field.onChange(e);
                 }}
-                value={inputText}
+                value={field.value}
             />) : (<ThreeDotsWave />)}
 
         </>

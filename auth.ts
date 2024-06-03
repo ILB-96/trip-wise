@@ -32,9 +32,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   events: {
     async linkAccount({ user }) {
-      console.log("I got here");
+      // console.log("I got here");
       await connectToDB();
-      console.log(user.id);
+      // console.log(user.id);
       await User.updateOne(
         {
           _id: user.id,
@@ -45,8 +45,8 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
           },
         }
       );
-      const test = await User.findOne({ _id: new Types.ObjectId(user.id) });
-      console.log({ test });
+      // const test = await User.findOne({ _id: new Types.ObjectId(user.id) });
+      // console.log({ test });
     },
   },
   callbacks: {
@@ -54,7 +54,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // console.log({ tokenSession: token });
 
       if (token.sub && session.user) {
-        console.log(token.id);
+        // console.log(token.id);
         session.user.id = token.id!;
       }
       if (token.role && session.user) {
@@ -72,7 +72,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         return token;
       }
       token.id = existingUser._id;
-      console.log(existingUser.email)
+      // console.log(existingUser.email)
       token.role = existingUser.role;
       return token;
     },
