@@ -1,16 +1,13 @@
-"use server";
-
 import { NextResponse } from "next/server";
 import AttractionRating from "@/models/attractionRating";
 import { connectToDB } from "@utils/database";
 import { calculateAverageRating } from "@helpers/starsCalc";
-import { Types } from "mongoose";
+import Attraction from "@models/attraction";
 
 export async function POST(request: Request) {
   await connectToDB();
 
   const { attractionId, rating, userId } = await request.json();
-  console.log("Received data:", { attractionId, rating, userId });
   if (!attractionId || !rating || !userId) {
     console.error("Invalid data received:", { attractionId, rating, userId });
     return NextResponse.json(
@@ -20,17 +17,35 @@ export async function POST(request: Request) {
   }
 
   try {
-    console.log("Updating rating");
-    const newRating = await AttractionRating.findOneAndUpdate(
-      { author: userId, attractionId },
-      { $set: { rating } },
-      { upsert: true, new: true, setDefaultsOnInsert: true }
-    );
-    console.log("New rating:");
+    const existingRating = await AttractionRating.findOne({
+      attractionId,
+      author: userId,
+    });
+    const existingAtt = await Attraction.findById(attractionId);
+    if (existingRating) {
+      // Update the existing rating
+      const oldRating = existingRating.rating;
+      existingRating.rating = rating;
+      const ratingIndex = existingAtt.rating.indexOf(oldRating);
+      if (ratingIndex > -1) {
+        existingAtt.rating.splice(ratingIndex, 1);
+      }
+      existingAtt.rating.push(rating);
+      await existingRating.save();
+      await existingAtt.save();
+    } else {
+      const newRating = new AttractionRating({
+        attractionId,
+        rating,
+        author: userId,
+      });
+      existingAtt.rating.push(rating);
+      await newRating.save();
+      await existingAtt.save();
+    }
     const { averageRating, ratingCount } = await calculateAverageRating(
       attractionId
     );
-    console.log("Rating calculation:", { averageRating, ratingCount });
     return NextResponse.json({
       message: "Rating submitted successfully",
       newAverageRating: averageRating,
@@ -39,7 +54,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Error submitting rating:", error);
     return NextResponse.json(
-      { error: `Error submitting rating` },
+      { error: "Error submitting rating" },
       { status: 500 }
     );
   }
