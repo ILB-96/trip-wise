@@ -2,7 +2,7 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import authConfig from "./auth.config";
 
 import clientPromise from "@lib/db";
-import { getUserById } from "@lib/user_object_get";
+import { getUserByEmail, getUserById } from "@lib/user_object_get";
 import { MongoDBAdapter } from "@auth/mongodb-adapter";
 import { JWT } from "next-auth/jwt";
 import User, { Role } from "@models/user";
@@ -12,6 +12,7 @@ import { Types } from "mongoose";
 declare module "next-auth/jwt" {
   interface JWT {
     role?: Role;
+    id?: string;
   }
 }
 
@@ -50,11 +51,11 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async session({ token, session }) {
-      // injecting the ID inside our session
       // console.log({ tokenSession: token });
 
       if (token.sub && session.user) {
-        session.user.id = token.sub;
+        console.log(token.id);
+        session.user.id = token.id!;
       }
       if (token.role && session.user) {
         session.user.role = token.role;
@@ -65,12 +66,13 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
     },
     async jwt({ token }) {
       if (!token.sub) return token; // the user is not logged in
-      const existingUser = await getUserById(token.sub);
+      const existingUser = await getUserByEmail(token.email!);
       if (!existingUser) {
-        // Handle the user not found case gracefully
-        token.role = "USER"; // Assign a default role or handle as needed
+        token.role = "USER";
         return token;
       }
+      token.id = existingUser._id;
+      console.log(existingUser.email)
       token.role = existingUser.role;
       return token;
     },

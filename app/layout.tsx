@@ -5,6 +5,7 @@ import { auth } from "@auth";
 import Footer from "@components/Footer";
 import { HeaderProvider } from "@components/Header/HeaderProvider";
 import Provider from "@context/Provider";
+import UserProvider from "@context/UserProvider";
 
 export const metadata: Metadata = {
   title: "TripWise",
@@ -25,19 +26,21 @@ export default async function RootLayout({
 
   return (
     <Provider session={session}>
-      <html lang="en">
-        <body>
-          <div className="flex flex-col relative justify-start h-screen">
-            <div>
-              <HeaderProvider />
+      <UserProvider>
+        <html lang="en">
+          <body>
+            <div className="flex flex-col relative justify-start h-screen">
+              <div>
+                <HeaderProvider />
+              </div>
+              <main className="mb-auto">{children}</main>
+              <div className=" ">
+                <Footer />
+              </div>
             </div>
-            <main className="mb-auto">{children}</main>
-            <div className=" ">
-              <Footer />
-            </div>
-          </div>
-        </body>
-      </html>
+          </body>
+        </html>
+      </UserProvider>
     </Provider>
   );
 }
