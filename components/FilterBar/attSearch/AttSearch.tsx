@@ -16,6 +16,7 @@ import {
 import { Separator } from "@components/ui/separator";
 import { useEffect, useState } from "react";
 import findCities from "@helpers/findCities";
+import InputAutoComplete from "@components/Places/InputAutoComplete";
 
 const AttSearch = ({ options }: { options: Record<string, any> }) => {
   const [localOptions, setLocalOptions] = useState(options);
@@ -135,11 +136,11 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <Input
+                        <InputAutoComplete
                           className="md:w-40 lg:w-64 xl:w-80"
                           type="text"
-                          placeholder="Search..."
-                          {...field}
+                          // placeholder="Search..."
+                          field={field}
                         />
                       </FormControl>
                     </FormItem>

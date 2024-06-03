@@ -6,6 +6,7 @@ import Footer from "@components/Footer";
 import { HeaderProvider } from "@components/Header/HeaderProvider";
 import Provider from "@context/Provider";
 import UserProvider from "@context/UserProvider";
+import { Toaster } from "@components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "TripWise",
@@ -34,6 +35,7 @@ export default async function RootLayout({
                 <HeaderProvider />
               </div>
               <main className="mb-auto">{children}</main>
+              <Toaster />
               <div className=" ">
                 <Footer />
               </div>
