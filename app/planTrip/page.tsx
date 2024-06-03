@@ -9,14 +9,13 @@ import { Input } from "@/components/ui/input";
 import { attractionsFilter } from "@app/attractions/attractionsFilter";
 import AttractionCard from "@components/AttractionCard";
 import DateRangePicker from "@components/DateRangePicker";
-import FilterBar from "@components/FilterBar/FilterBar";
 import { IAttraction } from "@models/attraction";
 import AttSearch from "@components/FilterBar/attSearch/AttSearch";
 import Pagination from "@components/dashboard/pagination/Pagination";
 import { SearchParams } from "@models/types";
 import { getAttPage, getAttTypes } from "@lib/attraction";
-import { set } from "mongoose";
 import ThreeDotsWave from "@components/ThreeDotsLoading";
+import { useRouter } from "next/navigation";
 
 const hasSelectedAttractions = (selectedAttractions: {
   [key: string]: IAttraction[];
@@ -43,7 +42,7 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
     to: addDays(new Date(), 1),
   });
   const [count, setCount] = useState<number>(0);
-
+  const router = useRouter();
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedAttractions, setSelectedAttractions] = useState<
@@ -155,6 +154,8 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
         }
         console.log(await re.json());
       });
+      // go to trip/tripId with nextjs router
+      router.push(`/trip/${tripId}`);
     } else {
       setStatus("Failed to Create Trip.");
       console.log(await response.json());
