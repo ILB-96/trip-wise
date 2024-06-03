@@ -1,24 +1,24 @@
 import { getNames } from "country-list";
 
-export let attractionsFilter = [
-  {
+export let attractionsFilter = {
+  country: {
     title: "Country",
     selections: getNames().sort(),
     disableMultiple: true,
   },
-  {
+  location: {
     title: "Location",
     selections: [],
   },
-  {
+  types: {
     title: "Types",
     selections: [],
   },
-  {
+  price: {
     title: "Price Range",
-    selections: ["Free", "$", "$$", "$$$", "$$$$", "$$$$$"],
+    selections: ["Free", "$$", "$$$", "$$$$", "$$$$$"],
   },
-  {
+  rating: {
     title: "Rating",
     selections: [
       "⭐ and up",
@@ -27,17 +27,9 @@ export let attractionsFilter = [
       "⭐⭐⭐⭐ and up",
       "⭐⭐⭐⭐⭐",
     ],
-    disableMultiple: true,
   },
-  {
+  sortBy: {
     title: "Sort By",
-    selections: [
-      "Price Ascending",
-      "Price Descending",
-      "Rating",
-      "Duration Ascending",
-      "Duration Descending",
-    ],
-    disableMultiple: true,
+    selections: ["Price Ascending", "Price Descending", "Rating"],
   },
-];
+};
