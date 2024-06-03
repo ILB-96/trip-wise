@@ -92,22 +92,25 @@ const InputAutoComplete = ({ type, className, field }: InputAutoCompleteProps) =
         }
     }, [autoComplete]);
     return (
-        <>
-            {isLoaded ? (<Input
-                name={field.name}
-                onBlur={field.onBlur}
-                ref={placeAutoCompleteRef}
-                className={className}
-                type={type}
-                onChange={(e) => {
-                    // setInputText(e.target.value);
-                    field.onChange(e);
-                }}
-                value={field.value}
-            />) : (<ThreeDotsWave />)}
-
-        </>
-    )
+      <>
+        {isLoaded ? (
+          <Input
+            name={field.name}
+            onBlur={field.onBlur}
+            ref={placeAutoCompleteRef}
+            className={className}
+            type={type}
+            onChange={(e) => {
+              // setInputText(e.target.value);
+              field.onChange(e);
+            }}
+            value={field.value}
+          />
+        ) : (
+          <Input className={className} placeholder="Enter a location" />
+        )}
+      </>
+    );
 }
 
 export default InputAutoComplete
