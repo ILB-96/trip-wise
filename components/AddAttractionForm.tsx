@@ -1,10 +1,6 @@
 import { useState, FormEvent, ChangeEvent } from "react";
 
-interface AddAttractionFormProps {
-  onClose: () => void;
-}
-
-const AddAttractionForm: React.FC<AddAttractionFormProps> = ({ onClose }) => {
+const AddAttractionForm = () => {
   const [title, setTitle] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [country, setCountry] = useState<string>("");
@@ -71,7 +67,6 @@ const AddAttractionForm: React.FC<AddAttractionFormProps> = ({ onClose }) => {
       setMessage("Attraction added successfully!");
       setTimeout(() => {
         setMessage(null);
-        onClose(); // Close the modal after a short delay
       }, 2000);
     } catch (error: any) {
       // Explicitly typing 'error' as 'any'
