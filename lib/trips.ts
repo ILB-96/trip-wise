@@ -97,7 +97,7 @@ export const getTripById = async (id: string): Promise<any | null> => {
 
 export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
   await connectToDB();
-  return Trip.find({ editor: editorId });
+  return Trip.find({ creator: editorId });
 };
 
 export const getTrips = async (q: string | RegExp, page: number) => {
