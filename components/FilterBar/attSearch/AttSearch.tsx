@@ -128,10 +128,10 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                   control={methods.control}
                   name="q"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="max-sm:col-span-1 sm:col-span-2">
                       <FormControl>
                         <InputAutoComplete
-                          className="w-52"
+                          className="w-full"
                           type="text"
                           // placeholder="Search..."
                           field={field}
@@ -140,7 +140,7 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                     </FormItem>
                   )}
                 />
-                <div className="flex gap-2 md:col-start-3 place-content-end">
+                <div className="flex gap-2 place-content-end col-span-1 sm:col-start-2 md:col-start-3 max-sm:justify-center">
                   <Button
                     className="flex w-fit rounded-3xl"
                     variant="destructive"
