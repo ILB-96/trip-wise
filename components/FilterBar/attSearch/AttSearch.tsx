@@ -1,9 +1,8 @@
 "use client";
 import { useForm, FormProvider } from "react-hook-form";
-import { Search } from "lucide-react";
+import { Search, Trash2 } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 import {
@@ -14,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@components/ui/separator";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import findCities from "@helpers/findCities";
 import InputAutoComplete from "@components/Places/InputAutoComplete";
 
@@ -24,11 +23,6 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
-
-  useEffect(() => {
-    router.replace(pathname);
-    router.refresh();
-  }, [pathname, router]);
 
   const onSubmit = (data: any) => {
     router.replace(pathname);
@@ -64,6 +58,10 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
 
     router.replace(`${pathname}?${params.toString()}`);
   };
+  const handleClearParams = () => {
+    methods.reset();
+    router.replace(pathname);
+  };
 
   const handleChange = (value: string, name: string) => {
     if (name === "country") {
@@ -85,15 +83,11 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
 
   return (
     <>
-      <div className="flex justify-around">
+      <div className="flex max-sm:justify-center">
         <FormProvider {...methods}>
           <Form {...methods}>
-            <form
-              onSubmit={methods.handleSubmit(onSubmit)}
-              className="flex w-3/5 flex-col gap-3 my-2"
-            >
-              <div className="flex justify-center gap-3 max-md:flex-col">
-                {/* iterate over key value in localOptions */}
+            <form onSubmit={methods.handleSubmit(onSubmit)}>
+              <div className="grid max-sm:grid-cols-1 max-md:grid-cols-2 place-content-center grid-cols-3 gap-2 border-2 p-4 shadow-xl rounded-xl">
                 {Object.entries(localOptions).map(([key, value]) => {
                   return (
                     <FormField
@@ -101,7 +95,7 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                       control={methods.control}
                       name={key}
                       render={({ field }) => (
-                        <FormItem className="w-fit">
+                        <FormItem className="w-52">
                           <Select
                             onValueChange={(value) => {
                               field.onChange(value);
@@ -137,7 +131,7 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                     <FormItem>
                       <FormControl>
                         <InputAutoComplete
-                          className="md:w-40 lg:w-64 xl:w-80"
+                          className="w-52"
                           type="text"
                           // placeholder="Search..."
                           field={field}
@@ -146,19 +140,28 @@ const AttSearch = ({ options }: { options: Record<string, any> }) => {
                     </FormItem>
                   )}
                 />
-                <Button
-                  className="flex w-fit rounded-3xl"
-                  variant="outline"
-                  type="submit"
-                >
-                  <Search />
-                </Button>
+                <div className="flex gap-2 md:col-start-3 place-content-end">
+                  <Button
+                    className="flex w-fit rounded-3xl"
+                    variant="destructive"
+                    type="button"
+                    onClick={handleClearParams}
+                  >
+                    <Trash2 />
+                  </Button>
+                  <Button
+                    className="flex w-fit rounded-3xl bg-blue-400"
+                    variant="outline"
+                    type="submit"
+                  >
+                    <Search />
+                  </Button>
+                </div>
               </div>
             </form>
           </Form>
         </FormProvider>
       </div>
-      <Separator />
     </>
   );
 };
