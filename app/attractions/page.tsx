@@ -33,11 +33,7 @@ const Attractions: React.FC<AttPageProps> = async ({ searchParams }) => {
   let options = { ...attractionsFilter };
   try {
     const { types } = await getAttTypes();
-    console.log(types);
-    options = {
-      ...attractionsFilter,
-      types: { title: "Types", selections: types },
-    };
+    attractionsFilter.types = { title: "Types", selections: types };
     const result = await getAttPage(q, page);
     count = result.count;
     attractions = result.attractions;
@@ -48,12 +44,9 @@ const Attractions: React.FC<AttPageProps> = async ({ searchParams }) => {
 
   return (
     <AuthProvider>
-      {/* <FilterBar
-        options={attractionsFilter}
-        data={filteredData}
-        onDataChange={handleDataChange}
-      /> */}
-      <AttSearch options={options} />
+      <div className="m-4">
+        <AttSearch options={attractionsFilter} />
+      </div>
       <Link
         href="/attractions/add"
         className="bg-blue-500 text-white py-2 px-4 rounded my-4"
