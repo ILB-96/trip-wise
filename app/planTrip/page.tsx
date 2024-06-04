@@ -25,6 +25,7 @@ import {
 } from "@store/slice";
 import { RootState } from "@store/store";
 import { useSession } from "next-auth/react";
+import { set } from "mongoose";
 const hasSelectedAttractions = (selectedAttractions: {
   [key: string]: IAttraction[];
 }): boolean => {
@@ -92,28 +93,23 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
   }, [searchParams]);
 
   const setDateRange = (date: DateRange | undefined) => {
-    dispatch(setDate(date));
-  };
-
-  const handleAddAttraction = (
-    attraction: IAttraction,
-    date: Date | undefined
-  ) => {
-    const updated = [...selectedAttractions];
-    if (!date) {
-      return updated.filter((a) => a.attractionId !== attraction);
+    if (!date || !date.from) {
+      dispatch(setSelectedAttractions([]));
+      dispatch(setPreview([]));
+      dispatch(setDate({ from: new Date(), to: new Date() }));
+      return;
     }
-    let newSelected = [...updated, { day: date, attractionId: attraction }];
-    const data = newSelected.filter(
-      (a) =>
-        a.attractionId._id !== attraction._id ||
-        (a.day === date && a.attractionId._id === attraction._id)
-    );
-    dispatch(setSelectedAttractions(data));
-
+    dispatch(setDate(date));
     const dayAttractions: IAttraction[][] = [];
     let totalDays = 0;
-    let from = dateRange?.from || new Date();
+    let from = date?.from || new Date();
+    const data = selectedAttractions.filter(
+      (a) =>
+        a.day.getTime() >= from.getTime() &&
+        a.day.getTime() <= addDays(date?.to || addDays(from, -1), 1).getTime()
+    );
+
+    dispatch(setSelectedAttractions(data));
     if (dateRange && dateRange.from && dateRange.to) {
       const { from, to } = dateRange;
       totalDays =
@@ -135,6 +131,53 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
     }
     dispatch(setPreview(dayAttractions));
   };
+
+  const handleAddAttraction = (
+    attraction: IAttraction,
+    date: Date | undefined
+  ) => {
+    if (!dateRange || !dateRange.from) {
+      dispatch(setSelectedAttractions([]));
+      dispatch(setPreview([]));
+      return;
+    }
+    const dayAttractions: IAttraction[][] = [];
+    let totalDays = 0;
+    let from = dateRange?.from || new Date();
+    const updated = [...selectedAttractions];
+    if (!date) {
+      return updated.filter((a) => a.attractionId !== attraction);
+    }
+    let newSelected = [...updated, { day: date, attractionId: attraction }];
+    const data = newSelected.filter(
+      (a) =>
+        a.attractionId._id !== attraction._id ||
+        (a.day === date && a.attractionId._id === attraction._id)
+    );
+    dispatch(setSelectedAttractions(data));
+
+    if (dateRange && dateRange.from && dateRange.to) {
+      const { from, to } = dateRange;
+      totalDays =
+        Math.floor(
+          (addDays(to, 1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+    }
+    for (let i = 0; i < totalDays; i++) {
+      const currentDate = addDays(from, i);
+      let attractionsForDay = data
+        .filter((attraction) => isSameDay(attraction.day, currentDate))
+        .map((attraction) => ({
+          attractionId: attraction.attractionId,
+          day: currentDate,
+        }));
+      if (attractionsForDay.length > 0) {
+        dayAttractions.push(attractionsForDay);
+      }
+    }
+    dispatch(setPreview(dayAttractions));
+  };
+
   if (!session?.user) {
     router.push("/login");
   }

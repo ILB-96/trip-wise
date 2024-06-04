@@ -7,9 +7,7 @@ import { Button } from "@components/ui/button";
 import { RootState } from "@store/store";
 import { useSession } from "next-auth/react";
 import ThreeDotsWave from "@components/ThreeDotsLoading";
-import { stat } from "fs";
 export default function PreviewTrip() {
-  // Initialize the store with the product information
   const router = useRouter();
   const store = useAppStore();
   const initialized = useRef(false);
@@ -25,7 +23,6 @@ export default function PreviewTrip() {
     (state: RootState) => state.selectedAttractions.value
   );
   const isPrivate = useAppSelector((state: RootState) => state.isPrivate.value);
-  // const previewRef = useAppDispatch((state:RootState) => state.previewRef);
 
   const handleSubmit = async () => {
     if (
@@ -46,7 +43,7 @@ export default function PreviewTrip() {
       creator: session?.user?.id,
       image: selectedAttractions[0].attractionId.image,
       country: selectedAttractions[0].attractionId.country,
-      shared: !isPrivate, // Set the shared property based on the checkbox state
+      shared: !isPrivate,
     };
 
     const response = await fetch("/api/trip/addTrip", {
