@@ -14,16 +14,17 @@ import { cn } from "@/lib/utils";
 import { Button } from "@components/ui/button";
 import { Calendar } from "@components/ui/calendar";
 
+
 type DateRangePickerProps = {
   className?: string;
   date: DateRange | undefined;
-  setDate: React.Dispatch<React.SetStateAction<DateRange | undefined>>;
+  setDateRange: (date: DateRange) => void;
 };
 
 const DateRangePicker: React.FC<DateRangePickerProps> = ({
   className,
   date,
-  setDate,
+  setDateRange,
 }) => {
   return (
     <div className={cn("grid gap-2", className)}>
@@ -58,7 +59,7 @@ const DateRangePicker: React.FC<DateRangePickerProps> = ({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={setDateRange}
             numberOfMonths={2}
           />
         </PopoverContent>
