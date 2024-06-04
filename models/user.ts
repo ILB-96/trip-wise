@@ -1,7 +1,9 @@
-import { IAccount } from '@models/account';
-import mongoose, { Document, Schema, Types } from 'mongoose';
-
+// File: /models/user.ts
+import mongoose, { Document, Schema, Types } from "mongoose";
+import { IAccount } from "./account";
+import Trip from "./trip";
 export type Role = "ADMIN" | "USER";
+
 export interface IUser extends Document {
   id: string;
   name?: string;
@@ -12,6 +14,7 @@ export interface IUser extends Document {
   role: Role;
   accounts: IAccount[];
   chats: Types.ObjectId[];
+  favorites: Types.ObjectId[];
 }
 
 const UserSchema: Schema = new mongoose.Schema({
@@ -24,7 +27,8 @@ const UserSchema: Schema = new mongoose.Schema({
   role: { type: String, required: true, default: "USER" },
   accounts: [{ type: Schema.Types.ObjectId, ref: "Account" }],
   chats: [{ type: Schema.Types.ObjectId, ref: "Chat" }],
+  favorites: [{ type: Schema.Types.ObjectId, ref: "Trip" }], // Ensure this is correct
 });
 
-const User = mongoose.models?.User || mongoose.model<IUser>('User', UserSchema);
+const User = mongoose.models?.User || mongoose.model<IUser>("User", UserSchema);
 export default User;

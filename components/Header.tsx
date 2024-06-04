@@ -11,6 +11,7 @@ import { Button } from "./Header/Button";
 import { ButtonGradient } from "./Header/ButtonGradient";
 import MenuSvg from "./Header/MenuSvg";
 import { ProfileButton } from "./Header/ProfileButton";
+import axios from "axios"; // Add axios for API calls
 
 const Logo: React.FC = () => {
   const router = useRouter();
@@ -19,7 +20,7 @@ const Logo: React.FC = () => {
   };
   return (
     <>
-      <button className=" flex items-center" onClick={navigateToHomePage}>
+      <button className="flex items-center" onClick={navigateToHomePage}>
         <div className="py-1 lg:py-0">
           <Image
             src="/assets/icons/logo.png"
@@ -51,6 +52,22 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   const currentPath = usePathname(); // to know which page are we in
   const [openNavigation, setOpenNavigation] = React.useState(false);
+  const [favorites, setFavorites] = useState<any[]>([]); // State for favorite trips
+
+  useEffect(() => {
+    if (currentUser) {
+      // Fetch user's favorite trips
+      axios
+        .get(`/api/user/${currentUser.id}/favorites`)
+        .then((response) => {
+          setFavorites(response.data.favorites);
+        })
+        .catch((error) => {
+          console.error("Error fetching favorite trips:", error);
+        });
+    }
+  }, [currentUser]);
+
   const toggleNavigation = () => {
     if (openNavigation) {
       setOpenNavigation(false);
@@ -60,6 +77,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
       disablePageScroll();
     }
   };
+
   const handleClick = () => {
     if (!openNavigation) return;
     enablePageScroll();
@@ -70,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
     <header
       className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
       text-white  px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
-       ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
+      ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
     >
       <Logo />
       <nav
@@ -87,13 +105,13 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
               onClick={handleClick}
               className={`block relative font-code text-2xl uppercase 
                 transition duration-300 ease-in-out hover:text-blue-400
-                 px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold
-                 ${
-                   item.url === currentPath
-                     ? "z-2 lg:text-n-1"
-                     : "lg:text-n-1/50"
-                 }
-                  lg:leading-5 lg:hover:text-n-1 xl:px-12`}
+                px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold
+                ${
+                  item.url === currentPath
+                    ? "z-2 lg:text-n-1"
+                    : "lg:text-n-1/50"
+                }
+                 lg:leading-5 lg:hover:text-n-1 xl:px-12`}
             >
               {item.title}
             </a>
@@ -123,6 +141,9 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
             </Button>
             <Button className="mr-4" href="/myTrips">
               <span className="whitespace-nowrap">My Trips</span>
+            </Button>
+            <Button className="mr-4" href="/favorites">
+              <span className="whitespace-nowrap">Favorites</span>
             </Button>
             <ProfileButton />
           </>
