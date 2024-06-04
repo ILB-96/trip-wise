@@ -19,18 +19,22 @@ import { cn } from "@/lib/utils";
 import { IAttraction } from "@models/attraction";
 
 type AddDateButtonProps = {
+  currentDate?: Date | undefined;
   addAction: (attraction: IAttraction, newDate: Date | undefined) => void;
   dateRange: DateRange | undefined;
   attraction: IAttraction;
 };
 
 const AddDateButton: React.FC<AddDateButtonProps> = ({
+  currentDate = undefined,
   addAction,
   dateRange,
   attraction,
 }) => {
-  const [date, setDate] = React.useState<Date | undefined>(undefined);
-  const [time, setTime] = React.useState<string>("12:00");
+  const [date, setDate] = React.useState<Date | undefined>(currentDate);
+  const [time, setTime] = React.useState<string>(
+    `${currentDate?.getHours() || "12"}:${currentDate?.getMinutes() || "00"}`
+  );
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
   const start = dateRange?.from ? dateRange.from : new Date();
   const end = dateRange?.to ? dateRange.to : new Date();
@@ -42,7 +46,6 @@ const AddDateButton: React.FC<AddDateButtonProps> = ({
       if (time) {
         [hours, minutes] = time.split(":").map(Number);
       }
-      console.log(hours, minutes);
       const dateTime = new Date(selectedDate);
       dateTime.setHours(hours, minutes);
       addAction(attraction, dateTime);
@@ -58,7 +61,6 @@ const AddDateButton: React.FC<AddDateButtonProps> = ({
       if (newTime) {
         [hours, minutes] = newTime.split(":").map(Number);
       }
-      console.log(hours, minutes);
       const dateTime = new Date(date);
       dateTime.setHours(hours, minutes);
       addAction(attraction, dateTime);
