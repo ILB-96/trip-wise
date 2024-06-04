@@ -2,9 +2,17 @@ import { Country, State, City } from "country-state-city";
 import { getCode } from "country-list";
 type isoCode = string;
 
-const findCities = (countries: string[]) => {
-  const country = Country.getCountryByCode(getCode(countries[0]) as isoCode);
+const cityCache: { [key: string]: string[] } = {};
+
+const findCities = (countries: string[]): string[] => {
+  const countryCode = getCode(countries[0]) as isoCode;
+  if (cityCache[countryCode]) {
+    return cityCache[countryCode];
+  }
+
+  const country = Country.getCountryByCode(countryCode);
   let cities: string[] = [];
+
   if (country) {
     const states = State.getStatesOfCountry(country.isoCode);
     states.forEach((state) => {
@@ -12,6 +20,8 @@ const findCities = (countries: string[]) => {
       cities = cities.concat(stateCities.map((city) => city.name as string));
     });
   }
+
+  cityCache[countryCode] = cities;
   return cities;
 };
 

@@ -8,7 +8,7 @@ export let attractionsFilter = {
   },
   location: {
     title: "Location",
-    selections: [],
+    selections: ["No cities found"],
   },
   types: {
     title: "Types",
