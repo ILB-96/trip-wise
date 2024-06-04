@@ -1,9 +1,8 @@
 "use client";
 import { addDays, isSameDay } from "date-fns";
-import { useSession } from "next-auth/react";
 import React, { useEffect, useState } from "react";
 import { DateRange } from "react-day-picker";
-
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { attractionsFilter } from "@app/attractions/attractionsFilter";
@@ -16,13 +15,16 @@ import { SearchParams } from "@models/types";
 import { getAttPage, getAttTypes } from "@lib/attraction";
 import ThreeDotsWave from "@components/ThreeDotsLoading";
 import { useRouter } from "next/navigation";
-import DaysViewer from "@components/ItineraryViewer/DaysViewer";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@components/ui/popover";
 
+import {
+  setDate,
+  setIsPrivate,
+  setPreview,
+  setSelectedAttractions,
+  setTripName,
+} from "@store/slice";
+import { RootState } from "@store/store";
+import { useSession } from "next-auth/react";
 const hasSelectedAttractions = (selectedAttractions: {
   [key: string]: IAttraction[];
 }): boolean => {
@@ -31,7 +33,7 @@ const hasSelectedAttractions = (selectedAttractions: {
   );
 };
 
-interface dayAttraction {
+export interface dayAttraction {
   day: Date;
   attractionId: IAttraction;
 }
@@ -41,22 +43,21 @@ interface PlanPageProps {
 
 const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
   const session = useSession()?.data;
+  const dispatch = useDispatch();
   const [status, setStatus] = useState<string>("");
-  const [tripName, setTripName] = useState<string>("");
-  const [dateRange, setDate] = useState<DateRange | undefined>({
-    from: new Date(),
-    to: addDays(new Date(), 1),
-  });
+  const tripName = useSelector((state: RootState) => state.tripName.value);
+  const dateRange = useSelector((state: RootState) => state.dateRange.value);
+  const selectedAttractions = useSelector(
+    (state: RootState) => state.selectedAttractions.value
+  );
+  const isPrivate = useSelector((state: RootState) => state.isPrivate.value);
+  const previewRef = useSelector((state: RootState) => state.preview.value);
   const [count, setCount] = useState<number>(0);
   const router = useRouter();
   const [filteredData, setFilteredData] = useState<IAttraction[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedAttractions, setSelectedAttractions] = useState<
-    dayAttraction[]
-  >([]);
-  const [isPrivate, setIsPrivate] = useState<boolean>(false);
+
   const [popoverOpen, setPopoverOpen] = useState<boolean>(false);
-  const previewRef = React.useRef<any[][]>([]);
 
   useEffect(() => {
     let q: { [key: string]: string } = { q: "" };
@@ -90,8 +91,8 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
     fetchData();
   }, [searchParams]);
 
-  const handleDataChange = (data: IAttraction[]) => {
-    setFilteredData(data);
+  const setDateRange = (date: DateRange | undefined) => {
+    dispatch(setDate(date));
   };
 
   const handleAddAttraction = (
@@ -108,12 +109,18 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
         a.attractionId._id !== attraction._id ||
         (a.day === date && a.attractionId._id === attraction._id)
     );
-    setSelectedAttractions(data);
+    dispatch(setSelectedAttractions(data));
 
     const dayAttractions: IAttraction[][] = [];
-    const { from, to } = dateRange;
-    const totalDays =
-      Math.floor((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    let totalDays = 0;
+    let from = dateRange?.from || new Date();
+    if (dateRange && dateRange.from && dateRange.to) {
+      const { from, to } = dateRange;
+      totalDays =
+        Math.floor(
+          (addDays(to, 1).getTime() - from.getTime()) / (1000 * 60 * 60 * 24)
+        ) + 1;
+    }
     for (let i = 0; i < totalDays; i++) {
       const currentDate = addDays(from, i);
       let attractionsForDay = data
@@ -122,81 +129,20 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
           attractionId: attraction.attractionId,
           day: currentDate,
         }));
-      console.log(attractionsForDay);
       if (attractionsForDay.length > 0) {
         dayAttractions.push(attractionsForDay);
       }
     }
-    previewRef.current = dayAttractions;
+    dispatch(setPreview(dayAttractions));
   };
-  console.log(previewRef.current);
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    // e.preventDefault();
-    console.log(selectedAttractions);
-    if (
-      !tripName ||
-      !selectedAttractions.length ||
-      !dateRange?.from ||
-      !dateRange?.to
-    ) {
-      setStatus("Please fill out all required fields.");
-      return;
-    }
-
-    setStatus("Sending...");
-    const formData = {
-      title: tripName,
-      startDate: dateRange.from,
-      endDate: dateRange.to,
-      creator: session?.user?.id,
-      image: selectedAttractions[0].attractionId.image,
-      country: selectedAttractions[0].attractionId.country,
-      shared: !isPrivate, // Set the shared property based on the checkbox state
-    };
-
-    const response = await fetch("/api/trip/addTrip", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
-    });
-
-    if (response.ok) {
-      const data = await response.json();
-      const tripId = data._id;
-      setStatus("Trip Created successfully!");
-      Array.from(selectedAttractions).forEach(async (val) => {
-        const attractionData = {
-          tripId: tripId,
-          attractionId: val.attractionId._id,
-          day: val.day,
-        };
-        const re = await fetch("/api/tripAttraction", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(attractionData),
-        });
-        if (!re.ok) {
-          setStatus("Failed to Add Attractions.");
-        }
-        console.log(await re.json());
-      });
-      // go to trip/tripId with nextjs router
-      router.push(`/trip/${tripId}`);
-    } else {
-      setStatus("Failed to Create Trip.");
-      console.log(await response.json());
-    }
-  };
-
+  if (!session?.user) {
+    router.push("/login");
+  }
   if (loading) return <ThreeDotsWave />;
   return (
     <>
       <div className="flex justify-around p-4 max-lg:flex-col">
-        <form className="flex flex-col max-sm:m-auto" onSubmit={handleSubmit}>
+        <form className="flex flex-col max-sm:m-auto">
           <h1
             id="trip-planner-heading"
             className="font-bold text-xl text-gray-700 mb-2"
@@ -214,44 +160,25 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
               type="text"
               placeholder="Trip Name"
               value={tripName}
-              onChange={(e) => setTripName(e.target.value)}
+              onChange={(e) => dispatch(setTripName(e.target.value))}
               aria-labelledby="trip-planner-heading"
             />
           </div>
-
           <div className="w-full flex mb-1">
             <DateRangePicker
               className="font-inter"
               date={dateRange}
-              setDate={setDate}
+              setDateRange={setDateRange}
             />
           </div>
 
           <div className="w-full flex justify-start items-center mb-2">
-            <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  disabled={!tripName || !selectedAttractions.length}
-                  aria-disabled={!tripName || !selectedAttractions.length}
-                >
-                  {" "}
-                  Preview Trip
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-fit m-auto h-full space-x-1">
-                <DaysViewer tripDays={previewRef.current} />
-                <Button onClick={handleSubmit}>Create Trip</Button>
-                <Button variant="outline" onClick={() => setPopoverOpen(false)}>
-                  Edit
-                </Button>
-              </PopoverContent>
-            </Popover>
-            <div className="ml-4 flex items-center">
+            <div className="flex items-center">
               <label className="flex items-center space-x-2">
                 <input
                   type="checkbox"
                   checked={isPrivate}
-                  onChange={(e) => setIsPrivate(e.target.checked)}
+                  onChange={(e) => dispatch(setIsPrivate(e.target.checked))}
                   className="form-checkbox h-4 w-4 text-blue-600"
                 />
                 <span className="text-gray-700 font-bold">
@@ -266,6 +193,14 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
             )}
           </div>
         </form>
+        <Button
+          className="w-fit mb-2 max-sm:m-auto max-sm:mb-2"
+          disabled={!tripName || !selectedAttractions.length}
+          aria-disabled={!tripName || !selectedAttractions.length}
+          onClick={() => router.push("/planTrip/preview")}
+        >
+          Preview Trip
+        </Button>
         <div className="m-0">
           <AttSearch options={attractionsFilter} />
         </div>
@@ -280,6 +215,12 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
             key={attraction.title + index}
             item={attraction}
             addAction={handleAddAttraction}
+            currentDate={
+              selectedAttractions?.find(
+                (attractionItem) =>
+                  attractionItem.attractionId._id === attraction._id
+              )?.day || undefined
+            }
             dateRange={dateRange}
           />
         ))}
