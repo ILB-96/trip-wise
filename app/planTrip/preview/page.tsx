@@ -83,7 +83,6 @@ export default function PreviewTrip() {
       console.log(await response.json());
     }
   };
-
   return (
     <div className="py-4">
       {status === "Sending..." && (

@@ -9,13 +9,13 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   const { id } = params;
-
+  if(Trip) {}
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
   }
 
   try {
-    const user = await User.findById(id).populate("favorites").exec();
+    const user = await User.findById(id).populate("favorites", "_id image title").exec();
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }

@@ -169,9 +169,10 @@ const TripPlanner: React.FC<PlanPageProps> = ({ searchParams }) => {
         .filter((attraction) => isSameDay(attraction.day, currentDate))
         .map((attraction) => ({
           attractionId: attraction.attractionId,
-          day: currentDate,
+          day: attraction.day,
         }));
       if (attractionsForDay.length > 0) {
+        attractionsForDay.sort((a, b) => a.day.getTime() - b.day.getTime());
         dayAttractions.push(attractionsForDay);
       }
     }

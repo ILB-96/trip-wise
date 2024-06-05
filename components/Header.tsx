@@ -52,21 +52,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
   const currentPath = usePathname(); // to know which page are we in
   const [openNavigation, setOpenNavigation] = React.useState(false);
-  const [favorites, setFavorites] = useState<any[]>([]); // State for favorite trips
 
-  useEffect(() => {
-    if (currentUser) {
-      // Fetch user's favorite trips
-      axios
-        .get(`/api/user/${currentUser.id}/favorites`)
-        .then((response) => {
-          setFavorites(response.data.favorites);
-        })
-        .catch((error) => {
-          console.error("Error fetching favorite trips:", error);
-        });
-    }
-  }, [currentUser]);
 
   const toggleNavigation = () => {
     if (openNavigation) {
