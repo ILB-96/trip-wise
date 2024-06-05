@@ -17,6 +17,7 @@ interface Attraction {
   name: string;
   description: string;
   types: string[];
+  averageRating: number;
 }
 
 export default function Slider() {
@@ -28,7 +29,7 @@ export default function Slider() {
   useEffect(() => {
     const fetchAttractions = async () => {
       try {
-        const res = await fetch("/api/attraction/getAttraction");
+        const res = await fetch("/api/attraction/getBest10Attractions");
         if (!res.ok) {
           throw new Error(`HTTP status ${res.status}`);
         }
