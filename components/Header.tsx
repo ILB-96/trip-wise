@@ -124,6 +124,9 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
             <Button className="mr-4" href="/myTrips">
               <span className="whitespace-nowrap">My Trips</span>
             </Button>
+            {/* <Button className="mr-4" href="/favorites">
+              <span className="whitespace-nowrap">Favorites</span>
+            </Button> */}
             <ProfileButton />
           </>
         )}
