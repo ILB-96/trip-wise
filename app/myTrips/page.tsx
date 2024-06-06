@@ -72,7 +72,7 @@ const MyTrips = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
       {trips.map((trip: ITrip) => (
-        <TripCard key={trip._id} trip={trip} />
+        <TripCard key={trip._id} trip={trip} WithCreator={false} />
       ))}
     </div>
   );
