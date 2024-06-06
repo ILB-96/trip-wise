@@ -28,7 +28,7 @@ const MyTrips = () => {
       }
     };
 
-    const fetchTrips = async (editorId) => {
+    const fetchTrips = async (editorId: string) => {
       try {
         const res = await fetch(`/api/trip/${editorId}/getTripByCreator`);
         if (!res.ok) {
