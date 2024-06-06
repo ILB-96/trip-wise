@@ -22,6 +22,7 @@ export const getAllTrips = async (): Promise<ITrip[]> => {
 export interface ITripWithRating extends ITrip {
   averageRating: number;
   ratingCount: number;
+  commentsCount: number;
 }
 
 export const getAllSharedTrips = async (): Promise<ITripWithRating[]> => {
@@ -95,9 +96,17 @@ export const getTripById = async (id: string): Promise<any | null> => {
   return trip[0] || null;
 };
 
-export const getTripsByEditor = async (editorId: string): Promise<ITrip[]> => {
+export const getTripsByEditor = async (editorId: string) => {
   await connectToDB();
-  return Trip.find({ creator: editorId });
+
+  const trips = await Trip.find({ creator: editorId }).lean();
+  const newTrips = trips.map((trip) => {
+    return {
+      ...trip,
+      commentsCount: trip.comments.length,
+    };
+  });
+  return newTrips;
 };
 
 export const getTrips = async (q: string | RegExp, page: number) => {
@@ -151,7 +160,9 @@ export const getTrips = async (q: string | RegExp, page: number) => {
   }
 };
 
-export const deleteTrip = async (formData: Iterable<readonly [PropertyKey, any]>) => {
+export const deleteTrip = async (
+  formData: Iterable<readonly [PropertyKey, any]>
+) => {
   const { id } = Object.fromEntries(formData);
 
   try {
@@ -288,6 +299,7 @@ export const getTripsPage = async (
             ],
           },
           averageRating: { $avg: "$rating" },
+          commentsCount: { $size: "$comments" },
         },
       },
       {
@@ -340,7 +352,9 @@ export const getTripsPage = async (
           rating: 1,
           image: 1,
           country: 1,
+          comments: 1,
           averageRating: 1,
+          commentsCount: 1,
           creator: {
             name: "$creatorDetails.name",
           },
@@ -349,7 +363,10 @@ export const getTripsPage = async (
     );
 
     const trips = await Trip.aggregate(aggregatePipeline);
-
+    const plainTrips = trips.map((trip) => ({
+      ...trip,
+      _id: trip._id.toString(), // Convert _id to string
+    }));
     // Count the total number of trips matching the conditions
     const countAggregatePipeline = [
       {
@@ -393,9 +410,7 @@ export const getTripsPage = async (
     const countResult = await Trip.aggregate(countAggregatePipeline);
     const count = countResult[0]?.count || 0;
 
-    console.log("count", count);
-    console.log(trips[0].averageRating);
-    return { count, trips };
+    return { count, trips: plainTrips };
   } catch (err) {
     console.error("Error fetching trips:", err);
     throw new Error("Failed to fetch trips!");
