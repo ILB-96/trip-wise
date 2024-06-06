@@ -69,6 +69,9 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       const existingUser = await getUserByEmail(token.email!);
       if (!existingUser) {
         token.role = "USER";
+        if (existingUser.id !== token.sub) {
+          return null;
+        }
         return token;
       }
       token.id = existingUser._id;
