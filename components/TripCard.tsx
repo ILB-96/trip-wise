@@ -10,9 +10,10 @@ import TripRatingComponent from "@/components/tripRating"; // Adjust the import 
 
 interface TripCardProps {
   trip: ITripWithRating;
+  WithCreator?: boolean;
 }
 
-const TripCard: React.FC<TripCardProps> = ({ trip }) => {
+const TripCard: React.FC<TripCardProps> = ({ trip, WithCreator = true }) => {
   const router = useRouter();
   const navigateToTripDetail = async () => {
     router.push(`/trip/${trip._id}`); // Navigate to the trip detail page
@@ -46,7 +47,7 @@ const TripCard: React.FC<TripCardProps> = ({ trip }) => {
                           </Badge>
                       )}
                       <p className="text-gray-600">{trip.country}</p>
-                      <p className="text-gray-600">{"By " + trip.creator.name}</p>
+                      {WithCreator && <p className="text-gray-600">{"By " + trip.creator.name}</p>}
                       <div onClick={stopPropagation} style={{ marginBottom: '10px' }}>
                           <TripRatingComponent tripId={trip._id}/>
                       </div>
