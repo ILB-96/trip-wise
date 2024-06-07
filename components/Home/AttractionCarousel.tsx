@@ -63,18 +63,19 @@ export const Carousel = ({ bestAttractions }: { bestAttractions: IAttractionWith
             setCarouselVariant("inactive");
         }
     });
-    const randomAttractionSet1 = preventNeighboringDuplicates(bestAttractions.slice(1, 6)
-        .sort(() => Math.random() - 0.5)
-        .concat(bestAttractions.slice(1, 6).sort(() => Math.random() - 0.5))
-        .concat(bestAttractions.slice(1, 6).sort(() => Math.random() - 0.5))
-    );
 
-    const randomAttractionSet2 = preventNeighboringDuplicates(bestAttractions.slice(6, bestAttractions.length)
-        .sort(() => Math.random() - 0.5)
-        .concat(bestAttractions.slice(6, bestAttractions.length).sort(() => Math.random() - 0.5))
-        .concat(bestAttractions.slice(6, bestAttractions.length).sort(() => Math.random() - 0.5))
-        .sort(() => Math.random() - 0.5)
-    );
+    // const randomAttractionSet1 = preventNeighboringDuplicates(bestAttractions.slice(1, 6)
+    //     .sort(() => Math.random() - 0.5)
+    //     .concat(bestAttractions.slice(1, 6).sort(() => Math.random() - 0.5))
+    //     .concat(bestAttractions.slice(1, 6).sort(() => Math.random() - 0.5))
+    // );
+    const randomAttractionSet1 = bestAttractions.slice(1, 6)
+    .concat(bestAttractions.slice(1, 6))
+    .concat(bestAttractions.slice(1, 6));
+
+    const randomAttractionSet2 = bestAttractions.slice(6, bestAttractions.length)
+    .concat(bestAttractions.slice(6, bestAttractions.length))
+    .concat(bestAttractions.slice(6, bestAttractions.length));
 
     const handleClick = (attraction: any) => {
         setSelectedAttraction(attraction);
@@ -92,7 +93,7 @@ export const Carousel = ({ bestAttractions }: { bestAttractions: IAttractionWith
                             <img className="w-full h-full object-cover" src={bestAttractions[1].image} alt={bestAttractions[1].title} />
                         </motion.div>
                         <motion.div
-                            onClick={() => handleClick(bestAttractions[0])} 
+                            onClick={() => handleClick(bestAttractions[0])}
                             style={{ scale }} className="relative w-[300px] md:w-[60vw] aspect-[9/16] md:aspect-video shrink-0 overflow-clip rounded-2xl">
                             <img className="w-full h-full object-cover" src={bestAttractions[0].image} alt={bestAttractions[0].title} />
                             <motion.div
@@ -149,9 +150,9 @@ const SmallCarousel = ({ attractions, handleClick }: { attractions: IAttractionW
                     <div className="relative w-[40vw] md:w-[23vw] aspect-video shrink-0" key={`${index}-${attraction.title}`} onClick={() => handleClick(attraction)}>
                         <img className="w-full h-full object-cover rounded-xl" src={attraction.image} alt={attraction.title} />
                         <div>
-                            <p className="p-5 items-center text-white text-lg absolute flex flex-col gap-4 md:gap-0 left-0 bottom-0 w-full">
-                                {attraction.title}
-                                <div className="flex items-center space-x-3">
+                            <p className={`p-5 items-center text-white ${attraction.title.length > 20 ? "text-xs" : "text-sm"} md:text-lg absolute flex flex-col gap-4 md:gap-0 left-0 bottom-0 w-full overflow-hidden`}>
+                            {attraction.title}
+                            <div className="flex items-center space-x-3">
                                     <FaStar className="text-yellow-400" />
                                     <p>{attraction.averageRating}</p>
                                 </div>

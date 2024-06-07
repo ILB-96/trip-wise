@@ -2,10 +2,9 @@
 
 import Link from "next/link";
 import TripsStoriesSection from "@components/TripsStoriesSection";
-import { Carousel } from "@components/Home/AttractionCarousel";
+import { Carousel, IAttractionWithRating } from "@components/Home/AttractionCarousel";
 import { useEffect, useState } from "react";
 import { useSession } from "next-auth/react";
-import { IAttractionWithRating } from "@components/Home/AttractionPoster";
 import ThreeDotsWave from "@components/ThreeDotsLoading";
 
 const Home = () => {
