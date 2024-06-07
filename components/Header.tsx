@@ -4,6 +4,7 @@ import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { disablePageScroll, enablePageScroll } from "scroll-lock";
+import { Tooltip } from '@mui/material';
 
 import { navigation } from "@constants/navigation";
 
@@ -11,12 +12,12 @@ import { Button } from "./Header/Button";
 import { ButtonGradient } from "./Header/ButtonGradient";
 import MenuSvg from "./Header/MenuSvg";
 import { ProfileButton } from "./Header/ProfileButton";
-import axios from "axios"; // Add axios for API calls
+import { motion } from "framer-motion";
 
 const Logo: React.FC = () => {
   const router = useRouter();
   const navigateToHomePage = () => {
-    router.push("/"); // Navigate to the home page
+    router.push("/");
   };
   return (
     <>
@@ -72,14 +73,14 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
 
   return (
     <header
-      className={`bg-gradient-to-r from-gray-700 to-gray-900 w-full left-0 right-0 bottom-0
+      className={`bg-gradient-to-r from-purple-900 to-gray-900 w-full left-0 right-0 bottom-0
       text-white  px-6 md:px-10 lg:px-16 xl:px-20 flex md:flex-row justify-between items-center shadow-xl
       ${openNavigation ? "bg-n-8" : "bg-n-8/90 backdrop-blur-sm"}`}
     >
       <Logo />
       <nav
         className={`${openNavigation ? "flex" : "hidden"}  
-                    fixed md:top-[5rem] sm:top-[4rem] max-sm:top-[4rem] left-0 right-0 bottom-0 bg-n-8
+                    fixed md:top-[5rem] sm:top-[4rem] max-sm:top-[4rem] left-0 right-0 bottom-0 bg-purple-600
                     lg:static lg:flex lg:mx-auto lg:bg-transparent z-50`}
         aria-label="Main Navigation"
       >
@@ -92,14 +93,20 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
               className={`block relative font-code text-2xl uppercase 
                 transition duration-300 ease-in-out hover:text-blue-400
                 px-6 py-6 md:py-8 lg:-mr-0.25 lg:text-xs lg:font-semibold
-                ${
-                  item.url === currentPath
-                    ? "z-2 lg:text-n-1"
-                    : "lg:text-n-1/50"
+                ${item.url === currentPath
+                  ? "z-2 lg:text-n-1"
+                  : "lg:text-n-1/50"
                 }
                  lg:leading-5 lg:hover:text-n-1 xl:px-12`}
             >
-              {item.title}
+              <div className={`flex flex-row ${openNavigation ? "space-x-5": ""} items-center`}>
+              <Tooltip title={item.title} placement="right">
+                <motion.div whileHover={{ scale: 1.1 }} transition={{ type: 'spring', stiffness: 300 }}>
+                  {item.icon}
+                </motion.div>
+              </Tooltip>
+              {openNavigation && item.title}
+              </div>
             </a>
           ))}
         </div>
