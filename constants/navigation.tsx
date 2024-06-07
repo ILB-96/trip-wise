@@ -1,22 +1,29 @@
+import { AttractionsOutlined, ChatBubbleOutline, HomeMaxOutlined, HomeOutlined, HomeSharp, ModeOfTravelOutlined } from "@mui/icons-material";
+import { FaHome } from "react-icons/fa";
+
 export const navigation = [
   {
     id: "0",
-    title: "HOME",
+    icon: <HomeOutlined fontSize="large" />,
     url: "/",
+    title: "Home",
   },
   {
     id: "1",
-    title: "TRIPS",
+    icon: <ModeOfTravelOutlined fontSize="large" />,
     url: "/trips",
+    title: "Trips",
   },
   {
     id: "2",
-    title: "ATTRACTIONS",
+    icon: <AttractionsOutlined fontSize="large" />,
     url: "/attractions",
+    title: "Attractions",
   },
   {
     id: "3",
-    title: "COMMUNITY",
+    icon: <ChatBubbleOutline fontSize="large" />,
     url: "/chats",
+    title: "Community",
   },
 ];

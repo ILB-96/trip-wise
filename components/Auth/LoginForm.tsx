@@ -100,7 +100,7 @@ export const LoginForm = () => {
         <FormSuccess message={success} />
         <Button 
           type='submit'
-          className='w-full bg-orange-700 hover:bg-orange-300'
+          className='w-full bg-purple-700 hover:bg-purple-300'
           disabled={isPending}
         >
             Login
