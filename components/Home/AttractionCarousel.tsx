@@ -70,12 +70,12 @@ export const Carousel = ({ bestAttractions }: { bestAttractions: IAttractionWith
     //     .concat(bestAttractions.slice(1, 6).sort(() => Math.random() - 0.5))
     // );
     const randomAttractionSet1 = bestAttractions.slice(1, 6)
-    .concat(bestAttractions.slice(1, 6))
-    .concat(bestAttractions.slice(1, 6));
+        .concat(bestAttractions.slice(1, 6))
+        .concat(bestAttractions.slice(1, 6))
 
     const randomAttractionSet2 = bestAttractions.slice(6, bestAttractions.length)
-    .concat(bestAttractions.slice(6, bestAttractions.length))
-    .concat(bestAttractions.slice(6, bestAttractions.length));
+        .concat(bestAttractions.slice(6, bestAttractions.length))
+        .concat(bestAttractions.slice(6, bestAttractions.length));
 
     const handleClick = (attraction: any) => {
         setSelectedAttraction(attraction);
@@ -101,7 +101,7 @@ export const Carousel = ({ bestAttractions }: { bestAttractions: IAttractionWith
                                     active: { opacity: 1 },
                                     inactive: { opacity: 0 },
 
-                                }} className="p-5 items-center text-white text-lg absolute flex flex-col md:flex-row gap-4 md:gap-0 md:justify-between left-0 bottom-0 w-full">
+                                }} className="p-5 items-center text-white font-bold text-lg absolute flex flex-col md:flex-row gap-4 md:gap-0 md:justify-between left-0 bottom-0 w-full">
                                 <div className="flex flex-col">
                                     <p>
                                         {bestAttractions[0].title}
@@ -149,18 +149,17 @@ const SmallCarousel = ({ attractions, handleClick }: { attractions: IAttractionW
                 {attractions.map((attraction, index) => (
                     <div className="relative w-[40vw] md:w-[23vw] aspect-video shrink-0" key={`${index}-${attraction.title}`} onClick={() => handleClick(attraction)}>
                         <img className="w-full h-full object-cover rounded-xl" src={attraction.image} alt={attraction.title} />
-                        <div>
-                            <p className={`p-5 items-center text-white ${attraction.title.length > 20 ? "text-xs" : "text-sm"} md:text-lg absolute flex flex-col gap-4 md:gap-0 left-0 bottom-0 w-full overflow-hidden`}>
+                        <div className="absolute inset-0 bg-black bg-opacity-40 rounded-xl" /> 
+                        <div className="p-5 items-center text-white font-bold absolute flex flex-col gap-4 md:gap-0 left-0 bottom-0 w-full overflow-hidden">
                             {attraction.title}
                             <div className="flex items-center space-x-3">
-                                    <FaStar className="text-yellow-400" />
-                                    <p>{attraction.averageRating}</p>
-                                </div>
-                            </p>
+                                <FaStar className="text-yellow-400" />
+                                <p>{attraction.averageRating}</p>
+                            </div>
                         </div>
                     </div>
                 ))}
             </div>
         </div>
-    )
-}
+    );
+};
