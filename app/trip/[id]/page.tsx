@@ -22,6 +22,7 @@ const TripPage = ({ params }: { params: { id: string } }) => {
   const [trip, setTrip] = useState<any>(null);
   const [attractions, setAttractions] = useState<any>(null);
   const [loading, setLoading] = useState<boolean>(true);
+  const [averageRating, setAverageRating] = useState<number>(0);
 
   useEffect(() => {
     const fetchTripData = async () => {
@@ -37,6 +38,11 @@ const TripPage = ({ params }: { params: { id: string } }) => {
       setAttractions(
         attractionsResult.success ? attractionsResult.attractions : null
       );
+      response = await fetch(`/api/getTripRating?tripId=${params.id}`, {
+        method: "GET",
+      });
+      const ratingResult = await response.json();
+      setAverageRating(ratingResult.averageRating);
       setLoading(!attractionsResult.success);
     };
     fetchTripData();
@@ -52,7 +58,7 @@ const TripPage = ({ params }: { params: { id: string } }) => {
           tripName={trip.title}
           tripImage={trip.image}
           numberOfDays={attractions.length}
-          averageRating={trip.averageRating || 0}
+          averageRating={averageRating || 0}
           tripProfile={{
             id: 1,
             name: trip.creator.name,

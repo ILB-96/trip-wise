@@ -14,7 +14,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { useContext } from 'react';
 import { UserContext } from '@context/UserContext';
-import { HeartIcon } from 'lucide-react';
+import { HeartIcon, LayoutDashboardIcon } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 
@@ -37,6 +37,15 @@ export const ProfileButton = () => {
                     <HeartIcon className='h-4 w-4 mr-2' />
                     Favorites
                 </DropdownMenuItem>
+                {user?.role == "ADMIN" && <DropdownMenuItem onClick={
+                    () => {
+                        router.push('/dashboard');
+                    }
+                }
+                >
+                    <LayoutDashboardIcon className='h-4 w-4 mr-2' />
+                    Dashboard
+                </DropdownMenuItem>}
                 <DropdownMenuItem onClick={
                     async () => {
                         await signOut({ callbackUrl: "/auth/login" });

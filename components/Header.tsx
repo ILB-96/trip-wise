@@ -105,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({ currentUser }: HeaderProps) => {
                   {item.icon}
                 </motion.div>
               </Tooltip>
-              {openNavigation && item.title}
+              {openNavigation && <div className="lg:hidden">{item.title}</div>}
               </div>
             </a>
           ))}
