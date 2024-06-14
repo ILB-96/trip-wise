@@ -37,7 +37,12 @@ const TripCover = ({
       if (rating >= i + 1) {
         stars.push(<Star key={i} size={25} fill="gold" stroke="gold" />);
       } else if (rating >= i + 0.5) {
-        stars.push(<Star key={i} size={25} fill="gold" stroke="gold" />);
+        stars.push(<div key={i} style={{ position: 'relative', display: 'inline-block' }}>
+          <Star size={25} fill="gray" stroke="gray" />
+          <div style={{ position: 'absolute', overflow: 'hidden', width: '50%', top: 0, left: 0 }}>
+            <Star size={25} fill="gold" stroke="gold" />
+          </div>
+        </div>);
       } else {
         stars.push(<Star key={i} size={25} fill="gray" stroke="gray" />);
       }
