@@ -27,7 +27,7 @@ export const ProfileButton = () => {
             <DropdownMenuTrigger>
                 {user?.image ? <Image src={user.image} alt="profile" className="w-10 h-10 rounded-full" width={40} height={40} /> : <FaUser />}
             </DropdownMenuTrigger>
-            <DropdownMenuContent>
+            <DropdownMenuContent onCloseAutoFocus={(e) => e.preventDefault()}>
                 <DropdownMenuItem onClick={
                     () => {
                         router.push('/favorites');
