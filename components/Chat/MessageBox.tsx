@@ -1,13 +1,21 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@components/ui/avatar';
 import { format } from 'date-fns';
 import React from 'react'
+import { FaUser } from 'react-icons/fa';
 
 const MessageBox = ({ message, currentUserEmail }: { message: any, currentUserEmail: string }) => {
     return message?.sender?.email !== currentUserEmail ? (
         <div className='flex gap-3 items-start'>
-            <img
+            <Avatar className='w-8 h-8 rounded-full'>
+                <AvatarImage src={message?.sender?.image || ""} />
+                <AvatarFallback className="bg-orange-300">
+                    <FaUser />
+                </AvatarFallback>
+            </Avatar>
+            {/* <img
                 src={message?.sender?.image || "/assets/images/noavatar.png"}
                 alt='profile photo'
-                className='w-8 h-8 rounded-full' />
+                className='w-8 h-8 rounded-full' /> */}
             <div className='flex flex-col gap-2'>
                 <p className='text-sm font-bold'>
                     {message?.sender?.name}  &#160; &#183; &#160; {format((new Date(message?.createdAt)), 'p')}
