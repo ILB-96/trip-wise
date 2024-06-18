@@ -7,6 +7,8 @@ import TripCommentReport, {
 import { revalidatePath } from "next/cache";
 import TripComment from "@models/tripComment";
 import { REPORTS_PER_PAGE } from "@app/dashboard/reports/page";
+import Trip from "@models/trip";
+import { Types } from "mongoose";
 export const getReports = async (q: string | RegExp, page: number) => {
   const regex = new RegExp(q, "i");
   try {
@@ -42,7 +44,17 @@ export const deleteTripCommentReport = async (
 
   try {
     await connectToDB(); // Ensure the database connection is awaited
+    const { tripId } = await TripComment.findById(tripCommentId).select("tripId");
     const deletedComment = await TripComment.findByIdAndDelete(tripCommentId);
+
+    const trip = await Trip.findById(tripId);
+    if (trip) {
+      trip.comments = trip.comments.filter(
+        (comment: Types.ObjectId) => comment.toString() !== tripCommentId.toString()
+      );
+      await trip.save();
+    }
+
     if (!deletedComment) {
       throw new Error(`Failed to delete TripComment with ID: ${tripCommentId}`);
     }
