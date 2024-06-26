@@ -255,7 +255,7 @@ export const getTripsPage = async (
 ) => {
   let regex;
   try {
-    console.log("q", q);
+    // console.log("q", q);
     regex = new RegExp(q.q, "i");
   } catch (err) {
     console.error("Invalid regex pattern:", err);

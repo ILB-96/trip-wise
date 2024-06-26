@@ -58,7 +58,7 @@ export const deleteTripCommentReport = async (
     if (!deletedComment) {
       throw new Error(`Failed to delete TripComment with ID: ${tripCommentId}`);
     }
-    console.log("hey");
+    // console.log("hey");
 
     const deletedReport = await TripCommentReport.findByIdAndDelete(id);
     if (!deletedReport) {
