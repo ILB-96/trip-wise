@@ -410,9 +410,28 @@ export const getTripsPage = async (
     const countResult = await Trip.aggregate(countAggregatePipeline);
     const count = countResult[0]?.count || 0;
 
-    return { count, trips: plainTrips };
+    return convertToPlainObject({ count, trips: plainTrips });
   } catch (err) {
     console.error("Error fetching trips:", err);
     throw new Error("Failed to fetch trips!");
   }
 };
+function convertToPlainObject(data: any): any {
+  if (Array.isArray(data)) {
+    return data.map(item => convertToPlainObject(item));
+  } else if (data !== null && typeof data === 'object') {
+    if (Buffer.isBuffer(data)) {
+      return data.toString('base64');
+    } else if (data.toJSON && typeof data.toJSON === 'function') {
+      return convertToPlainObject(data.toJSON());
+    } else {
+      const plainObject: any = {};
+      for (const [key, value] of Object.entries(data)) {
+        plainObject[key] = convertToPlainObject(value);
+      }
+      return plainObject;
+    }
+  } else {
+    return data;
+  }
+}

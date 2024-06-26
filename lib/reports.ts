@@ -120,7 +120,7 @@ export const addTripReport = async (
   formData: Iterable<readonly [PropertyKey, any]>
 ) => {
   const { snitchId, id, reason } = Object.fromEntries(formData);
-  console.log(snitchId, id, reason);
+  // console.log(snitchId, id, reason);
   try {
     await connectToDB(); // Ensure the database connection is awaited
 

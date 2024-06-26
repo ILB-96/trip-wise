@@ -26,7 +26,7 @@ export const getFormattedData = async () => {
     let date = new Date();
     date.setDate(today.getDate() - i);
     let key = date.toISOString().split("T")[0];
-    console.log(key);
+    // console.log(key);
     if (!data[key]) {
       data[key] = { user: 0, trip: 0, attraction: 0 };
     }
