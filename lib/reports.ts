@@ -58,7 +58,7 @@ export const deleteTripCommentReport = async (
     if (!deletedComment) {
       throw new Error(`Failed to delete TripComment with ID: ${tripCommentId}`);
     }
-    console.log("hey");
+    // console.log("hey");
 
     const deletedReport = await TripCommentReport.findByIdAndDelete(id);
     if (!deletedReport) {
@@ -120,7 +120,7 @@ export const addTripReport = async (
   formData: Iterable<readonly [PropertyKey, any]>
 ) => {
   const { snitchId, id, reason } = Object.fromEntries(formData);
-  console.log(snitchId, id, reason);
+  // console.log(snitchId, id, reason);
   try {
     await connectToDB(); // Ensure the database connection is awaited
 

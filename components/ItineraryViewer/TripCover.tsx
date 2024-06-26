@@ -87,9 +87,9 @@ const TripCover = ({
           </div>
           <div className="flex space-x-5">
             <HeartInteraction tripId={tripId} /> {/* Pass the tripId here */}
-            <Button className=" bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full w-300 mt-10 text-center">
+            {/* <Button className=" bg-blue-700 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded-full w-300 mt-10 text-center">
               ➕Duplicate
-            </Button>
+            </Button> */}
           </div>
         </div>
       </div>

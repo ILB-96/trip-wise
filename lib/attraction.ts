@@ -170,7 +170,7 @@ export const getAttPage = async (
 ) => {
   let regex;
   try {
-    console.log("q", q);
+    // console.log("q", q);
     regex = new RegExp(q.q, "i");
   } catch (err) {
     console.error("Invalid regex pattern:", err);
@@ -325,7 +325,7 @@ export const getAttPage = async (
 
     const countResult = await Attraction.aggregate(countAggregatePipeline);
     const count = countResult[0]?.count || 0;
-    console.log(attractions, count);
+    // console.log(attractions, count);
     return { count, attractions: plainAttractions };
   } catch (err) {
     console.error("Error fetching trips:", err);

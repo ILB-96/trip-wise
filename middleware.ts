@@ -20,6 +20,9 @@ export default auth((req) => {
     if ((nextUrl.pathname.startsWith('/chats') || nextUrl.pathname.startsWith('/api/chats')) && !isLoggedIn) {
         return Response.redirect(new URL("/auth/login", nextUrl));
     }
+    if ((nextUrl.pathname.startsWith('/planTrip') || (nextUrl.pathname.startsWith('/myTrips'))) && !isLoggedIn) {
+        return Response.redirect(new URL("/auth/login", nextUrl));
+    }
     // if(isApiAuthRoute) {
     //     return ;
     // }

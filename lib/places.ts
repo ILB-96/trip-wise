@@ -38,6 +38,6 @@ export const getPlaceAddress = (addressComponent: google.maps.GeocoderAddressCom
                 "Unknown";
         }
     }
-    console.log(`Country: ${country}, Location: ${location}`);
+    // console.log(`Country: ${country}, Location: ${location}`);
     return { country, location };
 }
