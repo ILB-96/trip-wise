@@ -1,3 +1,7 @@
+
+
+https://github.com/ILB-96/trip-wise/assets/87178618/dd6c3be5-cdd8-40df-ae6f-eea573d4d28f
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
